@@ -6,6 +6,7 @@ package Util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 /**
@@ -14,7 +15,7 @@ import javax.swing.JOptionPane;
  */
 public class ConexionBD {
     
-    private static String DRIVER="com.mysql.jdbc.Driver";
+    private static String DRIVER="com.mysql.cj.jdbc.Driver";
     private static String USUARIO="root";
     private static String PASSWORD="root1234";
     private static String URL="jdbc:mysql://localhost:3306/rrhh";
@@ -27,17 +28,38 @@ public class ConexionBD {
         }
     }
     
-    public Connection getConnection(){
+    public static Connection getConnection() throws SQLException{
         
         Connection con = null;
         try {
             con=DriverManager.getConnection(URL, USUARIO, PASSWORD);
             JOptionPane.showMessageDialog(null, "CONEXIÓN EXITOSA");
+            //Aquí hacemos uso de la conexión
+            //Guardar en log que hemos realizado correctamente la conexión
 
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "ERROR EN LA CONEXIÓN: " + e);
+        } finally {
+            
+            try {
+                //con.close();
+                System.out.println("Todo bien en ConexionDB");
+            }
+        
+            catch (Throwable e) {
+                JOptionPane.showMessageDialog(null, "ERROR EN LA CONEXIÓN: " + e);
+            }
         }
         
         return con;
+    }
+    
+    public static void closeConnection(Connection con) throws SQLException {
+        
+        try {
+            con.close();
+        }
+        catch (Throwable e){
+            //Guardar en el log que se cierra la conexión correctamente
+            JOptionPane.showMessageDialog(null, "CONEXIÓN FINALIZADA");
+        }
     }
 }

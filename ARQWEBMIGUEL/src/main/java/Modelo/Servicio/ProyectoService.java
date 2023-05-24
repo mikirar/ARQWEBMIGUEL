@@ -6,6 +6,7 @@ package Modelo.Servicio;
 
 import Modelo.Proyecto;
 import Modelo.Repository.ProyectoRepository;
+import java.sql.SQLException;
 
 /**
  *
@@ -14,7 +15,7 @@ import Modelo.Repository.ProyectoRepository;
 public class ProyectoService {
     private ProyectoRepository proyectoRepository;
     
-    public ProyectoService(){
+    public ProyectoService() throws SQLException{
         proyectoRepository = new ProyectoRepository(); //Inicializamos repo
     }
     
@@ -26,7 +27,7 @@ public class ProyectoService {
     
     public Proyecto obtenerProyecto(int idProyecto) {
         //Logica
-        return proyectoRepository.obtenerProyecto(idProyecto);
+        return proyectoRepository.obtenerProyectoPorId(idProyecto);
     }
     
     public void actualizarProyecto(Proyecto proyecto) {

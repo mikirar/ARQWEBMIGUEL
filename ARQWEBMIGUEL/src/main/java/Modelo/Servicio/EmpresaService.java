@@ -5,6 +5,8 @@
 package Modelo.Servicio;
 
 import Modelo.Empresa;
+import Modelo.Repository.EmpresaRepository;
+import java.sql.SQLException;
 
 /**
  *
@@ -12,19 +14,25 @@ import Modelo.Empresa;
  */
 public class EmpresaService {
     
+    private EmpresaRepository empresaRepository;
+    
+    public EmpresaService() throws SQLException {
+        empresaRepository = new EmpresaRepository();
+    }
+    
     public void crearEmpresa(Empresa empresa) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        empresaRepository.crearEmpresa(empresa);
     }
 
-    public Empresa obtenerEmpresa(int idEmpresa) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Empresa obtenerEmpresaPorId(int idEmpresa) {
+        return empresaRepository.obtenerEmpresaPorId(idEmpresa);
     }
 
     public void actualizarEmpresa(Empresa empresa) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        empresaRepository.actualizarEmpresa(empresa);
     }
 
     public void eliminarEmpresa(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        empresaRepository.eliminarEmpresa(id);
     }
 }

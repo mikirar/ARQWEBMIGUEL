@@ -4,7 +4,9 @@
  */
 package Modelo.Servicio;
 
+import Modelo.Repository.UsuarioRepository;
 import Modelo.Usuario;
+import java.sql.SQLException;
 
 /**
  *
@@ -12,19 +14,25 @@ import Modelo.Usuario;
  */
 public class UsuarioService {
     
+    private UsuarioRepository usuarioRepository;
+    
+    public UsuarioService() throws SQLException{
+        usuarioRepository = new UsuarioRepository();
+    }
+    
     public void crearUsuario(Usuario usuario) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        usuarioRepository.crearUsuario(usuario);
     }
 
     public Usuario obtenerUsuario(int idUsuario) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return usuarioRepository.obtenerUsuarioPorId(idUsuario);
     }
 
     public void actualizarUsuario(Usuario usuario) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        usuarioRepository.actualizarUsuario(usuario);
     }
 
     public void eliminarUsuario(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        usuarioRepository.eliminarUsuario(id);
     }
 }

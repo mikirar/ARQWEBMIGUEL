@@ -5,6 +5,8 @@
 package Modelo.Servicio;
 
 import Modelo.Marcaje;
+import Modelo.Repository.MarcajeRepository;
+import java.sql.SQLException;
 
 /**
  *
@@ -12,19 +14,25 @@ import Modelo.Marcaje;
  */
 public class MarcajeService {
     
+    private MarcajeRepository marcajeRepository;
+    
+    public MarcajeService() throws SQLException{
+        marcajeRepository = new MarcajeRepository();
+    }
+    
     public void crearMarcaje(Marcaje marcaje) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+       marcajeRepository.crearMarcaje(marcaje);
     }
 
     public Marcaje obtenerMarcaje(int idMarcaje) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return marcajeRepository.obtenerMarcajePorId(idMarcaje);
     }
 
     public void actualizarMarcaje(Marcaje marcaje) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        marcajeRepository.actualizarMarcaje(marcaje);
     }
 
     public void eliminarMarcaje(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        marcajeRepository.eliminarMarcaje(id);
     }
 }
