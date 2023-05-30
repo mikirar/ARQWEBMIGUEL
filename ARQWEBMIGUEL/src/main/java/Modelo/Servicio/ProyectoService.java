@@ -5,7 +5,7 @@
 package Modelo.Servicio;
 
 import Modelo.Proyecto;
-import Modelo.Repository.ProyectoRepository;
+import Modelo.DAO.ProyectoRepository;
 import java.sql.SQLException;
 
 /**

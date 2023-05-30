@@ -5,7 +5,7 @@
 package Modelo.Servicio;
 
 import Modelo.Marcaje;
-import Modelo.Repository.MarcajeRepository;
+import Modelo.DAO.MarcajeRepository;
 import java.sql.SQLException;
 
 /**

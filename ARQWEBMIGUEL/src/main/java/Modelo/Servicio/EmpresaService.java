@@ -5,7 +5,7 @@
 package Modelo.Servicio;
 
 import Modelo.Empresa;
-import Modelo.Repository.EmpresaRepository;
+import Modelo.DAO.EmpresaRepository;
 import java.sql.SQLException;
 
 /**

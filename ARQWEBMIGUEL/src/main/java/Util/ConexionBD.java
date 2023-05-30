@@ -24,32 +24,28 @@ public class ConexionBD {
         try {
             Class.forName(DRIVER);
         } catch (ClassNotFoundException e) {
-            JOptionPane.showMessageDialog(null, "ERROR EN EL DRIVER: " + e);
+            System.out.println("Error en el driver: " + e);
         }
     }
     
     public static Connection getConnection() throws SQLException{
         
-        Connection con = null;
+        Connection connection = null;
         try {
-            con=DriverManager.getConnection(URL, USUARIO, PASSWORD);
-            JOptionPane.showMessageDialog(null, "CONEXIÓN EXITOSA");
+            Class.forName(DRIVER);
+            connection=DriverManager.getConnection(URL, USUARIO, PASSWORD);
+            System.out.println("Conexión exitosa");
             //Aquí hacemos uso de la conexión
             //Guardar en log que hemos realizado correctamente la conexión
 
-        } finally {
+        } catch (SQLException e){
+            System.out.println("Error SQL: " + e);
             
-            try {
-                //con.close();
-                System.out.println("Todo bien en ConexionDB");
-            }
-        
-            catch (Throwable e) {
-                JOptionPane.showMessageDialog(null, "ERROR EN LA CONEXIÓN: " + e);
-            }
+        } catch (ClassNotFoundException e) {
+            System.out.println("Error clase no encontrada: " + e);
         }
         
-        return con;
+        return connection;
     }
     
     public static void closeConnection(Connection con) throws SQLException {

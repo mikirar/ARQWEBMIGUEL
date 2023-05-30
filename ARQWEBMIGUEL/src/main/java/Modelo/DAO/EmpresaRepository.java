@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Modelo.Repository;
+package Modelo.DAO;
 
 import Modelo.Empresa;
 import Util.ConexionBD;
@@ -48,12 +48,12 @@ public class EmpresaRepository {
             preparedStatement.setInt(1, idEmpresa);
             ResultSet rs = preparedStatement.executeQuery();
             if (rs.next()) {
-                empresa.setEmpresaid(rs.getInt("idEmpresa"));
+                empresa.setEmpresaid(rs.getInt("id_empresa"));
                 empresa.setNombre_empresa(rs.getString("nombre_empresa"));      
             }
         } catch (SQLException e) {
             //Meter en el log el error
-            System.out.println("Ha fallado la obtención de la empresa");
+            System.out.println("Ha fallado la obtención de la empresa: " + e);
         }
         return empresa;
     }

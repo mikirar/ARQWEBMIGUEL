@@ -12,7 +12,7 @@ import java.util.Date;
  */
 public class Usuario {
     
-    int userid;
+    int id_user;
     String username;
     String password;
     String dni;
@@ -23,11 +23,11 @@ public class Usuario {
     Enum tipo_usuario;
 
     public int getUserid() {
-        return userid;
+        return id_user;
     }
 
     public void setUserid(int userid) {
-        this.userid = userid;
+        this.id_user = userid;
     }
 
     public String getUsername() {
@@ -96,7 +96,7 @@ public class Usuario {
 
     @Override
     public String toString() {
-        return "Usuario{" + "userid=" + userid + ", username=" + username + ", password=" + password + ", dni=" + dni + ", nombre=" + nombre + ", apellidos=" + apellidos + ", fecha_alta=" + fecha_alta + ", fecha_baja=" + fecha_baja + ", tipo_usuario=" + tipo_usuario + '}';
+        return "Usuario{" + "userid=" + id_user + ", username=" + username + ", password=" + password + ", dni=" + dni + ", nombre=" + nombre + ", apellidos=" + apellidos + ", fecha_alta=" + fecha_alta + ", fecha_baja=" + fecha_baja + ", tipo_usuario=" + tipo_usuario + '}';
     }
     
     

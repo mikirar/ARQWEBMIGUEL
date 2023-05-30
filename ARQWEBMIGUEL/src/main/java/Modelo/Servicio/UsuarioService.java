@@ -4,7 +4,7 @@
  */
 package Modelo.Servicio;
 
-import Modelo.Repository.UsuarioRepository;
+import Modelo.DAO.UsuarioDAO;
 import Modelo.Usuario;
 import java.sql.SQLException;
 
@@ -14,13 +14,13 @@ import java.sql.SQLException;
  */
 public class UsuarioService {
     
-    private UsuarioRepository usuarioRepository;
+    private UsuarioDAO usuarioRepository;
     
     public UsuarioService() throws SQLException{
-        usuarioRepository = new UsuarioRepository();
+        usuarioRepository = new UsuarioDAO();
     }
     
-    public void crearUsuario(Usuario usuario) {
+    public void crearUsuario(Usuario usuario) throws SQLException {
         usuarioRepository.crearUsuario(usuario);
     }
 
