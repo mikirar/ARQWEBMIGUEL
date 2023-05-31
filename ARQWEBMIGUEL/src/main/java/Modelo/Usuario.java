@@ -4,6 +4,7 @@
  */
 package Modelo;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -18,8 +19,8 @@ public class Usuario {
     String dni;
     String nombre;
     String apellidos;
-    Date fecha_alta;
-    Date fecha_baja;
+    Timestamp fecha_alta;
+    Timestamp fecha_baja;
     Enum tipo_usuario;
 
     public int getUserid() {
@@ -69,20 +70,21 @@ public class Usuario {
     public void setApellidos(String apellidos) {
         this.apellidos = apellidos;
     }
-
-    public Date getFecha_alta() {
+    
+    
+    public Timestamp getFecha_alta() {
         return fecha_alta;
     }
 
-    public void setFecha_alta(Date fecha_alta) {
+    public void setFecha_alta(Timestamp fecha_alta) {
         this.fecha_alta = fecha_alta;
     }
 
-    public Date getFecha_baja() {
+    public Timestamp getFecha_baja() {
         return fecha_baja;
     }
 
-    public void setFecha_baja(Date fecha_baja) {
+    public void setFecha_baja(Timestamp fecha_baja) {
         this.fecha_baja = fecha_baja;
     }
 

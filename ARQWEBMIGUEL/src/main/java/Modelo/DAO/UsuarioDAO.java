@@ -43,7 +43,7 @@ public class UsuarioDAO {
     }
 
     
-    public void crearUsuario(Usuario usuario) throws SQLException{
+    public void crearUsuario(Usuario usuario) {
         System.out.println(INSERT_USERS_SQL);
         try{
             Connection connection = ConexionBD.getConnection();
@@ -55,8 +55,8 @@ public class UsuarioDAO {
             preparedStatement.setString(3, usuario.getDni());
             preparedStatement.setString(4, usuario.getNombre());
             preparedStatement.setString(5, usuario.getApellidos());
-            preparedStatement.setDate(6, (Date) usuario.getFecha_alta());
-            preparedStatement.setDate(7, (Date) usuario.getFecha_baja());
+            preparedStatement.setTimestamp(6, usuario.getFecha_alta());
+            preparedStatement.setTimestamp(7, usuario.getFecha_baja());
             preparedStatement.setString(8, usuario.getTipo_usuario().name());
             preparedStatement.executeUpdate();
             System.out.println("Se ha creado el usuario");
@@ -82,8 +82,8 @@ public class UsuarioDAO {
                 usuario.setDni(rs.getString("dni"));
                 usuario.setNombre(rs.getString("nombre"));
                 usuario.setApellidos(rs.getString("apellidos"));
-                usuario.setFecha_alta(rs.getDate("fecha_alta"));
-                usuario.setFecha_baja(rs.getDate("fecha_baja"));
+                usuario.setFecha_alta(rs.getTimestamp("fecha_alta"));
+                usuario.setFecha_baja(rs.getTimestamp("fecha_baja"));
                 //usuario.setTipo_usuario(usuario.tipo_usuario.valueOf(rs.getString("tipo_usuario")));
                 usuario.setTipo_usuario(TipoUsuario.valueOf(rs.getString("tipo_usuario")));
             }
@@ -110,8 +110,8 @@ public class UsuarioDAO {
                 usuario.setDni(rs.getString("dni"));
                 usuario.setNombre(rs.getString("nombre"));
                 usuario.setApellidos(rs.getString("apellidos"));
-                usuario.setFecha_alta(rs.getDate("fecha_alta"));
-                usuario.setFecha_baja(rs.getDate("fecha_baja"));
+                usuario.setFecha_alta(rs.getTimestamp("fecha_alta"));
+                usuario.setFecha_baja(rs.getTimestamp("fecha_baja"));
                 usuario.setTipo_usuario(TipoUsuario.valueOf(rs.getString("tipo_usuario")));
                 usuarios.add(usuario);
                 }
@@ -135,10 +135,10 @@ public class UsuarioDAO {
             preparedStatement.setString(3, usuario.getDni());
             preparedStatement.setString(4, usuario.getNombre());
             preparedStatement.setString(5, usuario.getApellidos());
-            preparedStatement.setDate(6, (Date) usuario.getFecha_alta());
-            preparedStatement.setDate(7, (Date) usuario.getFecha_baja());
+            preparedStatement.setTimestamp(6, usuario.getFecha_alta());
+            preparedStatement.setTimestamp(7, usuario.getFecha_baja());
             preparedStatement.setString(8, usuario.getTipo_usuario().name());
-            
+            preparedStatement.setInt(9, usuario.getUserid());
             usuarioActualizado = preparedStatement.executeUpdate() > 0;
             
         } catch (SQLException e) {
@@ -151,9 +151,10 @@ public class UsuarioDAO {
     
     public boolean eliminarUsuario(int id) {
         boolean usuarioEliminado = false;
+        
         try {
             Connection connection = ConexionBD.getConnection();
-           PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER_BY_ID_SQL);
+            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER_BY_ID_SQL);
             // Parameters start with 1 
             preparedStatement.setInt(1, id);
             usuarioEliminado = preparedStatement.executeUpdate() > 0; 

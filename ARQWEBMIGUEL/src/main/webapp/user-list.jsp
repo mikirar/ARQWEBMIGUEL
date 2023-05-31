@@ -51,8 +51,9 @@
                                 <td><c:out value="${user.fecha_alta}" /></td>
                                 <td><c:out value="${user.fecha_baja}" /></td>
                                 <td><c:out value="${user.tipo_usuario}" /></td>
-                                <td><a href="/UsuarioControlador/action=edit?id_user=<c:out value="${user.userid}" />">Edit</a></td>
-                                <td><a href="delete?id_user=<c:out value="${user.userid}" />">Delete</a></td>
+                                <%--<td><a href="UsuarioControlador?action=edit?userid=<c:out value="${user.userid}" />">Edit</a></td>--%>
+                                <td><a href="UsuarioControlador?action=edit&userid=${user.userid}">Edit</a></td>
+                                <td><a href="UsuarioControlador?action=delete&userid=${user.userid}">Delete</a></td>
 
                             </tr>
                         </c:forEach>

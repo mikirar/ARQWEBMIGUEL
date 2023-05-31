@@ -16,26 +16,15 @@
         crossorigin="anonymous">
     </head>
     <body>
-        
-        <header>
-            <nav class="navbar navbar-expand-md navbar-dark"
-            style="background-color: blue"> 
-                <div>
-                    <a href="https://www.xadmin.net" class="navbar-brand"> RRHH </a>
-                </div>
-                
-                <ul class="navbar-nav">
-                    <li><a href="<%=request.getContextPath()%>/list"
-                        class="nav-link">Users</a></li>
-                </ul> 
-            </nav>
-        <header> 
         <br>
             <div class="container col-md-5">
                 <div class="card">
                     <div class="card-body">
                     <c:if test="${user != null}">
-                        <form method="GET" action='UsuarioControlador' name="frmAddUser"">
+                        <form method="POST" action='UsuarioControlador' name="frmAddUser"">
+                    </c:if>
+                    <c:if test="${user == null}">
+                        <form method="POST" action='UsuarioControlador' name="frmAddUser"">
                     </c:if>
                         
                     <caption>
@@ -50,48 +39,48 @@
                     </caption>
                                
                     <c:if test="${user != null}">
-                        <input type="hidden" name="id" value="<c:out value='${user.id}' />" />
+                        <input type="hidden" name="userid" value="<c:out value='${user.userid}' />" />
                     </c:if>
                     
                     <fieldset class="form-group"> 
                         <label>Username</label> <input type="text"
                         value="<c:out value='${user.username}' />" class="form-control" 
-                        name="username" required="required">
+                        name="username" required>
                     </fieldset>
                     <fieldset class="form-group"> 
                         <label>Password</label> <input type="text"
                         value="<c:out value='${user.password}' />" class="form-control" 
-                        name="password" required="required">
+                        name="password" required>
                     </fieldset>
                     <fieldset class="form-group"> 
                         <label>DNI</label> <input type="text"
                         value="<c:out value='${user.dni}' />" class="form-control" 
-                        name="dni" required="required">
+                        name="dni" required>
                     </fieldset>
                     <fieldset class="form-group"> 
                         <label>Nombre</label> <input type="text"
                         value="<c:out value='${user.nombre}' />" class="form-control" 
-                        name="nombre" required="required">
+                        name="nombre" required>
                     </fieldset>
                     <fieldset class="form-group"> 
                         <label>Apellidos</label> <input type="text"
                         value="<c:out value='${user.apellidos}' />" class="form-control" 
-                        name="apellidos" required="required">
+                        name="apellidos" required>
                     </fieldset>
                     <fieldset class="form-group"> 
-                        <label>Fecha alta</label> <input type="text"
+                        <label>Fecha alta</label> <input type="date"
                         value="<c:out value='${user.fecha_alta}' />" class="form-control" 
-                        name="fecha_alta" required="required">
+                        name="fecha_alta" required>
                     </fieldset>
                     <fieldset class="form-group"> 
-                        <label>Fecha baja</label> <input type="text"
+                        <label>Fecha baja</label> <input type="date"
                         value="<c:out value='${user.fecha_baja}' />" class="form-control" 
-                        name="fecha_baja" required="required">
+                        name="fecha_baja">
                     </fieldset>
                     <fieldset class="form-group"> 
                         <label>Tipo usuario</label> <input type="text"
                         value="<c:out value='${user.tipo_usuario}' />" class="form-control" 
-                        name="tipo_usuario" required="required">
+                        name="tipo_usuario" required>
                     </fieldset>
                         
                     <button type="submit" class="btn btn-success">Save</button> 

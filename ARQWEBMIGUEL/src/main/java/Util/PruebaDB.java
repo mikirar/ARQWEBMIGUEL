@@ -6,11 +6,12 @@ package Util;
 
 import Modelo.Empresa;
 import Modelo.Proyecto;
-import Modelo.DAO.EmpresaRepository;
+import Modelo.DAO.EmpresaDAO;
 import Modelo.DAO.ProyectoRepository;
 import Modelo.DAO.UsuarioDAO;
 import Modelo.Usuario;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ public class PruebaDB {
         //db.getConnection();
         
         //Creamos la empresa
-        /*EmpresaRepository empresaRepository = new EmpresaRepository();
+        /*EmpresaDAO empresaRepository = new EmpresaDAO();
         Empresa empresa = empresaRepository.obtenerEmpresaPorId(1);
         System.out.println(empresa);*/
         /*Empresa empresa = new Empresa();
@@ -40,11 +41,16 @@ public class PruebaDB {
         proyecto.setEmpresaid(1);
         proyectoRepository.crearProyecto(proyecto);*/
         
-        UsuarioDAO usuarioRepository = new UsuarioDAO();
+        //UsuarioDAO usuarioRepository = new UsuarioDAO();
         //Usuario usuario = usuarioRepository.obtenerUsuarioPorId(1);
         //System.out.println(usuario);
-        List usuarios = usuarioRepository.obtenerTodosLosUsuarios();
-        System.out.println(usuarios.get(0));
-        
+        //List usuarios = usuarioRepository.obtenerTodosLosUsuarios();
+        //System.out.println(usuarios.get(0));
+        /*
+        Usuario usuario = new Usuario();
+        usuario.setApellidos("prueba");
+        usuario.setDni("pruebadni");
+        usuario.setFecha_alta(Timestamp.valueOf(s));
+        */
     }
 }

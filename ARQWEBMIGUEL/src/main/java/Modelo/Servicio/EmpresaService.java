@@ -5,7 +5,7 @@
 package Modelo.Servicio;
 
 import Modelo.Empresa;
-import Modelo.DAO.EmpresaRepository;
+import Modelo.DAO.EmpresaDAO;
 import java.sql.SQLException;
 
 /**
@@ -14,10 +14,10 @@ import java.sql.SQLException;
  */
 public class EmpresaService {
     
-    private EmpresaRepository empresaRepository;
+    private EmpresaDAO empresaRepository;
     
     public EmpresaService() throws SQLException {
-        empresaRepository = new EmpresaRepository();
+        empresaRepository = new EmpresaDAO();
     }
     
     public void crearEmpresa(Empresa empresa) {

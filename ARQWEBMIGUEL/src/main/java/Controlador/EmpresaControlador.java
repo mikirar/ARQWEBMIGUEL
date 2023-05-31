@@ -4,9 +4,8 @@
  */
 package Controlador;
 
-import Modelo.DAO.UsuarioDAO;
-import Modelo.TipoUsuario;
-import Modelo.Usuario;
+import Modelo.DAO.EmpresaDAO;
+import Modelo.Empresa;
 import Util.Common;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -33,15 +32,15 @@ import javax.servlet.http.HttpServletResponse;*/
  */
 
 
-public class UsuarioControlador extends HttpServlet{
+public class EmpresaControlador extends HttpServlet{
     private static final long serialVersionUID = 1L;
-    private static String INSERT_OR_EDIT = "/user-form.jsp";
-    private static String LIST_USER = "/user-list.jsp";
-    private UsuarioDAO usuarioRepository;
+    private static String INSERT_OR_EDIT = "/empresa-form.jsp";
+    private static String LIST_EMPRESA = "/empresa-list.jsp";
+    private EmpresaDAO empresaDao;
     
-    public UsuarioControlador() throws SQLException {
+    public EmpresaControlador() throws SQLException {
         super();
-        usuarioRepository = new UsuarioDAO();
+        empresaDao = new EmpresaDAO();
     }
     
     /**
@@ -61,20 +60,20 @@ public class UsuarioControlador extends HttpServlet{
         //Log.log.info("Recogemos el parametro action con valor " + action+ "\n");
         if (action.equalsIgnoreCase("delete")) {
             //Log.log.info("Parametro valor DELETE");
-            int userId = Integer.parseInt(request.getParameter("userid"));
-            usuarioRepository.eliminarUsuario(userId);
-            forward = LIST_USER;
-            request.setAttribute("users", usuarioRepository.obtenerTodosLosUsuarios());
+            int empresaId = Integer.parseInt(request.getParameter("empresaid"));
+            empresaDao.eliminarEmpresa(empresaId);
+            forward = LIST_EMPRESA;
+            request.setAttribute("empresas", empresaDao.obtenerTodasLasempresa());
         } else if (action.equalsIgnoreCase("edit")) {
             //Log.log.info("Parametro valor EDIT");
             forward = INSERT_OR_EDIT;
-            int userId = Integer.parseInt(request.getParameter("userid"));
-            Usuario user = usuarioRepository.obtenerUsuarioPorId(userId);
-            request.setAttribute("user", user);
-        } else if (action.equalsIgnoreCase("listUser")) {
+            int empresaId = Integer.parseInt(request.getParameter("empresaid"));
+            Empresa empresa = empresaDao.obtenerEmpresaPorId(empresaId);
+            request.setAttribute("empresa", empresa);
+        } else if (action.equalsIgnoreCase("listEmpresa")) {
             //Log.log.info("Parametro valor LIST\n");
-            forward = LIST_USER;
-            request.setAttribute("users", usuarioRepository.obtenerTodosLosUsuarios());
+            forward = LIST_EMPRESA;
+            request.setAttribute("empresas", empresaDao.obtenerTodasLasempresa());
         } else {
             //Log.log.info("Parametro valor vacio vamos a insertar\n");
             forward = INSERT_OR_EDIT;
@@ -91,25 +90,12 @@ public class UsuarioControlador extends HttpServlet{
 
         //Log.log.info("Entramos por el doPost\n");
         //processRequest(request, response);
-        Usuario usuario = new Usuario();
-        usuario.setUsername(request.getParameter("username"));
-        usuario.setPassword(request.getParameter("password"));                
-        usuario.setDni(request.getParameter("dni"));
-        usuario.setNombre(request.getParameter("nombre"));
-        usuario.setApellidos(request.getParameter("apellidos"));
-        String fechaAltaString = request.getParameter("fecha_alta");
-        //Date fechaAlta = Common.parseStringToDate(fechaAltaString);
-        Timestamp fechaAlta = Common.parseStringToTimestamp(fechaAltaString);
-        usuario.setFecha_alta(fechaAlta);
-        String fechaBajaString = request.getParameter("fecha_baja");
-        //Date fechaBaja = Common.parseStringToDate(fechaBajaString);
-        Timestamp fechaBaja = Common.parseStringToTimestamp(fechaBajaString);
-        usuario.setFecha_baja(fechaBaja);
-        usuario.setTipo_usuario(TipoUsuario.valueOf(request.getParameter("tipo_usuario")));
+        Empresa empresa = new Empresa();
+        empresa.setNombre_empresa(request.getParameter("nombre_empresa"));
 
-        String userid = request.getParameter("userid");
-        if (userid == null || userid.isEmpty() || userid.equalsIgnoreCase("")) {
-            usuarioRepository.crearUsuario(usuario);
+        String empresaid = request.getParameter("empresaid");
+        if (empresaid == null || empresaid.isEmpty() || empresaid.equalsIgnoreCase("")) {
+            empresaDao.crearEmpresa(empresa);
 
             /*try {
                 //Log.log.info("Vamos a añadir el usuario\n");
@@ -119,11 +105,11 @@ public class UsuarioControlador extends HttpServlet{
             }*/
             
         } else {
-            usuario.setUserid(Integer.parseInt(userid));
-            usuarioRepository.actualizarUsuario(usuario);
+            empresa.setEmpresaid(Integer.parseInt(empresaid));
+            empresaDao.actualizarEmpresa(empresa);
         }
-        request.setAttribute("users", usuarioRepository.obtenerTodosLosUsuarios());
-        RequestDispatcher view = request.getRequestDispatcher(LIST_USER);            
+        request.setAttribute("empresas", empresaDao.obtenerTodasLasempresa());
+        RequestDispatcher view = request.getRequestDispatcher(LIST_EMPRESA);            
         view.forward(request, response);
         //return;
     }
