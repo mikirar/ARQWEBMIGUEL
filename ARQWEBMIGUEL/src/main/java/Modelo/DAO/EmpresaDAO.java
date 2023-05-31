@@ -74,7 +74,7 @@ public class EmpresaDAO {
         return empresa;
     }
     
-    public List<Empresa> obtenerTodasLasempresa() {
+    public List<Empresa> obtenerTodasLasEmpresa() {
         List<Empresa> empresas = new ArrayList<>();
         
         try {
@@ -111,7 +111,7 @@ public class EmpresaDAO {
         return empresaActualizada;
     }
 
-    public void eliminarEmpresa(int id) {
+    public boolean eliminarEmpresa(int id) {
         boolean empresaEliminada = false;
         
         try {
@@ -125,6 +125,7 @@ public class EmpresaDAO {
             //grabar en el log
             System.out.println("No se ha eliminado bien la empresa");
         }
+        return empresaEliminada;
         
     }
 }

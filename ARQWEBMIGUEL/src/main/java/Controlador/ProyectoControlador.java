@@ -4,8 +4,8 @@
  */
 package Controlador;
 
-import Modelo.DAO.EmpresaDAO;
-import Modelo.Empresa;
+import Modelo.DAO.ProyectoDAO;
+import Modelo.Proyecto;
 import Util.Common;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -32,15 +32,15 @@ import javax.servlet.http.HttpServletResponse;*/
  */
 
 
-public class EmpresaControlador extends HttpServlet{
+public class ProyectoControlador extends HttpServlet{
     private static final long serialVersionUID = 1L;
-    private static String INSERT_OR_EDIT = "/empresa-form.jsp";
-    private static String LIST_EMPRESA = "/empresa-list.jsp";
-    private EmpresaDAO empresaDao;
+    private static String INSERT_OR_EDIT = "/proyecto-form.jsp";
+    private static String LIST_PROYECTO = "/proyecto-list.jsp";
+    private ProyectoDAO proyectoDao;
     
-    public EmpresaControlador() throws SQLException {
+    public ProyectoControlador() throws SQLException {
         super();
-        empresaDao = new EmpresaDAO();
+        proyectoDao = new ProyectoDAO();
     }
     
     /**
@@ -60,20 +60,20 @@ public class EmpresaControlador extends HttpServlet{
         //Log.log.info("Recogemos el parametro action con valor " + action+ "\n");
         if (action.equalsIgnoreCase("delete")) {
             //Log.log.info("Parametro valor DELETE");
-            int empresaId = Integer.parseInt(request.getParameter("empresaid"));
-            empresaDao.eliminarEmpresa(empresaId);
-            forward = LIST_EMPRESA;
-            request.setAttribute("empresas", empresaDao.obtenerTodasLasEmpresa());
+            int proyectoId = Integer.parseInt(request.getParameter("proyectoid"));
+            proyectoDao.eliminarProyecto(proyectoId);
+            forward = LIST_PROYECTO;
+            request.setAttribute("proyectos", proyectoDao.obtenerTodosLosProyectos());
         } else if (action.equalsIgnoreCase("edit")) {
             //Log.log.info("Parametro valor EDIT");
             forward = INSERT_OR_EDIT;
-            int empresaId = Integer.parseInt(request.getParameter("empresaid"));
-            Empresa empresa = empresaDao.obtenerEmpresaPorId(empresaId);
-            request.setAttribute("empresa", empresa);
-        } else if (action.equalsIgnoreCase("listEmpresa")) {
+            int proyectoId = Integer.parseInt(request.getParameter("proyectoid"));
+            Proyecto proyecto = proyectoDao.obtenerProyectoPorId(proyectoId);
+            request.setAttribute("proyecto", proyecto);
+        } else if (action.equalsIgnoreCase("listProyecto")) {
             //Log.log.info("Parametro valor LIST\n");
-            forward = LIST_EMPRESA;
-            request.setAttribute("empresas", empresaDao.obtenerTodasLasEmpresa());
+            forward = LIST_PROYECTO;
+            request.setAttribute("proyectos", proyectoDao.obtenerTodosLosProyectos());
         } else {
             //Log.log.info("Parametro valor vacio vamos a insertar\n");
             forward = INSERT_OR_EDIT;
@@ -90,12 +90,13 @@ public class EmpresaControlador extends HttpServlet{
 
         //Log.log.info("Entramos por el doPost\n");
         //processRequest(request, response);
-        Empresa empresa = new Empresa();
-        empresa.setNombre_empresa(request.getParameter("nombre_empresa"));
-
-        String empresaid = request.getParameter("empresaid");
-        if (empresaid == null || empresaid.isEmpty() || empresaid.equalsIgnoreCase("")) {
-            empresaDao.crearEmpresa(empresa);
+        Proyecto proyecto = new Proyecto();
+        proyecto.setNombre(request.getParameter("nombre"));
+        String empresaIdString = request.getParameter("empresaid");
+        proyecto.setEmpresaid(Integer.parseInt(empresaIdString));
+        String proyectoid = request.getParameter("proyectoid");
+        if (proyectoid == null || proyectoid.isEmpty() || proyectoid.equalsIgnoreCase("")) {
+            proyectoDao.crearProyecto(proyecto);
 
             /*try {
                 //Log.log.info("Vamos a añadir el usuario\n");
@@ -105,11 +106,11 @@ public class EmpresaControlador extends HttpServlet{
             }*/
             
         } else {
-            empresa.setEmpresaid(Integer.parseInt(empresaid));
-            empresaDao.actualizarEmpresa(empresa);
+            proyecto.setProyectoid(Integer.parseInt(proyectoid));
+            proyectoDao.actualizarProyecto(proyecto);
         }
-        request.setAttribute("empresas", empresaDao.obtenerTodasLasEmpresa());
-        RequestDispatcher view = request.getRequestDispatcher(LIST_EMPRESA);            
+        request.setAttribute("proyectos", proyectoDao.obtenerTodosLosProyectos());
+        RequestDispatcher view = request.getRequestDispatcher(LIST_PROYECTO);            
         view.forward(request, response);
         //return;
     }

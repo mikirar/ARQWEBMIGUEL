@@ -5,7 +5,7 @@
 package Modelo.Servicio;
 
 import Modelo.Proyecto;
-import Modelo.DAO.ProyectoRepository;
+import Modelo.DAO.ProyectoDAO;
 import java.sql.SQLException;
 
 /**
@@ -13,10 +13,10 @@ import java.sql.SQLException;
  * @author miki
  */
 public class ProyectoService {
-    private ProyectoRepository proyectoRepository;
+    private ProyectoDAO proyectoRepository;
     
     public ProyectoService() throws SQLException{
-        proyectoRepository = new ProyectoRepository(); //Inicializamos repo
+        proyectoRepository = new ProyectoDAO(); //Inicializamos repo
     }
     
     public void crearProyecto(Proyecto proyecto) {

@@ -7,7 +7,7 @@ package Util;
 import Modelo.Empresa;
 import Modelo.Proyecto;
 import Modelo.DAO.EmpresaDAO;
-import Modelo.DAO.ProyectoRepository;
+import Modelo.DAO.ProyectoDAO;
 import Modelo.DAO.UsuarioDAO;
 import Modelo.Usuario;
 import java.sql.SQLException;
@@ -34,7 +34,7 @@ public class PruebaDB {
         empresaRepository.crearEmpresa(empresa);*/
         
         //Creamos el proyecto
-        /*ProyectoRepository proyectoRepository = new ProyectoRepository();
+        /*ProyectoDAO proyectoRepository = new ProyectoDAO();
         Proyecto proyecto = new Proyecto();
         proyecto.setProyectoid(1);
         proyecto.setNombre("pruebaProyecto");

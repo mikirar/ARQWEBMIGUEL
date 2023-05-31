@@ -28,8 +28,8 @@ public class UsuarioDAO {
     private String jdbcDriver = "com.mysql.jdbc.Driver";
     //private Connection connection;
     
-    private static final String INSERT_USERS_SQL = "INSERT INTO usuarios " + "(username, password, dni, nombre, apellidos, fecha_alta, fecha_baja, tipo_usuario) VALUES"
-                                                    + "(?, ?, ?, ?, ?, ?, ?, ?);";
+    private static final String INSERT_USERS_SQL = "INSERT INTO usuarios " + "(id_user, username, password, dni, nombre, apellidos, fecha_alta, fecha_baja, tipo_usuario) VALUES"
+                                                    + "(?, ?, ?, ?, ?, ?, ?, ?, ?);";
     private static final String SELECT_USER_BY_ID_SQL = "SELECT * FROM usuarios WHERE id_user =?;";
     private static final String SELECT_ALL_USERS_SQL = "SELECT * FROM usuarios;";
     private static final String DELETE_USER_BY_ID_SQL = "DELETE FROM usuarios WHERE id_user =?;";
@@ -49,15 +49,15 @@ public class UsuarioDAO {
             Connection connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USERS_SQL);
             // Parameters start with 1 
-            //preparedStatement.setInt(1, usuario.getUserid());
-            preparedStatement.setString(1, usuario.getUsername());
-            preparedStatement.setString(2, usuario.getPassword());
-            preparedStatement.setString(3, usuario.getDni());
-            preparedStatement.setString(4, usuario.getNombre());
-            preparedStatement.setString(5, usuario.getApellidos());
-            preparedStatement.setTimestamp(6, usuario.getFecha_alta());
-            preparedStatement.setTimestamp(7, usuario.getFecha_baja());
-            preparedStatement.setString(8, usuario.getTipo_usuario().name());
+            preparedStatement.setInt(1, usuario.getUserid());
+            preparedStatement.setString(2, usuario.getUsername());
+            preparedStatement.setString(3, usuario.getPassword());
+            preparedStatement.setString(4, usuario.getDni());
+            preparedStatement.setString(5, usuario.getNombre());
+            preparedStatement.setString(6, usuario.getApellidos());
+            preparedStatement.setTimestamp(7, usuario.getFecha_alta());
+            preparedStatement.setTimestamp(8, usuario.getFecha_baja());
+            preparedStatement.setString(9, usuario.getTipo_usuario().name());
             preparedStatement.executeUpdate();
             System.out.println("Se ha creado el usuario");
         }

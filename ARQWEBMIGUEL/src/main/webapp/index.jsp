@@ -4,5 +4,7 @@
     Author     : miki
 --%>
 
-<<jsp:forward page="/UsuarioControlador?action=listUser"/>
+<%--<<jsp:forward page="/UsuarioControlador?action=listUser"/>--%>
+<<jsp:forward page="menu-principal-rrhh.jsp"/>
+
 

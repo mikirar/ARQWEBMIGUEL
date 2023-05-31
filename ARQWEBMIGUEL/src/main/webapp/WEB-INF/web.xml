@@ -29,6 +29,14 @@
         <servlet-name>EmpresaControlador</servlet-name>
         <url-pattern>/EmpresaControlador</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>ProyectoControlador</servlet-name>
+        <servlet-class>Controlador.ProyectoControlador</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ProyectoControlador</servlet-name>
+        <url-pattern>/ProyectoControlador</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
