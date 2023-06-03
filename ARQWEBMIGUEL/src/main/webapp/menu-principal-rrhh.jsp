@@ -33,6 +33,7 @@
         <a class="button" href="UsuarioControlador?action=listUser"">Usuarios</a>
         <a class="button" href="EmpresaControlador?action=listEmpresa"">Empresas</a>
         <a class="button" href="ProyectoControlador?action=listProyecto"">Proyectos</a>
+        <a class="button" href="MarcadorControlador?action=listMarcador"">Marcajes</a>
     </div>
 </body>
 </html>

@@ -5,7 +5,7 @@
 package Modelo.Servicio;
 
 import Modelo.Marcaje;
-import Modelo.DAO.MarcajeRepository;
+import Modelo.DAO.MarcajeDAO;
 import java.sql.SQLException;
 
 /**
@@ -14,10 +14,10 @@ import java.sql.SQLException;
  */
 public class MarcajeService {
     
-    private MarcajeRepository marcajeRepository;
+    private MarcajeDAO marcajeRepository;
     
     public MarcajeService() throws SQLException{
-        marcajeRepository = new MarcajeRepository();
+        marcajeRepository = new MarcajeDAO();
     }
     
     public void crearMarcaje(Marcaje marcaje) {

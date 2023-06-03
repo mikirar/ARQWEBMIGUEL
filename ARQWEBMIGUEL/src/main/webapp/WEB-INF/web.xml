@@ -37,6 +37,14 @@
         <servlet-name>ProyectoControlador</servlet-name>
         <url-pattern>/ProyectoControlador</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>MarcadorControlador</servlet-name>
+        <servlet-class>Controlador.MarcadorControlador</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MarcadorControlador</servlet-name>
+        <url-pattern>/MarcadorControlador</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30

@@ -4,6 +4,7 @@
  */
 package Modelo;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Date;
 public class Marcaje {
     
     int id;
-    Date fecha;
+    Timestamp fecha;
     Enum tipo_marcaje;
     int usuarioid;
 
@@ -25,11 +26,11 @@ public class Marcaje {
         this.id = id;
     }
 
-    public Date getFecha() {
+    public Timestamp getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(Timestamp fecha) {
         this.fecha = fecha;
     }
 
