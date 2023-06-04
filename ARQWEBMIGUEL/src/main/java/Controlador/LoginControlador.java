@@ -63,43 +63,49 @@ public class LoginControlador extends HttpServlet{
         String user = request.getParameter("usuario");
         String pwd = request.getParameter("password");
         Usuario usuarioBd = usuarioDao.obtenerUsuarioPorUsernameYPassword(user, pwd);
-        userID = usuarioBd.getUsername();
-        password = usuarioBd.getPassword();
         
-        if(userID.equals(user) && password.equals(pwd) && usuarioBd.getTipo_usuario() == TipoUsuario.A){
-            Cookie loginCookie = new Cookie("user",user);
-            Cookie cookie = new Cookie("msg","4558858858585");
-            //setting cookie to expiry in 30 mins
-            loginCookie.setMaxAge(30*60);
-            response.addCookie(loginCookie);
-            response.addCookie(cookie);
-            response.sendRedirect("menu-principal-rrhh.jsp");
-        } else if(userID.equals(user) && password.equals(pwd) && usuarioBd.getTipo_usuario() == TipoUsuario.U) {
-            Cookie loginCookie = new Cookie("user",user);
-            Cookie cookie = new Cookie("msg","4558858858585");
-            loginCookie.setMaxAge(30*60);
-            response.addCookie(loginCookie);
-            response.addCookie(cookie);
-            //Metemos en la sesion tanto el usuario como su marcaje
-            HttpSession session = request.getSession();
-            List<Marcaje> marcajes = new ArrayList<>();
-            marcajes = marcajeDao.obtenerTodasLosMarcajesPorIdUsuario(usuarioBd.getUserid());
-            session.setAttribute("user", usuarioBd);
-            session.setAttribute("marcajes", marcajes);
-            request.setAttribute("user", usuarioBd);
-            request.setAttribute("marcajes", marcajes);
-            //RequestDispatcher dispatcher = request.getRequestDispatcher("EmpleadoControlador?action=listEmpleado");
-            //dispatcher.forward(request, response);
-            response.sendRedirect("EmpleadoControlador?action=listEmpleado");
+        try {
+        
+            userID = usuarioBd.getUsername();
+            password = usuarioBd.getPassword();
+
+            if(userID.equals(user) && password.equals(pwd) && usuarioBd.getTipo_usuario() == TipoUsuario.A){
+                Cookie loginCookie = new Cookie("user",user);
+                Cookie cookie = new Cookie("msg","4558858858585");
+                //setting cookie to expiry in 30 mins
+                loginCookie.setMaxAge(30*60);
+                response.addCookie(loginCookie);
+                response.addCookie(cookie);
+                response.sendRedirect("menu-principal-rrhh.jsp");
+            } else if(userID.equals(user) && password.equals(pwd) && usuarioBd.getTipo_usuario() == TipoUsuario.U) {
+                Cookie loginCookie = new Cookie("user",user);
+                Cookie cookie = new Cookie("msg","4558858858585");
+                loginCookie.setMaxAge(30*60);
+                response.addCookie(loginCookie);
+                response.addCookie(cookie);
+                //Metemos en la sesion tanto el usuario como su marcaje
+                HttpSession session = request.getSession();
+                List<Marcaje> marcajes = new ArrayList<>();
+                marcajes = marcajeDao.obtenerTodasLosMarcajesPorIdUsuario(usuarioBd.getUserid());
+                session.setAttribute("user", usuarioBd);
+                session.setAttribute("marcajes", marcajes);
+                request.setAttribute("user", usuarioBd);
+                request.setAttribute("marcajes", marcajes);
+                //RequestDispatcher dispatcher = request.getRequestDispatcher("EmpleadoControlador?action=listEmpleado");
+                //dispatcher.forward(request, response);
+                response.sendRedirect("EmpleadoControlador?action=listEmpleado");
+
+            }
+            else {
+                RequestDispatcher rd = getServletContext().getRequestDispatcher("index.jsp");
+                PrintWriter out= response.getWriter();
+                out.println("<font color=red>Usuario o password son incorrectos.</font>");
+                rd.include(request, response);
+            }
 
         }
-        else {
-            RequestDispatcher rd = getServletContext().getRequestDispatcher("index.jsp");
-            PrintWriter out= response.getWriter();
-            out.println("<font color=red>Usuario o password son incorrectos.</font>");
-            rd.include(request, response);
-        }
-
-
+        catch (Exception e) {
+                    response.sendRedirect("/error_inicio_sesion.jsp");
+            }
     }
 }

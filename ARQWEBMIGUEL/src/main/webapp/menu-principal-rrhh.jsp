@@ -30,10 +30,10 @@
 </head>
 <body>
     <div class="button-container">
-        <a class="button" href="UsuarioControlador?action=listUser"">Usuarios</a>
-        <a class="button" href="EmpresaControlador?action=listEmpresa"">Empresas</a>
-        <a class="button" href="ProyectoControlador?action=listProyecto"">Proyectos</a>
-        <a class="button" href="MarcadorControlador?action=listMarcador"">Marcajes</a>
+        <a class="button" href="UsuarioControlador?action=listUser"style="font-size: 30px; text-decoration: none"">Usuarios</a>
+        <a class="button" href="EmpresaControlador?action=listEmpresa"style="font-size: 30px; text-decoration: none">Empresas</a>
+        <a class="button" href="ProyectoControlador?action=listProyecto"style="font-size: 30px; text-decoration: none">Proyectos</a>
+        <a class="button" href="MarcadorControlador?action=listMarcador"style="font-size: 30px; text-decoration: none">Marcajes</a>
     </div>
 </body>
 </html>

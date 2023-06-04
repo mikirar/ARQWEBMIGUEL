@@ -43,7 +43,7 @@
                     </c:if>
                     
                     <fieldset class="form-group"> 
-                        <label>Fecha</label> <input type="date"
+                        <label>Fecha</label> <input type="datetime-local"
                         value="<c:out value='${marcaje.fecha}' />" class="form-control" 
                         name="fecha" required>
                     </fieldset>

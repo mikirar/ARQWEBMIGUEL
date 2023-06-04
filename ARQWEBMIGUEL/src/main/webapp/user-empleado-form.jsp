@@ -73,7 +73,7 @@
                         name="fecha_alta" required>
                     </fieldset>
                     <fieldset class="form-group"> 
-                        <label>Fecha baja</label> <input type="date"
+                        <label>Fecha baja</label> <input type="datetime-local"
                         value="<c:out value='${user.fecha_baja}' />" class="form-control" 
                         name="fecha_baja">
                     </fieldset>

@@ -105,12 +105,12 @@
                         name="apellidos" required readonly>
                     </fieldset>
                     <fieldset class="form-group"> 
-                        <label>Fecha alta</label> <input type="date"
+                        <label>Fecha alta</label> <input type="datetime-local"
                         value="<c:out value='${user.fecha_alta}' />" class="form-control" 
                         name="fecha_alta" required readonly>
                     </fieldset>
                     <fieldset class="form-group"> 
-                        <label>Fecha baja</label> <input type="date"
+                        <label>Fecha baja</label> <input type="datetime-local"
                         value="<c:out value='${user.fecha_baja}' />" class="form-control" 
                         name="fecha_baja" readonly>
                     </fieldset>
@@ -120,7 +120,11 @@
                         name="tipo_usuario" required readonly>
                     </fieldset>
                         
-                        <button><a href="EmpleadoControlador?action=edit&userid=${user.userid}">Edit</a></button>
+                        <button><a href="EmpleadoControlador?action=edit&userid=${user.userid}" style="font-size: 15px; text-decoration: none"">Edit</a></button>
+                    <%--</form>--%>
+                    
+                    <form action="LogoutControlador" method="POST">
+                        <button type="submit" class="btn btn-success" style="font-size: 15px; text-decoration: none"">Logout</button>
                     </form>
                     </div>
                 </div>

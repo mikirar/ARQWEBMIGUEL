@@ -68,12 +68,12 @@
                         name="apellidos" required>
                     </fieldset>
                     <fieldset class="form-group"> 
-                        <label>Fecha alta</label> <input type="date"
+                        <label>Fecha alta</label> <input type="datetime-local"
                         value="<c:out value='${user.fecha_alta}' />" class="form-control" 
                         name="fecha_alta" required>
                     </fieldset>
                     <fieldset class="form-group"> 
-                        <label>Fecha baja</label> <input type="date"
+                        <label>Fecha baja</label> <input type="datetime-local"
                         value="<c:out value='${user.fecha_baja}' />" class="form-control" 
                         name="fecha_baja">
                     </fieldset>
