@@ -45,6 +45,30 @@
         <servlet-name>MarcadorControlador</servlet-name>
         <url-pattern>/MarcadorControlador</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>MarcadorEmpleadoControlador</servlet-name>
+        <servlet-class>Controlador.MarcadorEmpleadoControlador</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MarcadorEmpleadoControlador</servlet-name>
+        <url-pattern>/MarcadorEmpleadoControlador</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>EmpleadoControlador</servlet-name>
+        <servlet-class>Controlador.EmpleadoControlador</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EmpleadoControlador</servlet-name>
+        <url-pattern>/EmpleadoControlador</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>LoginControlador</servlet-name>
+        <servlet-class>Controlador.LoginControlador</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginControlador</servlet-name>
+        <url-pattern>/LoginControlador</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30

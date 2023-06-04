@@ -30,10 +30,11 @@ public class MarcajeDAO {
     private static final String INSERT_MARCAJE_SQL = "INSERT INTO marcajes " + "(id, fecha, tipo_marcaje, id_usuario) VALUES" + "(?, ?, ?, ?);";
     private static final String SELECT_MARCAJE_BY_ID_SQL = "SELECT * FROM marcajes WHERE id =?;";
     private static final String SELECT_ALL_MARCAJE_SQL = "SELECT * FROM marcajes;";
+    private static final String SELECT_ALL_MARCAJE__USUARIO_SQL = "SELECT * FROM marcajes WHERE id_usuario = ?;";
     private static final String DELETE_MARCAJE_BY_ID_SQL = "DELETE FROM marcajes WHERE id =?;";
     private static final String UPDATE_MARCAJE_BY_ID_SQL = "UPDATE marcajes set fecha = ?, tipo_marcaje = ?, id_usuario = ? WHERE id =?;";
     
-    public MarcajeDAO() throws SQLException {
+    public MarcajeDAO() {
         //log de que cogemos conexión
         //connection = ConexionBD.getConnection();
         //log de que tenemos conexión
@@ -94,12 +95,38 @@ public class MarcajeDAO {
                 marcaje.setId(rs.getInt("id"));
                 marcaje.setFecha(rs.getTimestamp("fecha"));
                 marcaje.setTipo_marcaje(TipoMarcaje.valueOf(rs.getString("tipo_marcaje")));
+                marcaje.setUsuarioid(rs.getInt("id_usuario"));
                 marcajes.add(marcaje);
                 }
             } catch (SQLException e) {
                 //Log.logdb.error("SQL Exception: " + e + "\n");  
                 System.out.println("Error en la obtención de todos los marcajes: " + e);
             }
+            return marcajes;
+    }
+    
+    public List<Marcaje> obtenerTodasLosMarcajesPorIdUsuario(int idUsuario) {
+        System.out.println(SELECT_ALL_MARCAJE__USUARIO_SQL);
+        List<Marcaje> marcajes = new ArrayList<>();
+        
+        try {
+            Connection connection = ConexionBD.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_MARCAJE__USUARIO_SQL);
+            preparedStatement.setInt(1, idUsuario);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                Marcaje marcaje = new Marcaje();
+                marcaje.setId(rs.getInt("id"));
+                marcaje.setFecha(rs.getTimestamp("fecha"));
+                marcaje.setTipo_marcaje(TipoMarcaje.valueOf(rs.getString("tipo_marcaje")));
+                marcaje.setUsuarioid(rs.getInt("id_usuario"));
+                marcajes.add(marcaje);
+                }
+            } catch (SQLException e) {
+                //Log.logdb.error("SQL Exception: " + e + "\n");  
+                System.out.println("Error en la obtención de todos los marcajes de los usuarios: " + e);
+            }
+            System.out.println(marcajes);
             return marcajes;
     }
     

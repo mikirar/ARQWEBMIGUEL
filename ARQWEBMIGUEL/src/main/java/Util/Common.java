@@ -32,7 +32,9 @@ public class Common {
         if (fechaStr == null || fechaStr.isEmpty()) {
             return null;
         }
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String pattern = "yyyy-MM-dd'T'HH:mm";
+        SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
         try {
             Date fecha = dateFormat.parse(fechaStr);
             return new Timestamp(fecha.getTime());

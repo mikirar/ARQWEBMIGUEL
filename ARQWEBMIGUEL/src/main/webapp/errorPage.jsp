@@ -12,9 +12,15 @@
         <title>Error</title>
     </head>
     <body>
-    <centre>
+    <center>
         <h1>Error</h1>
         <h2><%=exception.getMessage()%></h2>
-    </centre>
+        <p>Información adicional:</p>
+        <<ul>
+            <li>Causa del error: <%=exception.getCause()%></li>
+            <li>Trazas de la pila de errores:</li>
+            <pre><%=exception.getStackTrace()%></pre>
+        </ul>
+    </center>
     </body>
 </html>

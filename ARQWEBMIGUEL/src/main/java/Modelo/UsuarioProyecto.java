@@ -4,8 +4,7 @@
  */
 package Modelo;
 
-import java.util.Date;
-
+import java.sql.Timestamp;
 /**
  *
  * @author miki
@@ -15,8 +14,8 @@ public class UsuarioProyecto {
     int id;
     int userid;
     int proyectoid;
-    Date fecha_alta;
-    Date fecha_baja;
+    Timestamp fecha_alta;
+    Timestamp fecha_baja;
 
     public int getId() {
         return id;
@@ -42,19 +41,19 @@ public class UsuarioProyecto {
         this.proyectoid = proyectoid;
     }
 
-    public Date getFecha_alta() {
+    public Timestamp getFecha_alta() {
         return fecha_alta;
     }
 
-    public void setFecha_alta(Date fecha_alta) {
+    public void setFecha_alta(Timestamp fecha_alta) {
         this.fecha_alta = fecha_alta;
     }
 
-    public Date getFecha_baja() {
+    public Timestamp getFecha_baja() {
         return fecha_baja;
     }
 
-    public void setFecha_baja(Date fecha_baja) {
+    public void setFecha_baja(Timestamp fecha_baja) {
         this.fecha_baja = fecha_baja;
     }
 

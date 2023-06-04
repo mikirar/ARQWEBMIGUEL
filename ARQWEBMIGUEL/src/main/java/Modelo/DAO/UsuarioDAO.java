@@ -34,6 +34,7 @@ public class UsuarioDAO {
     private static final String SELECT_ALL_USERS_SQL = "SELECT * FROM usuarios;";
     private static final String DELETE_USER_BY_ID_SQL = "DELETE FROM usuarios WHERE id_user =?;";
     private static final String UPDATE_USER_BY_ID_SQL = "UPDATE usuarios set username = ?, password = ?, dni = ?, nombre = ?, apellidos = ?, fecha_alta = ?, fecha_baja = ?, tipo_usuario = ? WHERE id_user =?;";
+    private static final String SELECT_USER_BY_USERNAME_PASSWORD_SQL = "SELECT * from usuarios where username = ? and password = ?;";
     
     public UsuarioDAO() {
         //log de que cogemos conexión
@@ -65,6 +66,37 @@ public class UsuarioDAO {
             //grabar en el log
             System.out.println("No se ha guardado bien el usuario: " + e);
         }
+    }
+    
+    public Usuario obtenerUsuarioPorUsernameYPassword(String username, String password) {
+        System.out.println(SELECT_USER_BY_USERNAME_PASSWORD_SQL);
+        Usuario usuario = new Usuario();
+        
+        try {
+            Connection connection = ConexionBD.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_USERNAME_PASSWORD_SQL);
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()){
+                usuario.setUserid(rs.getInt("id_user"));
+                usuario.setUsername(rs.getString("username"));
+                usuario.setPassword(rs.getString("password"));
+                usuario.setDni(rs.getString("dni"));
+                usuario.setNombre(rs.getString("nombre"));
+                usuario.setApellidos(rs.getString("apellidos"));
+                usuario.setFecha_alta(rs.getTimestamp("fecha_alta"));
+                usuario.setFecha_baja(rs.getTimestamp("fecha_baja"));
+                //usuario.setTipo_usuario(usuario.tipo_usuario.valueOf(rs.getString("tipo_usuario")));
+                usuario.setTipo_usuario(TipoUsuario.valueOf(rs.getString("tipo_usuario")));
+            }
+        }
+        catch (SQLException e) {
+            System.out.println("No se ha encontrado el usuario: " + e);
+        }
+        System.out.println(usuario.toString());
+        System.out.println(usuario.getTipo_usuario());
+        return usuario;
     }
     
     public Usuario obtenerUsuarioPorId(int idUsuario) {
