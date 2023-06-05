@@ -52,14 +52,15 @@
                                 <td><c:out value="${user.fecha_baja}" /></td>
                                 <td><c:out value="${user.tipo_usuario}" /></td>
                                 <%--<td><a href="UsuarioControlador?action=edit?userid=<c:out value="${user.userid}" />">Edit</a></td>--%>
-                                <td><a href="UsuarioControlador?action=edit&userid=${user.userid}">Edit</a></td>
-                                <td><a href="UsuarioControlador?action=delete&userid=${user.userid}">Delete</a></td>
+                                <td><a href="UsuarioControlador?action=edit&userid=${user.userid}"" style="text-decoration: none; font-size: 15px">Edit</a></td>
+                                <td><a href="UsuarioControlador?action=delete&userid=${user.userid}"" style="text-decoration: none; font-size: 15px">Delete</a></td>
 
                             </tr>
                         </c:forEach>
                     </tbody>
                     
                 </table>
-            <p><a href="UsuarioControlador?action=insert">Add User</a></p>
+            <p><a href="UsuarioControlador?action=insert" style="text-decoration: none; font-size: 20px">Add User</a></p>
+            <p><a href="/menu-principal-rrhh.jsp" style="text-decoration: none; font-size: 20px">Menú</a></p>
     </body>
 </html>

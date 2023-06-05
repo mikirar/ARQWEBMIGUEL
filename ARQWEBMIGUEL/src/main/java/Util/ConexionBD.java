@@ -34,15 +34,18 @@ public class ConexionBD {
         try {
             Class.forName(DRIVER);
             connection=DriverManager.getConnection(URL, USUARIO, PASSWORD);
-            System.out.println("Conexión exitosa");
+            //System.out.println("Conexión exitosa");
+            Log.insertLog("Conexión exitosa\n");
             //Aquí hacemos uso de la conexión
             //Guardar en log que hemos realizado correctamente la conexión
 
         } catch (SQLException e){
             System.out.println("Error SQL: " + e);
+            Log.insertLog(e + "Conexión incorrecta\n");
             
         } catch (ClassNotFoundException e) {
             System.out.println("Error clase no encontrada: " + e);
+            Log.insertLog(e + "Conexión incorrecta\n");
         }
         
         return connection;
@@ -53,9 +56,10 @@ public class ConexionBD {
         try {
             con.close();
         }
-        catch (Throwable e){
+        catch (Exception e){
             //Guardar en el log que se cierra la conexión correctamente
-            JOptionPane.showMessageDialog(null, "CONEXIÓN FINALIZADA");
+            Log.insertLog(e + "Conexión cerrada correctamente\n");
+            //JOptionPane.showMessageDialog(null, "CONEXIÓN FINALIZADA");
         }
     }
 }

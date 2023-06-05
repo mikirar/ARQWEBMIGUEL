@@ -40,14 +40,15 @@
                                 <td><c:out value="${proyecto.nombre}" /></td>
                                 <td><c:out value="${proyecto.empresaid}" /></td>
                                 <%--<td><a href="UsuarioControlador?action=edit?userid=<c:out value="${user.userid}" />">Edit</a></td>--%>
-                                <td><a href="ProyectoControlador?action=edit&proyectoid=${proyecto.proyectoid}">Edit</a></td>
-                                <td><a href="ProyectoControlador?action=delete&proyectoid=${proyecto.proyectoid}">Delete</a></td>
+                                <td><a href="ProyectoControlador?action=edit&proyectoid=${proyecto.proyectoid}"" style="text-decoration: none; font-size: 15px">Edit</a></td>
+                                <td><a href="ProyectoControlador?action=delete&proyectoid=${proyecto.proyectoid}"" style="text-decoration: none; font-size: 15px">Delete</a></td>
 
                             </tr>
                         </c:forEach>
                     </tbody>
                     
                 </table>
-            <p><a href="ProyectoControlador?action=insert">Add Proyecto</a></p>
+            <p><a href="ProyectoControlador?action=insert"" style="text-decoration: none; font-size: 20px">Add Proyecto</a></p>
+            <p><a href="/menu-principal-rrhh.jsp"" style="text-decoration: none; font-size: 20px">Menú</a></p>
     </body>
 </html>

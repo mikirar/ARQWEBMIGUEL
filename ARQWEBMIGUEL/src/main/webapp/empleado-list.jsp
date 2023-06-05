@@ -47,15 +47,15 @@
                                 <td><c:out value="${marcaje.tipo_marcaje}" /></td>
                                 <td><c:out value="${marcaje.usuarioid}" /></td>
                                 <%--<td><a href="UsuarioControlador?action=edit?userid=<c:out value="${user.userid}" />">Edit</a></td>--%>
-                                <td><a href="MarcadorEmpleadoControlador?action=edit&id=${marcaje.id}">Edit</a></td>
-                                <td><a href="MarcadorEmpleadoControlador?action=delete&id=${marcaje.id}">Delete</a></td>
+                                <td><a href="MarcadorEmpleadoControlador?action=edit&id=${marcaje.id}"" style="text-decoration: none; font-size: 15px">Edit</a></td>
+                                <td><a href="MarcadorEmpleadoControlador?action=delete&id=${marcaje.id}"" style="text-decoration: none; font-size: 15px">Delete</a></td>
 
                             </tr>
                         </c:forEach>
                     </tbody>
                     
                 </table>
-            <p><a href="MarcadorEmpleadoControlador?action=insert">Add Marcaje</a></p>
+            <p><a href="MarcadorEmpleadoControlador?action=insert"" style="text-decoration: none; font-size: 20px">Add Marcaje</a></p>
             
             <div class="container col-md-5">
                 <div class="card">
@@ -168,9 +168,6 @@
                                 <td scope="row"><c:out value="${proyecto.proyectoid}" /></td>
                                 <td><c:out value="${proyecto.nombre}" /></td>
                                 <td><c:out value="${proyecto.empresaid}" /></td>
-                                <%--<td><a href="UsuarioControlador?action=edit?userid=<c:out value="${user.userid}" />">Edit</a></td>--%>
-                                <td><a href="ProyectoControlador?action=edit&proyectoid=${proyecto.proyectoid}">Edit</a></td>
-                                <td><a href="ProyectoControlador?action=delete&proyectoid=${proyecto.proyectoid}">Delete</a></td>
 
                             </tr>
                         </c:forEach>

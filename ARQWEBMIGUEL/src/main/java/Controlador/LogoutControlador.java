@@ -72,8 +72,20 @@ public class LogoutControlador extends HttpServlet{
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Expires", "0");
-        request.getSession().invalidate();
-        
+        HttpSession session = request.getSession();
+        if (session.getAttribute("user") != null) {
+            session.removeAttribute("user");
+        }
+        if (session.getAttribute("marcajes") != null) {
+            session.removeAttribute("marcajes");
+        }
+        if (session.getAttribute("empresas") != null) {
+            session.removeAttribute("empresas");
+        }
+        if (session.getAttribute("proyectos") != null) {
+            session.removeAttribute("proyectos");
+        }
+        session.invalidate();        
         response.sendRedirect("index.jsp");
 
     }

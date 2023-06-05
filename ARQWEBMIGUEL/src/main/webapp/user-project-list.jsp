@@ -44,8 +44,8 @@
                                 <td><c:out value="${usuarioproyecto.fecha_alta}" /></td>
                                 <td><c:out value="${usuarioproyecto.fecha_baja}" /></td>
                                 <%--<td><a href="UsuarioControlador?action=edit?userid=<c:out value="${user.userid}" />">Edit</a></td>--%>
-                                <td><a href="UsuarioProyectoControlador?action=edit&id=${usuarioproyecto.id}">Edit</a></td>
-                                <td><a href="UsuarioProyectoControlador?action=delete&id=${usuarioproyecto.id}">Delete</a></td>
+                                <td><a href="UsuarioProyectoControlador?action=edit&id=${usuarioproyecto.id}"" style="text-decoration: none; font-size: 15px">Edit</a></td>
+                                <td><a href="UsuarioProyectoControlador?action=delete&id=${usuarioproyecto.id}"" style="text-decoration: none; font-size: 15px">Delete</a></td>
 
                             </tr>
                         </c:forEach>
@@ -53,5 +53,6 @@
                     
                 </table>
             <p><a href="UsuarioProyectoControlador?action=insert">Add UsuarioProyecto</a></p>
+            <p><a href="/menu-principal-rrhh.jsp" style="text-decoration: none; font-size: 20px">Menú</a></p>
     </body>
 </html>

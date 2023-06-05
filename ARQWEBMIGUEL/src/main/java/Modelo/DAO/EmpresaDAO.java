@@ -43,8 +43,9 @@ public class EmpresaDAO {
     
     public void crearEmpresa(Empresa empresa) {
         System.out.println(INSERT_EMPRESA_SQL);
+        Connection connection = null;
         try{
-            Connection connection = ConexionBD.getConnection();
+            connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_EMPRESA_SQL);
             // Parameters start with 1 
             preparedStatement.setInt(1, empresa.getEmpresaid());
@@ -57,14 +58,23 @@ public class EmpresaDAO {
             //grabar en el log
             System.out.println("No se ha guardado bien la empresa: " + e);
             Log.insertLog(e + "No se ha guardado la empresa\n");
+        } finally {
+        try {
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al cerrar la conexión");
+            Log.insertLog(e + "Error al cerrar la conexión\n");
         }
+    }
     }
 
     public Empresa obtenerEmpresaPorId(int idEmpresa) {
         Empresa empresa = new Empresa();
-        
+        Connection connection = null;
         try {
-            Connection connection = ConexionBD.getConnection();
+            connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_EMPRESA_BY_ID_SQL);
             preparedStatement.setInt(1, idEmpresa);
             ResultSet rs = preparedStatement.executeQuery();
@@ -76,16 +86,25 @@ public class EmpresaDAO {
             //Meter en el log el error
             System.out.println("Ha fallado la obtención de la empresa: " + e);
             Log.insertLog(e + "Ha fallado la obtención de la empresa\n");
+        } finally {
+        try {
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al cerrar la conexión");
+            Log.insertLog(e + "Error al cerrar la conexión\n");
         }
+    }
         Log.insertLog("Se ha obtenido la empresa\n");
         return empresa;
     }
     
     public List<Empresa> obtenerTodasLasEmpresa() {
         List<Empresa> empresas = new ArrayList<>();
-        
+        Connection connection = null;
         try {
-            Connection connection = ConexionBD.getConnection();
+            connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_EMPRESA_SQL);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
@@ -98,14 +117,24 @@ public class EmpresaDAO {
                 //Log.logdb.error("SQL Exception: " + e + "\n");  
                 System.out.println("Error en la obtención de todas las empresas: " + e);
                 Log.insertLog(e + "Error en la obtención de todas las empresas\n");
+            } finally {
+        try {
+            if (connection != null) {
+                connection.close();
             }
+        } catch (SQLException e) {
+            System.out.println("Error al cerrar la conexión");
+            Log.insertLog(e + "Error al cerrar la conexión\n");
+        }
+    }
             return empresas;
     }
 
     public boolean actualizarEmpresa(Empresa empresa) {
         boolean empresaActualizada = false;
+        Connection connection = null;
         try {
-            Connection connection = ConexionBD.getConnection();
+            connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_EMPRESA_BY_ID_SQL);
             // Parameters start with 1 
             preparedStatement.setString(1, empresa.getNombre_empresa());
@@ -115,7 +144,16 @@ public class EmpresaDAO {
         } catch (SQLException e) {
             System.out.println("No se ha podido actualizar la empresa: " + e);
             Log.insertLog(e + "No se ha podido actualizar la empresa\n");
+        } finally {
+        try {
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al cerrar la conexión");
+            Log.insertLog(e + "Error al cerrar la conexión\n");
         }
+    }
         
         Log.insertLog("Se ha actualizado la empresa\n");
         return empresaActualizada;
@@ -123,9 +161,10 @@ public class EmpresaDAO {
 
     public boolean eliminarEmpresa(int id) {
         boolean empresaEliminada = false;
+        Connection connection = null;
         
         try {
-            Connection connection = ConexionBD.getConnection();
+            connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_EMPRESA_BY_ID_SQL);
             // Parameters start with 1 
             preparedStatement.setInt(1, id);
@@ -135,7 +174,16 @@ public class EmpresaDAO {
             //grabar en el log
             System.out.println("No se ha eliminado bien la empresa");
             Log.insertLog(e + "Error al eliminar la empresa\n");
+        } finally {
+        try {
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al cerrar la conexión");
+            Log.insertLog(e + "Error al cerrar la conexión\n");
         }
+    }
         Log.insertLog("Se ha eliminado la empresa\n");
         return empresaEliminada;
         
@@ -143,9 +191,10 @@ public class EmpresaDAO {
     
     public List<Empresa> obtenerEmpresasPorIdUsuario(int idUsuario) {
         List<Empresa> empresas = new ArrayList<>();
+        Connection connection = null;
         
         try {
-            Connection connection = ConexionBD.getConnection();
+            connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_EMPRESA_BY_USER_ID_SQL);
             preparedStatement.setInt(1, idUsuario);
             ResultSet rs = preparedStatement.executeQuery();
@@ -158,7 +207,16 @@ public class EmpresaDAO {
             } catch (SQLException e) {
                 System.out.println("Error en la obtención de todas las empresas del usuario: " + e);
                 Log.insertLog(e + "Error en la obtención de todas las empresas del usuario\n");
+            } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión");
+                Log.insertLog(e + "Error al cerrar la conexión\n");
             }
+        }
             return empresas;
     }
 }

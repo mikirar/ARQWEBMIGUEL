@@ -44,9 +44,10 @@ public class MarcajeDAO {
     
     public void crearMarcaje(Marcaje marcaje) {
         System.out.println(INSERT_MARCAJE_SQL);
-
+        Connection connection = null;
+        
         try{
-            Connection connection = ConexionBD.getConnection();
+            connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_MARCAJE_SQL);
             // Parameters start with 1 
             preparedStatement.setInt(1, marcaje.getId());
@@ -61,14 +62,24 @@ public class MarcajeDAO {
             //grabar en el log
             System.out.println("No se ha guardado bien el marcaje: " + e);
             Log.insertLog(e + "No se ha guardado bien el marcaje\n");
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión");
+                Log.insertLog(e + "Error al cerrar la conexión\n");
+            }
         }
     }
     
     public Marcaje obtenerMarcajePorId(int idMarcaje) {
         Marcaje marcaje = new Marcaje();
+        Connection connection = null;
         
         try {
-            Connection connection = ConexionBD.getConnection();
+            connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_MARCAJE_BY_ID_SQL);
             preparedStatement.setInt(1, idMarcaje);
             ResultSet rs = preparedStatement.executeQuery();
@@ -83,6 +94,15 @@ public class MarcajeDAO {
             //Meter en el log el error
             System.out.println("Ha fallado la obtención del marcaje");
             Log.insertLog(e + "Ha fallado la obtención del marcaje\n");
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión");
+                Log.insertLog(e + "Error al cerrar la conexión\n");
+            }
         }
         Log.insertLog("Se ha obtenido correctamente el marcaje\n");
         return marcaje;
@@ -90,9 +110,10 @@ public class MarcajeDAO {
     
     public List<Marcaje> obtenerTodasLosMarcajes() {
         List<Marcaje> marcajes = new ArrayList<>();
+        Connection connection = null;
         
         try {
-            Connection connection = ConexionBD.getConnection();
+            connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_MARCAJE_SQL);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
@@ -107,17 +128,27 @@ public class MarcajeDAO {
                 //Log.logdb.error("SQL Exception: " + e + "\n");  
                 System.out.println("Error en la obtención de todos los marcajes: " + e);
                 Log.insertLog(e + "Error en la obtención de todos los marcajes\n");
+            } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión");
+                Log.insertLog(e + "Error al cerrar la conexión\n");
             }
+        }
         Log.insertLog("Se han obtenido correctamente todos los marcajes\n");
         return marcajes;
     }
     
     public List<Marcaje> obtenerTodasLosMarcajesPorIdUsuario(int idUsuario) {
         System.out.println(SELECT_ALL_MARCAJE__USUARIO_SQL);
+        Connection connection = null;
         List<Marcaje> marcajes = new ArrayList<>();
         
         try {
-            Connection connection = ConexionBD.getConnection();
+            connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_MARCAJE__USUARIO_SQL);
             preparedStatement.setInt(1, idUsuario);
             ResultSet rs = preparedStatement.executeQuery();
@@ -133,7 +164,16 @@ public class MarcajeDAO {
                 //Log.logdb.error("SQL Exception: " + e + "\n");  
                 System.out.println("Error en la obtención de todos los marcajes de los usuarios: " + e);
                 Log.insertLog(e + "Ha fallado la obtención de todos los marcajes por id de usuario\n");
+            } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión");
+                Log.insertLog(e + "Error al cerrar la conexión\n");
             }
+        }
             //System.out.println(marcajes);
             Log.insertLog("Se han obtenido todos los marcajes por id de usuario\n");
             return marcajes;
@@ -141,8 +181,9 @@ public class MarcajeDAO {
     
     
     public void actualizarMarcaje(Marcaje marcaje) {
+        Connection connection = null;
         try {
-            Connection connection = ConexionBD.getConnection();
+            connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_MARCAJE_BY_ID_SQL);
             // Parameters start with 1 
             preparedStatement.setTimestamp(1, marcaje.getFecha());
@@ -155,13 +196,23 @@ public class MarcajeDAO {
         } catch (SQLException e) {
             System.out.println("No se ha podido actualizar el marcaje:" + e);
             Log.insertLog(e + "No se ha podido actualizar el marcaje\n");
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión");
+                Log.insertLog(e + "Error al cerrar la conexión\n");
+            }
         }
     }
     
     public void eliminarMarcaje(int id) {
+        Connection connection = null;
         boolean marcajeEliminado = false;
         try {
-            Connection connection = ConexionBD.getConnection();
+            connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_MARCAJE_BY_ID_SQL);
             // Parameters start with 1 
             preparedStatement.setInt(1, id);
@@ -172,6 +223,15 @@ public class MarcajeDAO {
             //grabar en el log
             System.out.println("No se ha eliminado bien el marcaje");
             Log.insertLog(e + "No se ha eliminado correctamente el marcaje\n");
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión");
+                Log.insertLog(e + "Error al cerrar la conexión\n");
+            }
         }
         
     }

@@ -11,7 +11,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Empresas</title>
+        <title>Marcajes</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-gg0yROixCbMQv3Xipma34MD+dH/1f0784/j6cY/iJTQUOhcWr7x9JvORXT2MZWIT"
         crossorigin="anonymous">
@@ -43,14 +43,15 @@
                                 <td><c:out value="${marcaje.tipo_marcaje}" /></td>
                                 <td><c:out value="${marcaje.usuarioid}" /></td>
                                 <%--<td><a href="UsuarioControlador?action=edit?userid=<c:out value="${user.userid}" />">Edit</a></td>--%>
-                                <td><a href="MarcadorControlador?action=edit&id=${marcaje.id}">Edit</a></td>
-                                <td><a href="MarcadorControlador?action=delete&id=${marcaje.id}">Delete</a></td>
+                                <td><a href="MarcadorControlador?action=edit&id=${marcaje.id}"" style="text-decoration: none; font-size: 15px">Edit</a></td>
+                                <td><a href="MarcadorControlador?action=delete&id=${marcaje.id}"" style="text-decoration: none; font-size: 15px">Delete</a></td>
 
                             </tr>
                         </c:forEach>
                     </tbody>
                     
                 </table>
-            <p><a href="MarcadorControlador?action=insert">Add Marcaje</a></p>
+            <p><a href="MarcadorControlador?action=insert"" style="text-decoration: none; font-size: 20px">Add Marcaje</a></p>
+            <p><a href="/menu-principal-rrhh.jsp" style="text-decoration: none; font-size: 20px">Menú</a></p>
     </body>
 </html>

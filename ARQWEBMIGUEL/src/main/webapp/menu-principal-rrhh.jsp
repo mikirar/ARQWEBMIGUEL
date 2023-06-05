@@ -35,7 +35,13 @@
         <a class="button" href="ProyectoControlador?action=listProyecto"style="font-size: 30px; text-decoration: none">Proyectos</a>
         <a class="button" href="UsuarioProyectoControlador?action=listUserProject"style="font-size: 30px; text-decoration: none">Usuarios Proyectos</a>
         <a class="button" href="MarcadorControlador?action=listMarcador"style="font-size: 30px; text-decoration: none">Marcajes</a>
+        <form action="LogoutControlador" method="POST">
+            <br>            
+            <button type="submit" class="btn btn-success" style="font-size: 15px; text-decoration: none"">Logout</button>
+            <br>
+        </form>
     </div>
 </body>
+
 </html>
 

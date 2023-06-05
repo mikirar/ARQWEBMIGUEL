@@ -47,8 +47,9 @@ public class UsuarioDAO {
     
     public void crearUsuario(Usuario usuario) {
         System.out.println(INSERT_USERS_SQL);
+        Connection connection = null;
         try{
-            Connection connection = ConexionBD.getConnection();
+            connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USERS_SQL);
             // Parameters start with 1 
             preparedStatement.setInt(1, usuario.getUserid());
@@ -68,15 +69,25 @@ public class UsuarioDAO {
             //grabar en el log
             System.out.println("No se ha guardado bien el usuario: " + e);
             Log.insertLog(e + "No se ha guardado bien el usuario\n");
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión");
+                Log.insertLog(e + "Error al cerrar la conexión\n");
+            }
         }
     }
     
     public Usuario obtenerUsuarioPorUsernameYPassword(String username, String password) {
         System.out.println(SELECT_USER_BY_USERNAME_PASSWORD_SQL);
+        Connection connection = null;
         Usuario usuario = new Usuario();
         
         try {
-            Connection connection = ConexionBD.getConnection();
+            connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_USERNAME_PASSWORD_SQL);
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, password);
@@ -97,6 +108,15 @@ public class UsuarioDAO {
         catch (SQLException e) {
             System.out.println("No se ha encontrado el usuario: " + e);
             Log.insertLog(e + "No se ha encontrado el usuario\n");
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión");
+                Log.insertLog(e + "Error al cerrar la conexión\n");
+            }
         }
         //System.out.println(usuario.toString());
         //System.out.println(usuario.getTipo_usuario());
@@ -105,10 +125,11 @@ public class UsuarioDAO {
     }
     
     public Usuario obtenerUsuarioPorId(int idUsuario) {
+        Connection connection = null;
         Usuario usuario = new Usuario();
         
         try {
-            Connection connection = ConexionBD.getConnection();
+            connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_ID_SQL);
             preparedStatement.setInt(1, idUsuario);
             ResultSet rs = preparedStatement.executeQuery();
@@ -129,16 +150,26 @@ public class UsuarioDAO {
             //Meter en el log el error
             System.out.println("Ha fallado la obtención del usuario: " + e);
             Log.insertLog(e + "Ha fallado la obtención del usuario\n");
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión");
+                Log.insertLog(e + "Error al cerrar la conexión\n");
+            }
         }
         Log.insertLog("Se ha obtenido correctamente el usuario\n");
         return usuario;
     }
     
     public List<Usuario> obtenerTodosLosUsuarios() {
+        Connection connection = null;
         List<Usuario> usuarios = new ArrayList<>();
         
         try {
-            Connection connection = ConexionBD.getConnection();
+            connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_USERS_SQL);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
@@ -158,16 +189,26 @@ public class UsuarioDAO {
                 //Log.logdb.error("SQL Exception: " + e + "\n");  
                 System.out.println("Error en la obtención de todos los usuarios: " + e);
                 Log.insertLog(e + "Ha fallado la obtención de todos los usuarios\n");
+            } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión");
+                Log.insertLog(e + "Error al cerrar la conexión\n");
             }
+        }
         Log.insertLog("Se han obtenido correctamente todos los usuarios\n");
         return usuarios;
     }
        
     
     public boolean actualizarUsuario(Usuario usuario) {
+        Connection connection = null;
         boolean usuarioActualizado = false;
         try {
-            Connection connection = ConexionBD.getConnection();
+            connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER_BY_ID_SQL);
             // Parameters start with 1 
             //preparedStatement.setInt(1, usuario.getUserid());
@@ -185,6 +226,15 @@ public class UsuarioDAO {
         } catch (SQLException e) {
             System.out.println("Error en la actualización: " + e);
             Log.insertLog(e + "No se ha actualizado correctamente el usuario\n");
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión");
+                Log.insertLog(e + "Error al cerrar la conexión\n");
+            }
         }
         
         Log.insertLog("Se ha actualizado correctamente el usuario\n");
@@ -193,10 +243,11 @@ public class UsuarioDAO {
     }
     
     public boolean eliminarUsuario(int id) {
+        Connection connection = null;
         boolean usuarioEliminado = false;
         
         try {
-            Connection connection = ConexionBD.getConnection();
+            connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER_BY_ID_SQL);
             // Parameters start with 1 
             preparedStatement.setInt(1, id);
@@ -206,6 +257,15 @@ public class UsuarioDAO {
             //grabar en el log
             System.out.println("Error al eliminar el usuario: " + e);
             Log.insertLog(e + "No se ha eliminado correctamente el usuario\n");
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión");
+                Log.insertLog(e + "Error al cerrar la conexión\n");
+            }
         }
         Log.insertLog("Se ha eliminado correctamente el usuario\n");
         return usuarioEliminado;

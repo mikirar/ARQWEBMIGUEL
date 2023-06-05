@@ -107,7 +107,7 @@ public class UsuarioControlador extends HttpServlet{
         Timestamp fechaBaja = Common.parseStringToTimestamp(fechaBajaString);
         usuario.setFecha_baja(fechaBaja);
         usuario.setTipo_usuario(TipoUsuario.valueOf(request.getParameter("tipo_usuario")));
-
+        
         String userid = request.getParameter("userid");
         if (userid == null || userid.isEmpty() || userid.equalsIgnoreCase("")) {
             Log.insertLog("Vamos a añadir el usuario\n");
