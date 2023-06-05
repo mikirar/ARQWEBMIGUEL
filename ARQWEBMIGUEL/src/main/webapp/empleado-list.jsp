@@ -17,12 +17,16 @@
         crossorigin="anonymous">
     </head>
     <body>
-        <br>
+        <h1>Bienvenido ${user.nombre} ${user.apellidos}!</h1>
+        <form action="LogoutControlador" method="POST">
+                        <button type="submit" class="btn btn-success" style="font-size: 15px; text-decoration: none"">Logout</button>
+                        <br>
+        </form>
         
         <div class="row">
             <!--<div class="alert alert-success" *ngIf='message '>{{message}}s/div» "-->
             <div class="container">
-                <h3 class="text-center">List of Marcajes</h3>
+                <h3 class="text-center">Tus Marcajes</h3>
                 <hr>
                 <br>
                 <table class="table table-striped">
@@ -66,12 +70,7 @@
                         
                     <caption>
                          <h2> 
-                            <c:if test="${user != null}">
-                               Edit User 
-                            </c:if>
-                            <c:if test="${user == null}">
-                               Add New User 
-                            </c:if> 
+                            Datos personales
                          </h2>   
                     </caption>
                                
@@ -119,15 +118,66 @@
                         value="<c:out value='${user.tipo_usuario}' />" class="form-control" 
                         name="tipo_usuario" required readonly>
                     </fieldset>
-                        
+                        <br>
                         <button><a href="EmpleadoControlador?action=edit&userid=${user.userid}" style="font-size: 15px; text-decoration: none"">Edit</a></button>
                     <%--</form>--%>
-                    
-                    <form action="LogoutControlador" method="POST">
-                        <button type="submit" class="btn btn-success" style="font-size: 15px; text-decoration: none"">Logout</button>
-                    </form>
                     </div>
                 </div>
+            </div>
+                    
+            <div>
+                <h2> 
+                    Empresas
+                </h2>
+                  <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${empresas}" var="empresa">
+                            <tr>
+                                <td scope="row"><c:out value="${empresa.empresaid}" /></td>
+                                <td><c:out value="${empresa.nombre_empresa}" /></td>
+                                <%--<td><a href="UsuarioControlador?action=edit?userid=<c:out value="${user.userid}" />">Edit</a></td>--%>
+
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                    
+                </table>      
+            </div>
+                    
+            <div>
+                <h2>
+                    Proyectos
+                </h2>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>ID Empresa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${proyectos}" var="proyecto">
+                            <tr>
+                                <td scope="row"><c:out value="${proyecto.proyectoid}" /></td>
+                                <td><c:out value="${proyecto.nombre}" /></td>
+                                <td><c:out value="${proyecto.empresaid}" /></td>
+                                <%--<td><a href="UsuarioControlador?action=edit?userid=<c:out value="${user.userid}" />">Edit</a></td>--%>
+                                <td><a href="ProyectoControlador?action=edit&proyectoid=${proyecto.proyectoid}">Edit</a></td>
+                                <td><a href="ProyectoControlador?action=delete&proyectoid=${proyecto.proyectoid}">Delete</a></td>
+
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                    
+                </table>
+                        
             </div>
             
             

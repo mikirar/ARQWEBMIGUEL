@@ -7,6 +7,7 @@ package Controlador;
 import Modelo.DAO.EmpresaDAO;
 import Modelo.Empresa;
 import Util.Common;
+import Util.Log;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -55,27 +56,27 @@ public class EmpresaControlador extends HttpServlet{
             throws ServletException, IOException {
         
         String forward = "";
-        //Log.log.info("Entramos en el doGet\n");
+        Log.insertLog("Entramos en el doGet\n");
         String action = request.getParameter("action");
-        //Log.log.info("Recogemos el parametro action con valor " + action+ "\n");
+        Log.insertLog("Recogemos el parametro action con valor " + action+ "\n");
         if (action.equalsIgnoreCase("delete")) {
-            //Log.log.info("Parametro valor DELETE");
+            Log.insertLog("Parametro valor DELETE");
             int empresaId = Integer.parseInt(request.getParameter("empresaid"));
             empresaDao.eliminarEmpresa(empresaId);
             forward = LIST_EMPRESA;
             request.setAttribute("empresas", empresaDao.obtenerTodasLasEmpresa());
         } else if (action.equalsIgnoreCase("edit")) {
-            //Log.log.info("Parametro valor EDIT");
+            Log.insertLog("Parametro valor EDIT");
             forward = INSERT_OR_EDIT;
             int empresaId = Integer.parseInt(request.getParameter("empresaid"));
             Empresa empresa = empresaDao.obtenerEmpresaPorId(empresaId);
             request.setAttribute("empresa", empresa);
         } else if (action.equalsIgnoreCase("listEmpresa")) {
-            //Log.log.info("Parametro valor LIST\n");
+            Log.insertLog("Parametro valor LIST\n");
             forward = LIST_EMPRESA;
             request.setAttribute("empresas", empresaDao.obtenerTodasLasEmpresa());
         } else {
-            //Log.log.info("Parametro valor vacio vamos a insertar\n");
+            Log.insertLog("Parametro valor vacio vamos a insertar\n");
             forward = INSERT_OR_EDIT;
         }
         RequestDispatcher view = request.getRequestDispatcher(forward);
@@ -88,17 +89,18 @@ public class EmpresaControlador extends HttpServlet{
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        //Log.log.info("Entramos por el doPost\n");
+        Log.insertLog("Entramos por el doPost\n");
         //processRequest(request, response);
         Empresa empresa = new Empresa();
         empresa.setNombre_empresa(request.getParameter("nombre_empresa"));
 
         String empresaid = request.getParameter("empresaid");
         if (empresaid == null || empresaid.isEmpty() || empresaid.equalsIgnoreCase("")) {
+            Log.insertLog("Vamos a añadir el usuario\n");
             empresaDao.crearEmpresa(empresa);
 
             /*try {
-                //Log.log.info("Vamos a añadir el usuario\n");
+                //Log.insertLog("Vamos a añadir el usuario\n");
                 usuarioRepository.crearUsuario(usuario);
             } catch (SQLException ex) {
                 Logger.getLogger(UsuarioControlador.class.getName()).log(Level.SEVERE, null, ex);
@@ -106,6 +108,7 @@ public class EmpresaControlador extends HttpServlet{
             
         } else {
             empresa.setEmpresaid(Integer.parseInt(empresaid));
+            Log.insertLog("Vamos a actualizar la empresa\n");
             empresaDao.actualizarEmpresa(empresa);
         }
         request.setAttribute("empresas", empresaDao.obtenerTodasLasEmpresa());

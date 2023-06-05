@@ -4,12 +4,17 @@
  */
 package Controlador;
 
+import Modelo.DAO.EmpresaDAO;
 import Modelo.DAO.MarcajeDAO;
+import Modelo.DAO.ProyectoDAO;
 import Modelo.DAO.UsuarioDAO;
+import Modelo.Empresa;
 import Modelo.Marcaje;
+import Modelo.Proyecto;
 import Modelo.TipoUsuario;
 import Modelo.Usuario;
 import Util.Common;
+import Util.Log;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -46,11 +51,13 @@ public class LoginControlador extends HttpServlet{
     private String password;
     UsuarioDAO usuarioDao = new UsuarioDAO();
     MarcajeDAO marcajeDao = new MarcajeDAO();
+    EmpresaDAO empresaDao = new EmpresaDAO();
+    ProyectoDAO proyectoDao = new ProyectoDAO();
     
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //Log.log.info("Entramos por el doGet");
+        Log.insertLog("Entramos por el doGet");
         forward="index.jsp";
         RequestDispatcher view = request.getRequestDispatcher(forward);
         view.forward(request, response);
@@ -59,6 +66,7 @@ public class LoginControlador extends HttpServlet{
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Log.insertLog("Entramos por el doPost\n");
         // get request parameters for userID and password
         String user = request.getParameter("usuario");
         String pwd = request.getParameter("password");
@@ -76,6 +84,7 @@ public class LoginControlador extends HttpServlet{
                 loginCookie.setMaxAge(30*60);
                 response.addCookie(loginCookie);
                 response.addCookie(cookie);
+                Log.insertLog("Logeamos como usuario administrador\n");
                 response.sendRedirect("menu-principal-rrhh.jsp");
             } else if(userID.equals(user) && password.equals(pwd) && usuarioBd.getTipo_usuario() == TipoUsuario.U) {
                 Cookie loginCookie = new Cookie("user",user);
@@ -87,16 +96,26 @@ public class LoginControlador extends HttpServlet{
                 HttpSession session = request.getSession();
                 List<Marcaje> marcajes = new ArrayList<>();
                 marcajes = marcajeDao.obtenerTodasLosMarcajesPorIdUsuario(usuarioBd.getUserid());
+                List<Empresa> empresas = new ArrayList<>();
+                empresas = empresaDao.obtenerEmpresasPorIdUsuario(usuarioBd.getUserid());
+                List<Proyecto> proyectos = new ArrayList<>();
+                proyectos = proyectoDao.obtenerTodosLosProyectosPorIdUsuario(usuarioBd.getUserid());
                 session.setAttribute("user", usuarioBd);
                 session.setAttribute("marcajes", marcajes);
+                session.setAttribute("empresas", empresas);
+                session.setAttribute("proyectos", proyectos);
                 request.setAttribute("user", usuarioBd);
                 request.setAttribute("marcajes", marcajes);
+                request.setAttribute("empresas", empresas);
+                request.setAttribute("proyectos", proyectos);
                 //RequestDispatcher dispatcher = request.getRequestDispatcher("EmpleadoControlador?action=listEmpleado");
                 //dispatcher.forward(request, response);
+                Log.insertLog("Logeamos como usuario\n");
                 response.sendRedirect("EmpleadoControlador?action=listEmpleado");
 
             }
             else {
+                Log.insertLog("fallo en el login\n");
                 RequestDispatcher rd = getServletContext().getRequestDispatcher("index.jsp");
                 PrintWriter out= response.getWriter();
                 out.println("<font color=red>Usuario o password son incorrectos.</font>");
@@ -105,6 +124,7 @@ public class LoginControlador extends HttpServlet{
 
         }
         catch (Exception e) {
+                Log.insertLog("Intento de inicio de sesión erróneo\n");
                     response.sendRedirect("/error_inicio_sesion.jsp");
             }
     }

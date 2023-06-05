@@ -4,8 +4,10 @@
  */
 package Controlador;
 
-import Modelo.DAO.ProyectoDAO;
-import Modelo.Proyecto;
+import Modelo.DAO.UsuarioDAO;
+import Modelo.DAO.UsuarioProyectoDAO;
+import Modelo.TipoUsuario;
+import Modelo.UsuarioProyecto;
 import Util.Common;
 import Util.Log;
 import jakarta.servlet.RequestDispatcher;
@@ -33,15 +35,15 @@ import javax.servlet.http.HttpServletResponse;*/
  */
 
 
-public class ProyectoControlador extends HttpServlet{
+public class UsuarioProyectoControlador extends HttpServlet{
     private static final long serialVersionUID = 1L;
-    private static String INSERT_OR_EDIT = "/proyecto-form.jsp";
-    private static String LIST_PROYECTO = "/proyecto-list.jsp";
-    private ProyectoDAO proyectoDao;
+    private static String INSERT_OR_EDIT = "/user-project-form.jsp";
+    private static String LIST_USER_PROJECT = "/user-project-list.jsp";
+    private UsuarioProyectoDAO usuarioProyectoDao;
     
-    public ProyectoControlador() throws SQLException {
+    public UsuarioProyectoControlador() throws SQLException {
         super();
-        proyectoDao = new ProyectoDAO();
+        usuarioProyectoDao = new UsuarioProyectoDAO();
     }
     
     /**
@@ -61,20 +63,21 @@ public class ProyectoControlador extends HttpServlet{
         Log.insertLog("Recogemos el parametro action con valor " + action+ "\n");
         if (action.equalsIgnoreCase("delete")) {
             Log.insertLog("Parametro valor DELETE");
-            int proyectoId = Integer.parseInt(request.getParameter("proyectoid"));
-            proyectoDao.eliminarProyecto(proyectoId);
-            forward = LIST_PROYECTO;
-            request.setAttribute("proyectos", proyectoDao.obtenerTodosLosProyectos());
+            int id = Integer.parseInt(request.getParameter("id"));
+            //usuarioRepository.eliminarUsuario(userId);
+            usuarioProyectoDao.eliminarUsuarioProyecto(id);
+            forward = LIST_USER_PROJECT;
+            request.setAttribute("usuariosproyectos", usuarioProyectoDao.obtenerTodosLosUsuarioProyecto());
         } else if (action.equalsIgnoreCase("edit")) {
             Log.insertLog("Parametro valor EDIT");
             forward = INSERT_OR_EDIT;
-            int proyectoId = Integer.parseInt(request.getParameter("proyectoid"));
-            Proyecto proyecto = proyectoDao.obtenerProyectoPorId(proyectoId);
-            request.setAttribute("proyecto", proyecto);
-        } else if (action.equalsIgnoreCase("listProyecto")) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            UsuarioProyecto usuarioProyecto = usuarioProyectoDao.obtenerUsuarioProyectoPorId(id);
+            request.setAttribute("usuarioproyecto", usuarioProyecto);
+        } else if (action.equalsIgnoreCase("listUserProject")) {
             Log.insertLog("Parametro valor LIST\n");
-            forward = LIST_PROYECTO;
-            request.setAttribute("proyectos", proyectoDao.obtenerTodosLosProyectos());
+            forward = LIST_USER_PROJECT;
+            request.setAttribute("usuariosproyectos", usuarioProyectoDao.obtenerTodosLosUsuarioProyecto());
         } else {
             Log.insertLog("Parametro valor vacio vamos a insertar\n");
             forward = INSERT_OR_EDIT;
@@ -91,14 +94,21 @@ public class ProyectoControlador extends HttpServlet{
 
         Log.insertLog("Entramos por el doPost\n");
         //processRequest(request, response);
-        Proyecto proyecto = new Proyecto();
-        proyecto.setNombre(request.getParameter("nombre"));
-        String empresaIdString = request.getParameter("empresaid");
-        proyecto.setEmpresaid(Integer.parseInt(empresaIdString));
-        String proyectoid = request.getParameter("proyectoid");
-        if (proyectoid == null || proyectoid.isEmpty() || proyectoid.equalsIgnoreCase("")) {
-            Log.insertLog("Vamos a añadir el proyecto\n");
-            proyectoDao.crearProyecto(proyecto);
+        //Usuario usuario = new Usuario();
+        UsuarioProyecto usuarioProyecto = new UsuarioProyecto();
+        usuarioProyecto.setUserid(Integer.parseInt(request.getParameter("userid")));
+        usuarioProyecto.setProyectoid(Integer.parseInt(request.getParameter("proyectoid")));
+        String fechaAltaString = request.getParameter("fecha_alta");
+        Timestamp fechaAlta = Common.parseStringToTimestamp(fechaAltaString);
+        usuarioProyecto.setFecha_alta(fechaAlta);
+        String fechaBajaString = request.getParameter("fecha_baja");
+        Timestamp fechaBaja = Common.parseStringToTimestamp(fechaBajaString);
+        usuarioProyecto.setFecha_baja(fechaBaja);
+
+        String id = request.getParameter("id");
+        if (id == null || id.isEmpty() || id.equalsIgnoreCase("")) {
+            Log.insertLog("Vamos a añadir el usuario proyecto\n");
+            usuarioProyectoDao.crearUsuarioProyecto(usuarioProyecto);
 
             /*try {
                 //Log.insertLog("Vamos a añadir el usuario\n");
@@ -108,12 +118,12 @@ public class ProyectoControlador extends HttpServlet{
             }*/
             
         } else {
-            proyecto.setProyectoid(Integer.parseInt(proyectoid));
-            Log.insertLog("Vamos a actualizar el proyecto\n");
-            proyectoDao.actualizarProyecto(proyecto);
+            usuarioProyecto.setId(Integer.parseInt(id));
+            Log.insertLog("Vamos a añadir el usuario\n");
+            usuarioProyectoDao.actualizarUsuarioProyecto(usuarioProyecto);
         }
-        request.setAttribute("proyectos", proyectoDao.obtenerTodosLosProyectos());
-        RequestDispatcher view = request.getRequestDispatcher(LIST_PROYECTO);            
+        request.setAttribute("usuariosproyectos", usuarioProyectoDao.obtenerTodosLosUsuarioProyecto());
+        RequestDispatcher view = request.getRequestDispatcher(LIST_USER_PROJECT);            
         view.forward(request, response);
         //return;
     }

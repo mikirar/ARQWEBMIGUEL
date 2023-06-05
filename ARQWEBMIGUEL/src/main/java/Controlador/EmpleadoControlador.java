@@ -9,6 +9,7 @@ import Modelo.TipoUsuario;
 import Modelo.Usuario;
 import Util.Common;
 import static Util.Common.parseStringToTimestamp;
+import Util.Log;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -59,31 +60,30 @@ public class EmpleadoControlador extends HttpServlet{
             throws ServletException, IOException {
         
         String forward = "";
-        //Log.log.info("Entramos en el doGet\n");
+        Log.insertLog("Entramos en el doGet\n");
         String action = request.getParameter("action");
-        //Log.log.info("Recogemos el parametro action con valor " + action+ "\n");
+        Log.insertLog("Recogemos el parametro action con valor " + action+ "\n");
         if (action.equalsIgnoreCase("delete")) {
-            //Log.log.info("Parametro valor DELETE");
+            Log.insertLog("Parametro valor DELETE");
             int userId = Integer.parseInt(request.getParameter("userid"));
             usuarioRepository.eliminarUsuario(userId);
             forward = LIST_EMPLEADO;
             request.setAttribute("users", usuarioRepository.obtenerTodosLosUsuarios());
         } else if (action.equalsIgnoreCase("edit")) {
-            //Log.log.info("Parametro valor EDIT");
+            Log.insertLog("Parametro valor EDIT");
             forward = INSERT_OR_EDIT;
             int userId = Integer.parseInt(request.getParameter("userid"));
             Usuario user = usuarioRepository.obtenerUsuarioPorId(userId);
             request.setAttribute("user", user);
         } else if (action.equalsIgnoreCase("listEmpleado")) {
-            //Log.log.info("Parametro valor LIST\n");
-            System.out.println("ENTRA EN EL LISTEMPLEADO DE MIERDA");
+            Log.insertLog("Parametro valor LIST\n");
             forward = LIST_EMPLEADO;
             HttpSession session = request.getSession();
             request.setAttribute("user", session.getAttribute("user"));
             request.setAttribute("marcajes", session.getAttribute("marcajes"));
 
         } else {
-            //Log.log.info("Parametro valor vacio vamos a insertar\n");
+            Log.insertLog("Parametro valor vacio vamos a insertar\n");
             forward = INSERT_OR_EDIT;
         }
         RequestDispatcher view = request.getRequestDispatcher(forward);
@@ -96,7 +96,7 @@ public class EmpleadoControlador extends HttpServlet{
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        //Log.log.info("Entramos por el doPost\n");
+        Log.insertLog("Entramos por el doPost\n");
         //processRequest(request, response);
 
         Usuario usuario = new Usuario();
@@ -119,10 +119,12 @@ public class EmpleadoControlador extends HttpServlet{
         usuario.setUserid(Integer.parseInt(request.getParameter("userid")));
         String userid = request.getParameter("userid");
         if (userid == null || userid.isEmpty() || userid.equalsIgnoreCase("")) {
+            Log.insertLog("Vamos a añadir el empleado\n");
             usuarioRepository.crearUsuario(usuario);
             
         } else {
             usuario.setUserid(Integer.parseInt(userid));
+            Log.insertLog("Vamos a actualizar el empleado\n");
             usuarioRepository.actualizarUsuario(usuario);
         }
         

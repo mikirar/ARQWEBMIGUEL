@@ -8,6 +8,7 @@ import Modelo.DAO.UsuarioDAO;
 import Modelo.TipoUsuario;
 import Modelo.Usuario;
 import Util.Common;
+import Util.Log;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -56,27 +57,27 @@ public class UsuarioControlador extends HttpServlet{
             throws ServletException, IOException {
         
         String forward = "";
-        //Log.log.info("Entramos en el doGet\n");
+        Log.insertLog("Entramos en el doGet\n");
         String action = request.getParameter("action");
-        //Log.log.info("Recogemos el parametro action con valor " + action+ "\n");
+        Log.insertLog("Recogemos el parametro action con valor " + action+ "\n");
         if (action.equalsIgnoreCase("delete")) {
-            //Log.log.info("Parametro valor DELETE");
+            Log.insertLog("Parametro valor DELETE");
             int userId = Integer.parseInt(request.getParameter("userid"));
             usuarioRepository.eliminarUsuario(userId);
             forward = LIST_USER;
             request.setAttribute("users", usuarioRepository.obtenerTodosLosUsuarios());
         } else if (action.equalsIgnoreCase("edit")) {
-            //Log.log.info("Parametro valor EDIT");
+            Log.insertLog("Parametro valor EDIT");
             forward = INSERT_OR_EDIT;
             int userId = Integer.parseInt(request.getParameter("userid"));
             Usuario user = usuarioRepository.obtenerUsuarioPorId(userId);
             request.setAttribute("user", user);
         } else if (action.equalsIgnoreCase("listUser")) {
-            //Log.log.info("Parametro valor LIST\n");
+            Log.insertLog("Parametro valor LIST\n");
             forward = LIST_USER;
             request.setAttribute("users", usuarioRepository.obtenerTodosLosUsuarios());
         } else {
-            //Log.log.info("Parametro valor vacio vamos a insertar\n");
+            Log.insertLog("Parametro valor vacio vamos a insertar\n");
             forward = INSERT_OR_EDIT;
         }
         RequestDispatcher view = request.getRequestDispatcher(forward);
@@ -89,7 +90,7 @@ public class UsuarioControlador extends HttpServlet{
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        //Log.log.info("Entramos por el doPost\n");
+        Log.insertLog("Entramos por el doPost\n");
         //processRequest(request, response);
         Usuario usuario = new Usuario();
         usuario.setUsername(request.getParameter("username"));
@@ -109,10 +110,11 @@ public class UsuarioControlador extends HttpServlet{
 
         String userid = request.getParameter("userid");
         if (userid == null || userid.isEmpty() || userid.equalsIgnoreCase("")) {
+            Log.insertLog("Vamos a añadir el usuario\n");
             usuarioRepository.crearUsuario(usuario);
 
             /*try {
-                //Log.log.info("Vamos a añadir el usuario\n");
+                //Log.insertLog("Vamos a añadir el usuario\n");
                 usuarioRepository.crearUsuario(usuario);
             } catch (SQLException ex) {
                 Logger.getLogger(UsuarioControlador.class.getName()).log(Level.SEVERE, null, ex);
@@ -120,6 +122,7 @@ public class UsuarioControlador extends HttpServlet{
             
         } else {
             usuario.setUserid(Integer.parseInt(userid));
+            Log.insertLog("Vamos a añadir el usuario\n");
             usuarioRepository.actualizarUsuario(usuario);
         }
         request.setAttribute("users", usuarioRepository.obtenerTodosLosUsuarios());

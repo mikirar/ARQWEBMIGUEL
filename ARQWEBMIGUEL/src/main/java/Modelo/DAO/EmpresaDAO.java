@@ -6,6 +6,7 @@ package Modelo.DAO;
 
 import Modelo.Empresa;
 import Util.ConexionBD;
+import Util.Log;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,8 +31,10 @@ public class EmpresaDAO {
     private static final String SELECT_ALL_EMPRESA_SQL = "SELECT * FROM empresa;";
     private static final String DELETE_EMPRESA_BY_ID_SQL = "DELETE FROM empresa WHERE id_empresa =?;";
     private static final String UPDATE_EMPRESA_BY_ID_SQL = "UPDATE empresa set nombre_empresa = ? WHERE id_empresa =?;";
+    private static final String SELECT_ALL_EMPRESA_BY_USER_ID_SQL = "SELECT DISTINCT empresa.* FROM empresa JOIN proyectos ON empresa.id_empresa = proyectos.id_empresa " +
+    "JOIN usuarios_proyectos ON proyectos.id_proyecto = usuarios_proyectos.id_proyecto JOIN usuarios ON usuarios_proyectos.id_user = usuarios.id_user WHERE usuarios.id_user = ?;";
     
-    public EmpresaDAO() throws SQLException {
+    public EmpresaDAO() {
         //log de que cogemos conexión
         //connection = ConexionBD.getConnection();
         //log de que tenemos conexión
@@ -48,10 +51,12 @@ public class EmpresaDAO {
             preparedStatement.setString(2, empresa.getNombre_empresa());
             preparedStatement.executeUpdate();
             System.out.println("Se ha creado la empresa");
+            Log.insertLog("Se ha creado la empresa\n");
         }
         catch (SQLException e) {
             //grabar en el log
             System.out.println("No se ha guardado bien la empresa: " + e);
+            Log.insertLog(e + "No se ha guardado la empresa\n");
         }
     }
 
@@ -70,7 +75,9 @@ public class EmpresaDAO {
         } catch (SQLException e) {
             //Meter en el log el error
             System.out.println("Ha fallado la obtención de la empresa: " + e);
+            Log.insertLog(e + "Ha fallado la obtención de la empresa\n");
         }
+        Log.insertLog("Se ha obtenido la empresa\n");
         return empresa;
     }
     
@@ -90,6 +97,7 @@ public class EmpresaDAO {
             } catch (SQLException e) {
                 //Log.logdb.error("SQL Exception: " + e + "\n");  
                 System.out.println("Error en la obtención de todas las empresas: " + e);
+                Log.insertLog(e + "Error en la obtención de todas las empresas\n");
             }
             return empresas;
     }
@@ -106,8 +114,10 @@ public class EmpresaDAO {
             
         } catch (SQLException e) {
             System.out.println("No se ha podido actualizar la empresa: " + e);
+            Log.insertLog(e + "No se ha podido actualizar la empresa\n");
         }
         
+        Log.insertLog("Se ha actualizado la empresa\n");
         return empresaActualizada;
     }
 
@@ -124,8 +134,31 @@ public class EmpresaDAO {
         catch (SQLException e) {
             //grabar en el log
             System.out.println("No se ha eliminado bien la empresa");
+            Log.insertLog(e + "Error al eliminar la empresa\n");
         }
+        Log.insertLog("Se ha eliminado la empresa\n");
         return empresaEliminada;
         
+    }
+    
+    public List<Empresa> obtenerEmpresasPorIdUsuario(int idUsuario) {
+        List<Empresa> empresas = new ArrayList<>();
+        
+        try {
+            Connection connection = ConexionBD.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_EMPRESA_BY_USER_ID_SQL);
+            preparedStatement.setInt(1, idUsuario);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                Empresa empresa = new Empresa();
+                empresa.setEmpresaid(rs.getInt("id_empresa"));
+                empresa.setNombre_empresa(rs.getString("nombre_empresa"));
+                empresas.add(empresa);
+                }
+            } catch (SQLException e) {
+                System.out.println("Error en la obtención de todas las empresas del usuario: " + e);
+                Log.insertLog(e + "Error en la obtención de todas las empresas del usuario\n");
+            }
+            return empresas;
     }
 }

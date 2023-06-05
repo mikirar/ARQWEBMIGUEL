@@ -8,6 +8,7 @@ import Modelo.Empresa;
 import Modelo.Proyecto;
 import Modelo.UsuarioProyecto;
 import Util.ConexionBD;
+import Util.Log;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -30,10 +31,10 @@ public class UsuarioProyectoDAO {
     
     private static final String INSERT_USUARIO_PROYECTO_SQL = "insert into usuarios_proyectos(id, id_user, id_proyecto, fecha_alta, fecha_baja) values (?, ?, ?, ?, ?);";
     private static final String SELECT_USUARIO_PROYECTO_BY_ID_SQL = "select * from usuarios_proyectos where id=?;";
-    private static final String SELECT_ALL_USUARIO_PROYECTO_SQL = "SELECT * FROM usuario_proyecto;";
-    private static final String SELECT_ALL_USUARIOS_USUARIO_PROYECTO_SQL = "SELECT * FROM usuario_proyecto WHERE id_user = ?;";
+    private static final String SELECT_ALL_USUARIO_PROYECTO_SQL = "SELECT * FROM usuarios_proyectos;";
+    private static final String SELECT_ALL_USUARIOS_USUARIO_PROYECTO_SQL = "SELECT * FROM usuarios_proyectos WHERE id_user = ?;";
     private static final String DELETE_USUARIO_PROYECTO_BY_ID_SQL = "delete from usuarios_proyectos where id=?;";
-    private static final String UPDATE_USUARIO_PROYECTO_BY_ID_SQL = "update usuarios_proyectos set id=?, id_user=?, id_proyecto=?, fecha_alta=?, fecha_baja=? where id=?";
+    private static final String UPDATE_USUARIO_PROYECTO_BY_ID_SQL = "update usuarios_proyectos set id_user=?, id_proyecto=?, fecha_alta=?, fecha_baja=? where id=?";
     private static final String SELECT_PROYECTOS_FROM_USUARIO_PROYECTO_BY_ID_USER_SQL = "SELECT p.* FROM proyectos p JOIN usuarios_proyectos up ON p.id_proyecto = up.id_proyecto WHERE up.id_user = ?;";
     private static final String SELECT_EMPRESAS_FROM_USUARIO_PROYECTO_BY_ID_USER_SQL = "SELECT e.* FROM empresa e JOIN proyectos p ON e.id_empresa = p.id_empresa JOIN usuarios_proyectos up ON p.id_proyecto = up.id_proyecto WHERE up.id_user = ?;";
     
@@ -56,10 +57,12 @@ public class UsuarioProyectoDAO {
             preparedStatement.setTimestamp(5, usuarioProyecto.getFecha_baja());
             preparedStatement.executeUpdate();
             System.out.println("Se ha creado el usuario_proyecto");
+            Log.insertLog("Se ha creado el usuario_proyecto correctamente\n");
         }
         catch (SQLException e) {
             //grabar en el log
             System.out.println("No se ha guardado bien el usuario_proyecto: " + e);
+            Log.insertLog(e + "No se ha guardado correctamente el usuario_proyecto\n");
         }
     }
     
@@ -82,7 +85,9 @@ public class UsuarioProyectoDAO {
         } catch (SQLException e) {
             //Meter en el log el error
             System.out.println("Ha fallado la obtención del usuario_proyecto: " + e);
+            Log.insertLog(e + "no se ha obtenido correctamente el usuario_proyecto\n");
         }
+        Log.insertLog("Se ha obtenido correctamente el usuario_proyecto\n");
         return usuarioProyecto;
     }
     
@@ -105,8 +110,10 @@ public class UsuarioProyectoDAO {
             } catch (SQLException e) {
                 //Log.logdb.error("SQL Exception: " + e + "\n");  
                 System.out.println("Error en la obtención de todos los usuarios_proyectos: " + e);
+                Log.insertLog(e + "No se han obtenido correctamente todos los usuarios_proyectos\n");
             }
-            return usuariosProyectos;
+        Log.insertLog("Se han obtenido correctamente todos los usuarios_proyectos\n");
+        return usuariosProyectos;
     }
     
     public List<Proyecto> obtenerTodosLosProyectosUsuarioProyecto() {
@@ -123,9 +130,11 @@ public class UsuarioProyectoDAO {
                 proyecto.setEmpresaid(rs.getInt("id_empresa"));
                 proyectos.add(proyecto);
                 }
+            Log.insertLog("Se han obtenido correctamente todos los proyectos de los usuario_rpoyecto\n");
             } catch (SQLException e) {
                 //Log.logdb.error("SQL Exception: " + e + "\n");  
                 System.out.println("Error en la obtención de todos los proyectos de usuario_proyecto: " + e);
+                Log.insertLog(e + "No se han obtenido correctamente todos los proyectos de usuario_rpoyecto\n");
             }
             return proyectos;
     }
@@ -146,8 +155,10 @@ public class UsuarioProyectoDAO {
             } catch (SQLException e) {
                 //Log.logdb.error("SQL Exception: " + e + "\n");  
                 System.out.println("Error en la obtención de todas las empresas de usuario_proyecto: " + e);
+                Log.insertLog(e + "No se han obtenido correctamente todas las empresas de usuario_proyecto\n");
             }
-            return empresas;
+        Log.insertLog("Se han obtenido correctamente las empresas de usuario_proyecto\n");
+        return empresas;
     }
     
     public boolean actualizarUsuarioProyecto(UsuarioProyecto usuarioProyecto) {
@@ -156,18 +167,20 @@ public class UsuarioProyectoDAO {
             Connection connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USUARIO_PROYECTO_BY_ID_SQL);
             // Parameters start with 1 
-            preparedStatement.setInt(1, usuarioProyecto.getId());
-            preparedStatement.setInt(2, usuarioProyecto.getUserid());
-            preparedStatement.setInt(3, usuarioProyecto.getProyectoid());
-            preparedStatement.setTimestamp(4, usuarioProyecto.getFecha_alta());
-            preparedStatement.setTimestamp(5, usuarioProyecto.getFecha_baja());
+            preparedStatement.setInt(1, usuarioProyecto.getUserid());
+            preparedStatement.setInt(2, usuarioProyecto.getProyectoid());
+            preparedStatement.setTimestamp(3, usuarioProyecto.getFecha_alta());
+            preparedStatement.setTimestamp(4, usuarioProyecto.getFecha_baja());
+            preparedStatement.setInt(5, usuarioProyecto.getId());
             //preparedStatement.executeUpdate();
             usuarioProyectoActualizado = preparedStatement.executeUpdate() > 0;
             
         } catch (SQLException e) {
             System.out.println("No se ha podido actualizar el usuario_proyecto: " + e);
+            Log.insertLog("No se ha podido actualizar correctamente el usuario_proyecto\n");
         }
         
+        Log.insertLog("Se ha actualizado correctamente el usuario_proyecto\n");
         return usuarioProyectoActualizado;
     }
     
@@ -184,8 +197,9 @@ public class UsuarioProyectoDAO {
         catch (SQLException e) {
             //grabar en el log
             System.out.println("No se ha eliminado bien el usuario_proyecto: " + e);
+            Log.insertLog(e + "No se ha eliminado correctamente el usuario_proyecto\n");
         }
-        
+        Log.insertLog("Se ha eliminado correctamente el usuario_proyecto\n");
         return usuarioProyectoEliminado;
     }
     

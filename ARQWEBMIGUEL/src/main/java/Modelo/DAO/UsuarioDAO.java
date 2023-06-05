@@ -7,6 +7,7 @@ package Modelo.DAO;
 import Modelo.TipoUsuario;
 import Modelo.Usuario;
 import Util.ConexionBD;
+import Util.Log;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -61,10 +62,12 @@ public class UsuarioDAO {
             preparedStatement.setString(9, usuario.getTipo_usuario().name());
             preparedStatement.executeUpdate();
             System.out.println("Se ha creado el usuario");
+            Log.insertLog("Se ha creado correctamente el usuario\n");
         }
         catch (SQLException e) {
             //grabar en el log
             System.out.println("No se ha guardado bien el usuario: " + e);
+            Log.insertLog(e + "No se ha guardado bien el usuario\n");
         }
     }
     
@@ -93,9 +96,11 @@ public class UsuarioDAO {
         }
         catch (SQLException e) {
             System.out.println("No se ha encontrado el usuario: " + e);
+            Log.insertLog(e + "No se ha encontrado el usuario\n");
         }
-        System.out.println(usuario.toString());
-        System.out.println(usuario.getTipo_usuario());
+        //System.out.println(usuario.toString());
+        //System.out.println(usuario.getTipo_usuario());
+        Log.insertLog("Se ha encontrado correctamente el usuario\n");
         return usuario;
     }
     
@@ -123,7 +128,9 @@ public class UsuarioDAO {
         } catch (SQLException e) {
             //Meter en el log el error
             System.out.println("Ha fallado la obtención del usuario: " + e);
+            Log.insertLog(e + "Ha fallado la obtención del usuario\n");
         }
+        Log.insertLog("Se ha obtenido correctamente el usuario\n");
         return usuario;
     }
     
@@ -150,8 +157,10 @@ public class UsuarioDAO {
             } catch (SQLException e) {
                 //Log.logdb.error("SQL Exception: " + e + "\n");  
                 System.out.println("Error en la obtención de todos los usuarios: " + e);
+                Log.insertLog(e + "Ha fallado la obtención de todos los usuarios\n");
             }
-            return usuarios;
+        Log.insertLog("Se han obtenido correctamente todos los usuarios\n");
+        return usuarios;
     }
        
     
@@ -175,8 +184,10 @@ public class UsuarioDAO {
             
         } catch (SQLException e) {
             System.out.println("Error en la actualización: " + e);
+            Log.insertLog(e + "No se ha actualizado correctamente el usuario\n");
         }
         
+        Log.insertLog("Se ha actualizado correctamente el usuario\n");
         return usuarioActualizado;
 
     }
@@ -194,7 +205,9 @@ public class UsuarioDAO {
         catch (SQLException e) {
             //grabar en el log
             System.out.println("Error al eliminar el usuario: " + e);
+            Log.insertLog(e + "No se ha eliminado correctamente el usuario\n");
         }
+        Log.insertLog("Se ha eliminado correctamente el usuario\n");
         return usuarioEliminado;
     }
 }

@@ -77,6 +77,14 @@
         <servlet-name>LogoutControlador</servlet-name>
         <url-pattern>/LogoutControlador</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>UsuarioProyectoControlador</servlet-name>
+        <servlet-class>Controlador.UsuarioProyectoControlador</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UsuarioProyectoControlador</servlet-name>
+        <url-pattern>/UsuarioProyectoControlador</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30

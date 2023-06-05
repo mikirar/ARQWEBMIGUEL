@@ -11,6 +11,7 @@ import Modelo.Marcaje;
 import Modelo.TipoMarcaje;
 import Modelo.Usuario;
 import Util.Common;
+import Util.Log;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -61,11 +62,11 @@ public class MarcadorEmpleadoControlador extends HttpServlet{
             throws ServletException, IOException {
         
         String forward = "";
-        //Log.log.info("Entramos en el doGet\n");
+        Log.insertLog("Entramos en el doGet\n");
         String action = request.getParameter("action");
-        //Log.log.info("Recogemos el parametro action con valor " + action+ "\n");
+        Log.insertLog("Recogemos el parametro action con valor " + action+ "\n");
         if (action.equalsIgnoreCase("delete")) {
-            //Log.log.info("Parametro valor DELETE");
+            Log.insertLog("Parametro valor DELETE");
             int marcajeId = Integer.parseInt(request.getParameter("id"));
             marcajeDao.eliminarMarcaje(marcajeId);
             forward = LIST_EMPLEADO;
@@ -73,20 +74,20 @@ public class MarcadorEmpleadoControlador extends HttpServlet{
             Usuario user = (Usuario) session.getAttribute("user");
             request.setAttribute("marcajes", marcajeDao.obtenerTodasLosMarcajesPorIdUsuario(user.getUserid()));
         } else if (action.equalsIgnoreCase("edit")) {
-            //Log.log.info("Parametro valor EDIT");
+            Log.insertLog("Parametro valor EDIT");
             forward = INSERT_OR_EDIT;
             int marcajeId = Integer.parseInt(request.getParameter("id"));
             Marcaje marcaje = marcajeDao.obtenerMarcajePorId(marcajeId);
             request.setAttribute("marcaje", marcaje);
         } else if (action.equalsIgnoreCase("listEmpleado")) {
-            //Log.log.info("Parametro valor LIST\n");
+            Log.insertLog("Parametro valor LIST\n");
             forward = LIST_EMPLEADO;
             //request.setAttribute("marcajes", marcajeDao.obtenerTodasLosMarcajesPorIdUsuario(Integer.parseInt(request.getParameter("usuarioid"))));
             HttpSession session = request.getSession();
             Usuario user = (Usuario) session.getAttribute("user");
             request.setAttribute("marcajes", marcajeDao.obtenerTodasLosMarcajesPorIdUsuario(user.getUserid()));
         } else {
-            //Log.log.info("Parametro valor vacio vamos a insertar\n");
+            Log.insertLog("Parametro valor vacio vamos a insertar\n");
             forward = INSERT_OR_EDIT;
             HttpSession session = request.getSession();
             Usuario user = (Usuario) session.getAttribute("user");
@@ -103,7 +104,7 @@ public class MarcadorEmpleadoControlador extends HttpServlet{
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        //Log.log.info("Entramos por el doPost\n");
+        Log.insertLog("Entramos por el doPost\n");
         //processRequest(request, response);
         Marcaje marcaje = new Marcaje();
         String fechaString = request.getParameter("fecha");
@@ -116,11 +117,12 @@ public class MarcadorEmpleadoControlador extends HttpServlet{
 
         String marcajeid = request.getParameter("id");
         if (marcajeid == null || marcajeid.isEmpty() || marcajeid.equalsIgnoreCase("")) {
+            Log.insertLog("Vamos a añadir el marcaje del empleado\n");
             marcajeDao.crearMarcaje(marcaje);
-            System.out.println("Entra crear");
+            
 
             /*try {
-                //Log.log.info("Vamos a añadir el usuario\n");
+                //Log.insertLog("Vamos a añadir el usuario\n");
                 usuarioRepository.crearUsuario(usuario);
             } catch (SQLException ex) {
                 Logger.getLogger(UsuarioControlador.class.getName()).log(Level.SEVERE, null, ex);
@@ -128,8 +130,8 @@ public class MarcadorEmpleadoControlador extends HttpServlet{
             
         } else {
             marcaje.setId(Integer.parseInt(marcajeid));
+            Log.insertLog("Vamos a actualizar el marcaje del empleado\n");
             marcajeDao.actualizarMarcaje(marcaje);
-            System.out.println("Entra actualizar");
         }
         HttpSession session = request.getSession();
         List<Marcaje> marcajes = marcajeDao.obtenerTodasLosMarcajesPorIdUsuario(Integer.parseInt(request.getParameter("usuarioid")));

@@ -33,6 +33,7 @@
         <a class="button" href="UsuarioControlador?action=listUser"style="font-size: 30px; text-decoration: none"">Usuarios</a>
         <a class="button" href="EmpresaControlador?action=listEmpresa"style="font-size: 30px; text-decoration: none">Empresas</a>
         <a class="button" href="ProyectoControlador?action=listProyecto"style="font-size: 30px; text-decoration: none">Proyectos</a>
+        <a class="button" href="UsuarioProyectoControlador?action=listUserProject"style="font-size: 30px; text-decoration: none">Usuarios Proyectos</a>
         <a class="button" href="MarcadorControlador?action=listMarcador"style="font-size: 30px; text-decoration: none">Marcajes</a>
     </div>
 </body>

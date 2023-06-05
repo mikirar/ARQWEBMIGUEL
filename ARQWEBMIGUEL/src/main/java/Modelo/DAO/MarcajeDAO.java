@@ -7,6 +7,7 @@ package Modelo.DAO;
 import Modelo.Marcaje;
 import Modelo.TipoMarcaje;
 import Util.ConexionBD;
+import Util.Log;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -54,10 +55,12 @@ public class MarcajeDAO {
             preparedStatement.setInt(4, marcaje.getUsuarioid());
             preparedStatement.executeUpdate();
             System.out.println("Se ha creado el marcaje");
+            Log.insertLog("Se ha creado el marcaje\n");
         }
         catch (SQLException e) {
             //grabar en el log
             System.out.println("No se ha guardado bien el marcaje: " + e);
+            Log.insertLog(e + "No se ha guardado bien el marcaje\n");
         }
     }
     
@@ -78,8 +81,10 @@ public class MarcajeDAO {
             }
         } catch (SQLException e) {
             //Meter en el log el error
-            System.out.println("Ha fallado la obtención de la empresa");
+            System.out.println("Ha fallado la obtención del marcaje");
+            Log.insertLog(e + "Ha fallado la obtención del marcaje\n");
         }
+        Log.insertLog("Se ha obtenido correctamente el marcaje\n");
         return marcaje;
     }
     
@@ -101,8 +106,10 @@ public class MarcajeDAO {
             } catch (SQLException e) {
                 //Log.logdb.error("SQL Exception: " + e + "\n");  
                 System.out.println("Error en la obtención de todos los marcajes: " + e);
+                Log.insertLog(e + "Error en la obtención de todos los marcajes\n");
             }
-            return marcajes;
+        Log.insertLog("Se han obtenido correctamente todos los marcajes\n");
+        return marcajes;
     }
     
     public List<Marcaje> obtenerTodasLosMarcajesPorIdUsuario(int idUsuario) {
@@ -125,8 +132,10 @@ public class MarcajeDAO {
             } catch (SQLException e) {
                 //Log.logdb.error("SQL Exception: " + e + "\n");  
                 System.out.println("Error en la obtención de todos los marcajes de los usuarios: " + e);
+                Log.insertLog(e + "Ha fallado la obtención de todos los marcajes por id de usuario\n");
             }
-            System.out.println(marcajes);
+            //System.out.println(marcajes);
+            Log.insertLog("Se han obtenido todos los marcajes por id de usuario\n");
             return marcajes;
     }
     
@@ -141,9 +150,11 @@ public class MarcajeDAO {
             preparedStatement.setInt(3, marcaje.getUsuarioid());
             preparedStatement.setInt(4, marcaje.getId());
             preparedStatement.executeUpdate();
+            Log.insertLog("Marcaje actualizado correctamente\n");
             
         } catch (SQLException e) {
             System.out.println("No se ha podido actualizar el marcaje:" + e);
+            Log.insertLog(e + "No se ha podido actualizar el marcaje\n");
         }
     }
     
@@ -155,10 +166,12 @@ public class MarcajeDAO {
             // Parameters start with 1 
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate(); 
+            Log.insertLog("Marcaje eliminado correctamente\n");
         }
         catch (SQLException e) {
             //grabar en el log
             System.out.println("No se ha eliminado bien el marcaje");
+            Log.insertLog(e + "No se ha eliminado correctamente el marcaje\n");
         }
         
     }

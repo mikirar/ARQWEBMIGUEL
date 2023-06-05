@@ -6,6 +6,7 @@ package Modelo.DAO;
 
 import Modelo.Proyecto;
 import Util.ConexionBD;
+import Util.Log;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,9 +31,11 @@ public class ProyectoDAO {
     private static final String SELECT_ALL_PROYECTO_SQL = "SELECT * FROM proyectos;";
     private static final String DELETE_PROYECTO_BY_ID_SQL = "DELETE FROM proyectos WHERE id_proyecto =?;";
     private static final String UPDATE_PROYECTO_BY_ID_SQL = "UPDATE proyectos set nombre = ?, id_empresa = ? WHERE id_proyecto =?;";
+    private static final String SELECT_ALL_PROYECTO_BY_USER_ID_SQL = "SELECT proyectos.* FROM proyectos JOIN usuarios_proyectos ON proyectos.id_proyecto = usuarios_proyectos.id_proyecto " +
+    "WHERE usuarios_proyectos.id_user = ?;";
     
     
-    public ProyectoDAO() throws SQLException {
+    public ProyectoDAO() {
         //log de que cogemos conexión
         //connection = ConexionBD.getConnection();
         //log de que tenemos conexión
@@ -50,10 +53,12 @@ public class ProyectoDAO {
             preparedStatement.setInt(3, proyecto.getEmpresaid());
             preparedStatement.executeUpdate();
             System.out.println("Se ha creado el proyecto");
+            Log.insertLog("Se ha creado el proyecto correctamente\n");
         }
         catch (SQLException e) {
             //grabar en el log
             System.out.println("No se ha guardado bien el proyecto: " + e);
+            Log.insertLog(e + "No se ha guardado bien el proyecto\n");
         }
     }
 
@@ -72,7 +77,9 @@ public class ProyectoDAO {
         } catch (SQLException e) {
             //Meter en el log el error
             System.out.println("Ha fallado la obtención del proyecto: " + e);
+            Log.insertLog(e + "Ha fallado la obtención del poryecto\n");
         }
+        Log.insertLog("Se ha obtenido correctamente el proyecto\n");
         return proyecto;
     }
     
@@ -92,9 +99,11 @@ public class ProyectoDAO {
                 }
             } catch (SQLException e) {
                 //Log.logdb.error("SQL Exception: " + e + "\n");  
-                System.out.println("Error en la obtención de todas las empresas: " + e);
+                System.out.println("Error en la obtención de todos los proyectos: " + e);
+                Log.insertLog(e + "Error en la obtención de todos los proyectos\n");
             }
-            return proyectos;
+        Log.insertLog("Se han obtenido correctamente todos los proyectos\n");
+        return proyectos;
     }
 
     public boolean actualizarProyecto(Proyecto proyecto) {
@@ -109,8 +118,9 @@ public class ProyectoDAO {
             proyectoActualizado = preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             System.out.println("No se ha podido actualizar el proyecto: " + e);
+            Log.insertLog(e + "No se ha podido actualizar correctamente el proyecto\n");
         }
-        
+        Log.insertLog("Se ha actualizado correctamente el proyecto\n");
         return proyectoActualizado;
     }
 
@@ -127,10 +137,35 @@ public class ProyectoDAO {
         catch (SQLException e) {
             //grabar en el log
             System.out.println("No se ha eliminado bien el proyecto: " + e);
+            Log.insertLog(e + "No se ha eliminado correctamente el proyecto\n");
         }
-        
+        Log.insertLog("Se ha eliminado correctamente el proyecto\n");
         return proyectoEliminado;
         
+    }
+    
+    public List<Proyecto> obtenerTodosLosProyectosPorIdUsuario(int idUser) {
+        List<Proyecto> proyectos = new ArrayList<>();
+        
+        try {
+            Connection connection = ConexionBD.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_PROYECTO_BY_USER_ID_SQL);
+            preparedStatement.setInt(1, idUser);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                Proyecto proyecto = new Proyecto();
+                proyecto.setProyectoid(rs.getInt("id_proyecto"));
+                proyecto.setNombre(rs.getString("nombre"));
+                proyecto.setEmpresaid(rs.getInt("id_empresa"));
+                proyectos.add(proyecto);
+                }
+            } catch (SQLException e) {
+                //Log.logdb.error("SQL Exception: " + e + "\n");  
+                System.out.println("Error en la obtención de todos los proyectos por id de usuario: " + e);
+                Log.insertLog(e + "Error en la obtención de todos los proyectos por id de usuario\n");
+            }
+        Log.insertLog("Se han obtenido correctamente todos los proyectos por id de usuario\n");
+        return proyectos;
     }
     
 }

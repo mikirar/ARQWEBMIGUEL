@@ -10,6 +10,7 @@ import Modelo.Marcaje;
 import Modelo.TipoUsuario;
 import Modelo.Usuario;
 import Util.Common;
+import Util.Log;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -50,6 +51,7 @@ public class LogoutControlador extends HttpServlet{
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Log.insertLog("Hacemos logout\n");
         response.setContentType("text/html");
         Cookie loginCookie = null;
         Cookie[] cookies = request.getCookies();
