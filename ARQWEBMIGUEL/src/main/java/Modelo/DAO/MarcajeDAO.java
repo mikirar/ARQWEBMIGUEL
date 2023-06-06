@@ -13,6 +13,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,8 +33,31 @@ public class MarcajeDAO {
     private static final String SELECT_MARCAJE_BY_ID_SQL = "SELECT * FROM marcajes WHERE id =?;";
     private static final String SELECT_ALL_MARCAJE_SQL = "SELECT * FROM marcajes;";
     private static final String SELECT_ALL_MARCAJE__USUARIO_SQL = "SELECT * FROM marcajes WHERE id_usuario = ?;";
+    private static final String SELECT_ALL_MARCAJE_EMPRESA_SQL = "SELECT m.* FROM marcajes m JOIN usuarios u ON m.id_usuario = u.id_user " +
+    "JOIN usuarios_proyectos up ON u.id_user = up.id_user JOIN proyectos p ON up.id_proyecto = p.id_proyecto JOIN empresa e ON p.id_empresa = e.id_empresa WHERE e.id_empresa = ?;";
+    private static final String SELECT_ALL_MARCAJE_PROYECTO_SQL = "SELECT m.* FROM marcajes m JOIN usuarios u ON m.id_usuario = u.id_user JOIN usuarios_proyectos up ON u.id_user = up.id_user " +
+    "JOIN proyectos p ON up.id_proyecto = p.id_proyecto WHERE p.id_proyecto = ?;";
     private static final String DELETE_MARCAJE_BY_ID_SQL = "DELETE FROM marcajes WHERE id =?;";
     private static final String UPDATE_MARCAJE_BY_ID_SQL = "UPDATE marcajes set fecha = ?, tipo_marcaje = ?, id_usuario = ? WHERE id =?;";
+    private static final String SELECT_ALL_MARCAJE_EMPRESA_SEMANA_SQL = "SELECT m.* FROM marcajes m JOIN usuarios u ON m.id_usuario = u.id_user JOIN usuarios_proyectos up ON u.id_user = up.id_user " +
+    "JOIN proyectos p ON up.id_proyecto = p.id_proyecto JOIN empresa e ON p.id_empresa = e.id_empresa WHERE e.id_empresa = ? AND YEARWEEK(m.fecha) = YEARWEEK(?);";
+    private static final String SELECT_ALL_MARCAJE_EMPRESA_MENSUAL_SQL = "SELECT m.* FROM marcajes m JOIN usuarios u ON m.id_usuario = u.id_user JOIN usuarios_proyectos up ON u.id_user = up.id_user " +
+    "JOIN proyectos p ON up.id_proyecto = p.id_proyecto JOIN empresa e ON p.id_empresa = e.id_empresa WHERE e.id_empresa = ? AND MONTH(m.fecha) = MONTH(?);";
+    private static final String SELECT_ALL_MARCAJE_EMPRESA_ANUAL_SQL = "SELECT m.* FROM marcajes m JOIN usuarios u ON m.id_usuario = u.id_user " +
+    "JOIN usuarios_proyectos up ON u.id_user = up.id_user JOIN proyectos p ON up.id_proyecto = p.id_proyecto JOIN empresa e ON p.id_empresa = e.id_empresa " +
+    "WHERE e.id_empresa = ? AND YEAR(m.fecha) = YEAR(?);";
+    private static final String SELECT_ALL_MARCAJE_EMPRESA_PERIODO_SQL = "SELECT m.* FROM marcajes m JOIN usuarios u ON m.id_usuario = u.id_user " +
+    "JOIN usuarios_proyectos up ON u.id_user = up.id_user JOIN proyectos p ON up.id_proyecto = p.id_proyecto JOIN empresa e ON p.id_empresa = e.id_empresa " +
+    "WHERE e.id_empresa = ? AND m.fecha BETWEEN ? AND ?;";
+    private static final String SELECT_ALL_MARCAJE_USUARIO_SEMANAL_SQL = "SELECT m.* FROM marcajes m JOIN usuarios u ON m.id_usuario = u.id_user " +
+    "JOIN usuarios_proyectos up ON u.id_user = up.id_user JOIN proyectos p ON up.id_proyecto = p.id_proyecto WHERE u.id_user = ? AND YEARWEEK(m.fecha) = YEARWEEK(?);";
+    private static final String SELECT_ALL_MARCAJE_USUARIO_MENSUAL_SQL = "SELECT m.* FROM marcajes m JOIN usuarios u ON m.id_usuario = u.id_user " +
+    "JOIN usuarios_proyectos up ON u.id_user = up.id_user JOIN proyectos p ON up.id_proyecto = p.id_proyecto WHERE u.id_user = ? AND MONTH(m.fecha) = MONTH(?);";
+    private static final String SELECT_ALL_MARCAJE_USUARIO_ANUAL_SQL = "SELECT m.* FROM marcajes m JOIN usuarios u ON m.id_usuario = u.id_user " +
+    "JOIN usuarios_proyectos up ON u.id_user = up.id_user JOIN proyectos p ON up.id_proyecto = p.id_proyecto WHERE u.id_user = ? AND YEAR(m.fecha) = YEAR(?);";
+    private static final String SELECT_ALL_MARCAJE_USUARIO_PERIODO_SQL = "SELECT m.* FROM marcajes m JOIN usuarios u ON m.id_usuario = u.id_user " +
+    "JOIN usuarios_proyectos up ON u.id_user = up.id_user JOIN proyectos p ON up.id_proyecto = p.id_proyecto WHERE u.id_user = ? AND m.fecha BETWEEN ? AND ?;";
+    
     
     public MarcajeDAO() {
         //log de que cogemos conexión
@@ -176,6 +200,400 @@ public class MarcajeDAO {
         }
             //System.out.println(marcajes);
             Log.insertLog("Se han obtenido todos los marcajes por id de usuario\n");
+            return marcajes;
+    }
+    
+    public List<Marcaje> obtenerTodasLosMarcajesPorIdUsuarioSemanal(int idUsuario, Timestamp fecha_inicio) {
+        System.out.println(SELECT_ALL_MARCAJE_USUARIO_SEMANAL_SQL);
+        Log.insertLog(SELECT_ALL_MARCAJE_USUARIO_SEMANAL_SQL);
+        Connection connection = null;
+        List<Marcaje> marcajes = new ArrayList<>();
+        
+        try {
+            connection = ConexionBD.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_MARCAJE_USUARIO_SEMANAL_SQL);
+            preparedStatement.setInt(1, idUsuario);
+            preparedStatement.setTimestamp(2, fecha_inicio);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                Marcaje marcaje = new Marcaje();
+                marcaje.setId(rs.getInt("id"));
+                marcaje.setFecha(rs.getTimestamp("fecha"));
+                marcaje.setTipo_marcaje(TipoMarcaje.valueOf(rs.getString("tipo_marcaje")));
+                marcaje.setUsuarioid(rs.getInt("id_usuario"));
+                marcajes.add(marcaje);
+                }
+            } catch (SQLException e) {
+                //Log.logdb.error("SQL Exception: " + e + "\n");  
+                System.out.println("Error en la obtención de todos los marcajes de los usuarios: " + e);
+                Log.insertLog(e + "Ha fallado la obtención de todos los marcajes por id de usuario\n");
+            } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión");
+                Log.insertLog(e + "Error al cerrar la conexión\n");
+            }
+        }
+            //System.out.println(marcajes);
+            Log.insertLog("Se han obtenido todos los marcajes por id de usuario\n");
+            return marcajes;
+    }
+    
+    public List<Marcaje> obtenerTodasLosMarcajesPorIdUsuarioMensual(int idUsuario, Timestamp fecha_inicio) {
+        System.out.println(SELECT_ALL_MARCAJE_USUARIO_MENSUAL_SQL);
+        Log.insertLog(SELECT_ALL_MARCAJE_USUARIO_MENSUAL_SQL);
+        Connection connection = null;
+        List<Marcaje> marcajes = new ArrayList<>();
+        
+        try {
+            connection = ConexionBD.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_MARCAJE_USUARIO_MENSUAL_SQL);
+            preparedStatement.setInt(1, idUsuario);
+            preparedStatement.setTimestamp(2, fecha_inicio);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                Marcaje marcaje = new Marcaje();
+                marcaje.setId(rs.getInt("id"));
+                marcaje.setFecha(rs.getTimestamp("fecha"));
+                marcaje.setTipo_marcaje(TipoMarcaje.valueOf(rs.getString("tipo_marcaje")));
+                marcaje.setUsuarioid(rs.getInt("id_usuario"));
+                marcajes.add(marcaje);
+                }
+            } catch (SQLException e) {
+                //Log.logdb.error("SQL Exception: " + e + "\n");  
+                System.out.println("Error en la obtención de todos los marcajes de los usuarios: " + e);
+                Log.insertLog(e + "Ha fallado la obtención de todos los marcajes por id de usuario\n");
+            } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión");
+                Log.insertLog(e + "Error al cerrar la conexión\n");
+            }
+        }
+            //System.out.println(marcajes);
+            Log.insertLog("Se han obtenido todos los marcajes por id de usuario\n");
+            return marcajes;
+    }
+    
+    public List<Marcaje> obtenerTodasLosMarcajesPorIdUsuarioAnual(int idUsuario, Timestamp fecha_inicio) {
+        System.out.println(SELECT_ALL_MARCAJE_USUARIO_ANUAL_SQL);
+        Log.insertLog(SELECT_ALL_MARCAJE_USUARIO_ANUAL_SQL);
+        Connection connection = null;
+        List<Marcaje> marcajes = new ArrayList<>();
+        
+        try {
+            connection = ConexionBD.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_MARCAJE_USUARIO_ANUAL_SQL);
+            preparedStatement.setInt(1, idUsuario);
+            preparedStatement.setTimestamp(2, fecha_inicio);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                Marcaje marcaje = new Marcaje();
+                marcaje.setId(rs.getInt("id"));
+                marcaje.setFecha(rs.getTimestamp("fecha"));
+                marcaje.setTipo_marcaje(TipoMarcaje.valueOf(rs.getString("tipo_marcaje")));
+                marcaje.setUsuarioid(rs.getInt("id_usuario"));
+                marcajes.add(marcaje);
+                }
+            } catch (SQLException e) {
+                //Log.logdb.error("SQL Exception: " + e + "\n");  
+                System.out.println("Error en la obtención de todos los marcajes de los usuarios: " + e);
+                Log.insertLog(e + "Ha fallado la obtención de todos los marcajes por id de usuario\n");
+            } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión");
+                Log.insertLog(e + "Error al cerrar la conexión\n");
+            }
+        }
+            //System.out.println(marcajes);
+            Log.insertLog("Se han obtenido todos los marcajes por id de usuario\n");
+            return marcajes;
+    }
+    
+    public List<Marcaje> obtenerTodasLosMarcajesPorIdUsuarioPeriodo(int idUsuario, Timestamp fecha_inicio, Timestamp fecha_fin) {
+        System.out.println(SELECT_ALL_MARCAJE_USUARIO_PERIODO_SQL);
+        Log.insertLog(SELECT_ALL_MARCAJE_USUARIO_PERIODO_SQL);
+        Connection connection = null;
+        List<Marcaje> marcajes = new ArrayList<>();
+        
+        try {
+            connection = ConexionBD.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_MARCAJE_USUARIO_PERIODO_SQL);
+            preparedStatement.setInt(1, idUsuario);
+            preparedStatement.setTimestamp(2, fecha_inicio);
+            preparedStatement.setTimestamp(3, fecha_fin);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                Marcaje marcaje = new Marcaje();
+                marcaje.setId(rs.getInt("id"));
+                marcaje.setFecha(rs.getTimestamp("fecha"));
+                marcaje.setTipo_marcaje(TipoMarcaje.valueOf(rs.getString("tipo_marcaje")));
+                marcaje.setUsuarioid(rs.getInt("id_usuario"));
+                marcajes.add(marcaje);
+                }
+            } catch (SQLException e) {
+                //Log.logdb.error("SQL Exception: " + e + "\n");  
+                System.out.println("Error en la obtención de todos los marcajes de los usuarios: " + e);
+                Log.insertLog(e + "Ha fallado la obtención de todos los marcajes por id de usuario\n");
+            } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión");
+                Log.insertLog(e + "Error al cerrar la conexión\n");
+            }
+        }
+            //System.out.println(marcajes);
+            Log.insertLog("Se han obtenido todos los marcajes por id de usuario\n");
+            return marcajes;
+    }
+    
+    
+    public List<Marcaje> obtenerTodasLosMarcajesPorIdEmpresa(int idEmpresa) {
+        System.out.println(SELECT_ALL_MARCAJE_EMPRESA_SQL);
+        Connection connection = null;
+        List<Marcaje> marcajes = new ArrayList<>();
+        
+        try {
+            connection = ConexionBD.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_MARCAJE_EMPRESA_SQL);
+            preparedStatement.setInt(1, idEmpresa);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                Marcaje marcaje = new Marcaje();
+                marcaje.setId(rs.getInt("id"));
+                marcaje.setFecha(rs.getTimestamp("fecha"));
+                marcaje.setTipo_marcaje(TipoMarcaje.valueOf(rs.getString("tipo_marcaje")));
+                marcaje.setUsuarioid(rs.getInt("id_usuario"));
+                marcajes.add(marcaje);
+                }
+            } catch (SQLException e) {
+                //Log.logdb.error("SQL Exception: " + e + "\n");  
+                System.out.println("Error en la obtención de todos los marcajes de la empresa: " + e);
+                Log.insertLog(e + "Ha fallado la obtención de todos los marcajes por id de empresa\n");
+            } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión");
+                Log.insertLog(e + "Error al cerrar la conexión\n");
+            }
+        }
+            //System.out.println(marcajes);
+            Log.insertLog("Se han obtenido todos los marcajes por id de empresa\n");
+            System.out.println(marcajes);
+            return marcajes;
+    }
+    
+    public List<Marcaje> obtenerTodasLosMarcajesPorIdEmpresaSemanal(int idEmpresa, Timestamp fecha) {
+        System.out.println(SELECT_ALL_MARCAJE_EMPRESA_SEMANA_SQL);
+        Log.insertLog(SELECT_ALL_MARCAJE_EMPRESA_SEMANA_SQL);
+        Connection connection = null;
+        List<Marcaje> marcajes = new ArrayList<>();
+        
+        try {
+            connection = ConexionBD.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_MARCAJE_EMPRESA_SEMANA_SQL);
+            preparedStatement.setInt(1, idEmpresa);
+            preparedStatement.setTimestamp(2, fecha);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                Marcaje marcaje = new Marcaje();
+                marcaje.setId(rs.getInt("id"));
+                marcaje.setFecha(rs.getTimestamp("fecha"));
+                marcaje.setTipo_marcaje(TipoMarcaje.valueOf(rs.getString("tipo_marcaje")));
+                marcaje.setUsuarioid(rs.getInt("id_usuario"));
+                marcajes.add(marcaje);
+                }
+            } catch (SQLException e) {
+                //Log.logdb.error("SQL Exception: " + e + "\n");  
+                System.out.println("Error en la obtención de todos los marcajes de la empresa: " + e);
+                Log.insertLog(e + "Ha fallado la obtención de todos los marcajes por id de empresa\n");
+            } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión");
+                Log.insertLog(e + "Error al cerrar la conexión\n");
+            }
+        }
+            //System.out.println(marcajes);
+            Log.insertLog("Se han obtenido todos los marcajes por id de empresa\n");
+            System.out.println(marcajes);
+            return marcajes;
+    }
+    
+    public List<Marcaje> obtenerTodasLosMarcajesPorIdEmpresaMensual(int idEmpresa, Timestamp fecha) {
+        System.out.println(SELECT_ALL_MARCAJE_EMPRESA_MENSUAL_SQL);
+        Log.insertLog(SELECT_ALL_MARCAJE_EMPRESA_MENSUAL_SQL);
+        Connection connection = null;
+        List<Marcaje> marcajes = new ArrayList<>();
+        
+        try {
+            connection = ConexionBD.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_MARCAJE_EMPRESA_MENSUAL_SQL);
+            preparedStatement.setInt(1, idEmpresa);
+            preparedStatement.setTimestamp(2, fecha);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                Marcaje marcaje = new Marcaje();
+                marcaje.setId(rs.getInt("id"));
+                marcaje.setFecha(rs.getTimestamp("fecha"));
+                marcaje.setTipo_marcaje(TipoMarcaje.valueOf(rs.getString("tipo_marcaje")));
+                marcaje.setUsuarioid(rs.getInt("id_usuario"));
+                marcajes.add(marcaje);
+                }
+            } catch (SQLException e) {
+                //Log.logdb.error("SQL Exception: " + e + "\n");  
+                System.out.println("Error en la obtención de todos los marcajes de la empresa: " + e);
+                Log.insertLog(e + "Ha fallado la obtención de todos los marcajes por id de empresa\n");
+            } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión");
+                Log.insertLog(e + "Error al cerrar la conexión\n");
+            }
+        }
+            //System.out.println(marcajes);
+            Log.insertLog("Se han obtenido todos los marcajes por id de empresa\n");
+            System.out.println(marcajes);
+            return marcajes;
+    }
+    
+    public List<Marcaje> obtenerTodasLosMarcajesPorIdEmpresaAnual(int idEmpresa, Timestamp fecha) {
+        System.out.println(SELECT_ALL_MARCAJE_EMPRESA_ANUAL_SQL);
+        Log.insertLog(SELECT_ALL_MARCAJE_EMPRESA_ANUAL_SQL);
+        Connection connection = null;
+        List<Marcaje> marcajes = new ArrayList<>();
+        
+        try {
+            connection = ConexionBD.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_MARCAJE_EMPRESA_ANUAL_SQL);
+            preparedStatement.setInt(1, idEmpresa);
+            preparedStatement.setTimestamp(2, fecha);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                Marcaje marcaje = new Marcaje();
+                marcaje.setId(rs.getInt("id"));
+                marcaje.setFecha(rs.getTimestamp("fecha"));
+                marcaje.setTipo_marcaje(TipoMarcaje.valueOf(rs.getString("tipo_marcaje")));
+                marcaje.setUsuarioid(rs.getInt("id_usuario"));
+                marcajes.add(marcaje);
+                }
+            } catch (SQLException e) {
+                //Log.logdb.error("SQL Exception: " + e + "\n");  
+                System.out.println("Error en la obtención de todos los marcajes de la empresa: " + e);
+                Log.insertLog(e + "Ha fallado la obtención de todos los marcajes por id de empresa\n");
+            } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión");
+                Log.insertLog(e + "Error al cerrar la conexión\n");
+            }
+        }
+            //System.out.println(marcajes);
+            Log.insertLog("Se han obtenido todos los marcajes por id de empresa\n");
+            System.out.println(marcajes);
+            return marcajes;
+    }
+    
+    public List<Marcaje> obtenerTodasLosMarcajesPorIdEmpresaPeriodo(int idEmpresa, Timestamp fecha_inicial, Timestamp fecha_final) {
+        System.out.println(SELECT_ALL_MARCAJE_EMPRESA_PERIODO_SQL);
+        Log.insertLog(SELECT_ALL_MARCAJE_EMPRESA_PERIODO_SQL);
+        Connection connection = null;
+        List<Marcaje> marcajes = new ArrayList<>();
+        
+        try {
+            connection = ConexionBD.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_MARCAJE_EMPRESA_PERIODO_SQL);
+            preparedStatement.setInt(1, idEmpresa);
+            preparedStatement.setTimestamp(2, fecha_inicial);
+            preparedStatement.setTimestamp(3, fecha_final);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                Marcaje marcaje = new Marcaje();
+                marcaje.setId(rs.getInt("id"));
+                marcaje.setFecha(rs.getTimestamp("fecha"));
+                marcaje.setTipo_marcaje(TipoMarcaje.valueOf(rs.getString("tipo_marcaje")));
+                marcaje.setUsuarioid(rs.getInt("id_usuario"));
+                marcajes.add(marcaje);
+                }
+            } catch (SQLException e) {
+                //Log.logdb.error("SQL Exception: " + e + "\n");  
+                System.out.println("Error en la obtención de todos los marcajes de la empresa: " + e);
+                Log.insertLog(e + "Ha fallado la obtención de todos los marcajes por id de empresa\n");
+            } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión");
+                Log.insertLog(e + "Error al cerrar la conexión\n");
+            }
+        }
+            //System.out.println(marcajes);
+            Log.insertLog("Se han obtenido todos los marcajes por id de empresa\n");
+            System.out.println(marcajes);
+            return marcajes;
+    }
+    
+    public List<Marcaje> obtenerTodasLosMarcajesPorIdProyecto(int idProyecto) {
+        System.out.println(SELECT_ALL_MARCAJE_PROYECTO_SQL);
+        Connection connection = null;
+        List<Marcaje> marcajes = new ArrayList<>();
+        
+        try {
+            connection = ConexionBD.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_MARCAJE_PROYECTO_SQL);
+            preparedStatement.setInt(1, idProyecto);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                Marcaje marcaje = new Marcaje();
+                marcaje.setId(rs.getInt("id"));
+                marcaje.setFecha(rs.getTimestamp("fecha"));
+                marcaje.setTipo_marcaje(TipoMarcaje.valueOf(rs.getString("tipo_marcaje")));
+                marcaje.setUsuarioid(rs.getInt("id_usuario"));
+                marcajes.add(marcaje);
+                }
+            } catch (SQLException e) {
+                //Log.logdb.error("SQL Exception: " + e + "\n");  
+                System.out.println("Error en la obtención de todos los marcajes del proyecto: " + e);
+                Log.insertLog(e + "Ha fallado la obtención de todos los marcajes por id de proyecto\n");
+            } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión");
+                Log.insertLog(e + "Error al cerrar la conexión\n");
+            }
+        }
+            //System.out.println(marcajes);
+            Log.insertLog("Se han obtenido todos los marcajes por id de proyecto\n");
             return marcajes;
     }
     

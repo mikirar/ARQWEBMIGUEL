@@ -42,7 +42,7 @@
                                 <%--<td><a href="UsuarioControlador?action=edit?userid=<c:out value="${user.userid}" />">Edit</a></td>--%>
                                 <td><a href="ProyectoControlador?action=edit&proyectoid=${proyecto.proyectoid}"" style="text-decoration: none; font-size: 15px">Edit</a></td>
                                 <td><a href="ProyectoControlador?action=delete&proyectoid=${proyecto.proyectoid}"" style="text-decoration: none; font-size: 15px">Delete</a></td>
-
+                                <td><a href="InformesControlador?action=menu&proyectoid=${proyecto.proyectoid}&nombre_proyecto=${proyecto.nombre}"" style="text-decoration: none; font-size: 15px">Report</a></td>
                             </tr>
                         </c:forEach>
                     </tbody>

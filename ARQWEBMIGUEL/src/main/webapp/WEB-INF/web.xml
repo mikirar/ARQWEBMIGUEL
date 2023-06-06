@@ -85,6 +85,14 @@
         <servlet-name>UsuarioProyectoControlador</servlet-name>
         <url-pattern>/UsuarioProyectoControlador</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>InformesControlador</servlet-name>
+        <servlet-class>Controlador.InformesControlador</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InformesControlador</servlet-name>
+        <url-pattern>/InformesControlador</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30

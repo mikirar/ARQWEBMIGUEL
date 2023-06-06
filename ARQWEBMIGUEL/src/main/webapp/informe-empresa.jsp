@@ -11,7 +11,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Marcajes</title>
+        <title>Marcajes empresa</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-gg0yROixCbMQv3Xipma34MD+dH/1f0784/j6cY/iJTQUOhcWr7x9JvORXT2MZWIT"
         crossorigin="anonymous">
@@ -22,7 +22,7 @@
         <div class="row">
             <!--<div class="alert alert-success" *ngIf='message '>{{message}}s/div» "-->
             <div class="container">
-                <h3 class="text-center">List of Marcajes</h3>
+                <h3 class="text-center">Lista de marcajes de la empresa ${nombre_empresa}</h3>
                 <hr>
                 <br>
                 <table class="table table-striped">
@@ -36,28 +36,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach items="${marcajes}" var="marcaje">
+                        <c:forEach items="${marcajesEmpresa}" var="marcaje">
                             <tr>
                                 <td scope="row"><c:out value="${marcaje.id}" /></td>
                                 <td><c:out value="${marcaje.fecha}" /></td>
                                 <td><c:out value="${marcaje.tipo_marcaje}" /></td>
                                 <td><c:out value="${marcaje.usuarioid}" /></td>
-                                <%--<td><a href="UsuarioControlador?action=edit?userid=<c:out value="${user.userid}" />">Edit</a></td>--%>
-                                <td><a href="MarcadorControlador?action=edit&id=${marcaje.id}">Edit</a></td>
-                                <td><a href="MarcadorControlador?action=delete&id=${marcaje.id}">Delete</a></td>
-
                             </tr>
                         </c:forEach>
                     </tbody>
+                    
                 </table>
-                <br><br><br><br>
-                <form>
-                    <fieldset class="form-group"> 
-                            <label>Fecha informe</label> <input type="datetime-local"
-                            value="<c:out value='${fecha_informe}' />" class="form-control" 
-                            name="fecha_alta" required>
-                    </fieldset>
-                </form>
-            <p><a href="InformeControlador?action=insert">Informe</a></p>
+            <p><a href="EmpresaControlador?action=listEmpresa"" style="text-decoration: none; font-size: 20px">Volver</a></p>
+            <p><a href="/menu-principal-rrhh.jsp" style="text-decoration: none; font-size: 20px">Menú</a></p>
     </body>
 </html>

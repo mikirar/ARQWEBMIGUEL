@@ -40,8 +40,8 @@
                                 <%--<td><a href="UsuarioControlador?action=edit?userid=<c:out value="${user.userid}" />">Edit</a></td>--%>
                                 <td><a href="EmpresaControlador?action=edit&empresaid=${empresa.empresaid}"" style="text-decoration: none; font-size: 15px">Edit</a></td>
                                 <td><a href="EmpresaControlador?action=delete&empresaid=${empresa.empresaid}"" style="text-decoration: none; font-size: 15px">Delete</a></td>
-                                <td><a href="InformeControlador?action=informes&empresaid=${empresa.empresaid}"" style="text-decoration: none; font-size: 15px">Report</a></td>
-
+                                <!--<td><a href="InformeControlador?action=informeEmpresa&empresaid=${empresa.empresaid}"" style="text-decoration: none; font-size: 15px">Report</a></td>-->
+                                <td><a href="InformesControlador?action=menu&empresaid=${empresa.empresaid}&nombre_empresa=${empresa.nombre_empresa}"" style="text-decoration: none; font-size: 15px">Report</a></td>
                             </tr>
                         </c:forEach>
                     </tbody>
