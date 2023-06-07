@@ -12,31 +12,51 @@ import java.sql.SQLException;
  *
  * @author miki
  */
+
+/**
+ * Clase que representa el servicio de un proyecto.
+ */
 public class ProyectoService {
     private ProyectoDAO proyectoRepository;
     
+    /**
+     * Constructor de la clase ProyectoService.
+     * @throws SQLException si ocurre un error al inicializar el repositorio de proyectos.
+     */
     public ProyectoService() throws SQLException{
-        proyectoRepository = new ProyectoDAO(); //Inicializamos repo
+        proyectoRepository = new ProyectoDAO(); 
     }
     
+    /**
+     * Crea un nuevo proyecto.
+     * @param proyecto objeto Proyecto a crear.
+     */
     public void crearProyecto(Proyecto proyecto) {
-        //Lógica para crear nuevo proyecto
-        // Puede incluir validaciones, encriptación de contraseñas, etc.
         proyectoRepository.crearProyecto(proyecto);
     }
     
+    /**
+     * Obtiene un proyecto por su ID.
+     * @param idProyecto ID del proyecto a obtener.
+     * @return objeto Proyecto correspondiente al ID proporcionado.
+     */
     public Proyecto obtenerProyecto(int idProyecto) {
-        //Logica
         return proyectoRepository.obtenerProyectoPorId(idProyecto);
     }
     
+    /**
+     * Actualiza los datos de un proyecto.
+     * @param proyecto objeto Proyecto con los datos actualizados.
+     */
     public void actualizarProyecto(Proyecto proyecto) {
-        //Logica
         proyectoRepository.actualizarProyecto(proyecto);
     }
     
+    /**
+     * Elimina un proyecto por su ID.
+     * @param id ID del proyecto a eliminar.
+     */
     public void eliminarProyecto(int id) {
-        //Logica
         proyectoRepository.eliminarProyecto(id);
     }
 }

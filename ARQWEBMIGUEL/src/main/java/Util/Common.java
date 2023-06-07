@@ -13,8 +13,17 @@ import java.util.Date;
  *
  * @author miki
  */
+
+/**
+ * Clase de utilidad con métodos comunes.
+ */
 public class Common {
     
+    /**
+     * Convierte una cadena de texto en una fecha.
+     * @param fechaStr cadena de texto que representa la fecha.
+     * @return objeto Date correspondiente a la fecha proporcionada.
+     */
     public static Date parseStringToDate(String fechaStr) {
         if (fechaStr == null || fechaStr.isEmpty()) {
             return null;
@@ -28,6 +37,11 @@ public class Common {
         }
     }
     
+    /**
+     * Convierte una cadena de texto en una marca de tiempo (Timestamp).
+     * @param fechaStr cadena de texto que representa la marca de tiempo.
+     * @return objeto Timestamp correspondiente a la marca de tiempo proporcionada.
+     */
     public static Timestamp parseStringToTimestamp(String fechaStr) {
         if (fechaStr == null || fechaStr.isEmpty()) {
             return null;

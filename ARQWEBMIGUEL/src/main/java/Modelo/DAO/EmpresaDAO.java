@@ -18,6 +18,12 @@ import java.util.List;
  *
  * @author miki
  */
+
+/**
+ * Clase que representa un objeto de acceso a datos (DAO) para la tabla empresa en la base de datos.
+ * Se encarga de realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) sobre la tabla empresa.
+ * La clase utiliza una conexión a la base de datos a través de la clase ConexionBD.
+ */
 public class EmpresaDAO {
     
     private String jdbcURL = "jdbc:mysql://localhost:3306/rrhh?useSSL=false";
@@ -34,20 +40,26 @@ public class EmpresaDAO {
     private static final String SELECT_ALL_EMPRESA_BY_USER_ID_SQL = "SELECT DISTINCT empresa.* FROM empresa JOIN proyectos ON empresa.id_empresa = proyectos.id_empresa " +
     "JOIN usuarios_proyectos ON proyectos.id_proyecto = usuarios_proyectos.id_proyecto JOIN usuarios ON usuarios_proyectos.id_user = usuarios.id_user WHERE usuarios.id_user = ?;";
     
+    /**
+     * Constructor por defecto de la clase EmpresaDAO.
+     */
+    
     public EmpresaDAO() {
-        //log de que cogemos conexión
-        //connection = ConexionBD.getConnection();
-        //log de que tenemos conexión
 
     }
     
+    /**
+     * Crea una nueva empresa en la base de datos.
+     * 
+     * @param empresa La empresa a crear.
+     */
     public void crearEmpresa(Empresa empresa) {
         System.out.println(INSERT_EMPRESA_SQL);
         Connection connection = null;
         try{
             connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_EMPRESA_SQL);
-            // Parameters start with 1 
+            // Los parámetros comienzan en 1
             preparedStatement.setInt(1, empresa.getEmpresaid());
             preparedStatement.setString(2, empresa.getNombre_empresa());
             preparedStatement.executeUpdate();
@@ -55,7 +67,6 @@ public class EmpresaDAO {
             Log.insertLog("Se ha creado la empresa\n");
         }
         catch (SQLException e) {
-            //grabar en el log
             System.out.println("No se ha guardado bien la empresa: " + e);
             Log.insertLog(e + "No se ha guardado la empresa\n");
         } finally {
@@ -70,6 +81,12 @@ public class EmpresaDAO {
     }
     }
 
+    /**
+     * Obtiene una empresa de la base de datos por su ID.
+     * 
+     * @param idEmpresa El ID de la empresa a obtener.
+     * @return La empresa encontrada o una instancia vacía si no se encuentra ninguna empresa con el ID especificado.
+     */
     public Empresa obtenerEmpresaPorId(int idEmpresa) {
         Empresa empresa = new Empresa();
         Connection connection = null;
@@ -83,7 +100,6 @@ public class EmpresaDAO {
                 empresa.setNombre_empresa(rs.getString("nombre_empresa"));      
             }
         } catch (SQLException e) {
-            //Meter en el log el error
             System.out.println("Ha fallado la obtención de la empresa: " + e);
             Log.insertLog(e + "Ha fallado la obtención de la empresa\n");
         } finally {
@@ -100,6 +116,11 @@ public class EmpresaDAO {
         return empresa;
     }
     
+    /**
+    * Obtiene todas las empresas de la base de datos.
+    * 
+    * @return Una lista de todas las empresas encontradas.
+    */
     public List<Empresa> obtenerTodasLasEmpresa() {
         List<Empresa> empresas = new ArrayList<>();
         Connection connection = null;
@@ -114,7 +135,6 @@ public class EmpresaDAO {
                 empresas.add(empresa);
                 }
             } catch (SQLException e) {
-                //Log.logdb.error("SQL Exception: " + e + "\n");  
                 System.out.println("Error en la obtención de todas las empresas: " + e);
                 Log.insertLog(e + "Error en la obtención de todas las empresas\n");
             } finally {
@@ -130,13 +150,19 @@ public class EmpresaDAO {
             return empresas;
     }
 
+    /**
+    * Actualiza una empresa en la base de datos.
+    * 
+    * @param empresa La empresa actualizada.
+    * @return true si la actualización fue exitosa, false en caso contrario.
+    */
     public boolean actualizarEmpresa(Empresa empresa) {
         boolean empresaActualizada = false;
         Connection connection = null;
         try {
             connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_EMPRESA_BY_ID_SQL);
-            // Parameters start with 1 
+            // Los parámetros comienzan en 1
             preparedStatement.setString(1, empresa.getNombre_empresa());
             preparedStatement.setInt(2, empresa.getEmpresaid());
             empresaActualizada = preparedStatement.executeUpdate() > 0;
@@ -159,6 +185,12 @@ public class EmpresaDAO {
         return empresaActualizada;
     }
 
+    /**
+    * Elimina una empresa según su ID.
+    *
+    * @param id el ID de la empresa a eliminar
+    * @return true si la empresa se eliminó correctamente, false de lo contrario
+    */
     public boolean eliminarEmpresa(int id) {
         boolean empresaEliminada = false;
         Connection connection = null;
@@ -171,7 +203,6 @@ public class EmpresaDAO {
             empresaEliminada = preparedStatement.executeUpdate() > 0; 
         }
         catch (SQLException e) {
-            //grabar en el log
             System.out.println("No se ha eliminado bien la empresa");
             Log.insertLog(e + "Error al eliminar la empresa\n");
         } finally {
@@ -189,6 +220,12 @@ public class EmpresaDAO {
         
     }
     
+    /**
+    * Obtiene todas las empresas asociadas a un ID de usuario.
+    *
+    * @param idUsuario el ID del usuario
+    * @return una lista de objetos Empresa que pertenecen al usuario dado
+    */
     public List<Empresa> obtenerEmpresasPorIdUsuario(int idUsuario) {
         List<Empresa> empresas = new ArrayList<>();
         Connection connection = null;

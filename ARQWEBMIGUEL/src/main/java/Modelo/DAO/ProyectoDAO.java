@@ -18,13 +18,18 @@ import java.util.List;
  *
  * @author miki
  */
+
+/**
+ * Clase que representa un objeto de acceso a datos (DAO) para la tabla proyectos en la base de datos.
+ * Se encarga de realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) sobre la tabla proyectos.
+ * La clase utiliza una conexión a la base de datos a través de la clase ConexionBD.
+ */
 public class ProyectoDAO {
     
     private String jdbcURL = "jdbc:mysql://localhost:3306/rrhh?useSSL=false";
     private String jdbcUsername = "root";
     private String jdbcPassword = "root1234";
     private String jdbcDriver = "com.mysql.jdbc.Driver";
-    //private Connection connection;
     
     private static final String INSERT_PROYECTO_SQL = "INSERT INTO proyectos " + "(id_proyecto, nombre, id_empresa) VALUES" + "(?, ?, ?);";
     private static final String SELECT_PROYECTO_BY_ID_SQL = "SELECT * FROM proyectos WHERE id_proyecto =?;";
@@ -36,19 +41,20 @@ public class ProyectoDAO {
     
     
     public ProyectoDAO() {
-        //log de que cogemos conexión
-        //connection = ConexionBD.getConnection();
-        //log de que tenemos conexión
 
     }
 
+    /**
+    * Crea un nuevo proyecto en la base de datos.
+    *
+    * @param proyecto El objeto Proyecto que se va a crear.
+    */
     public void crearProyecto(Proyecto proyecto) {
         System.out.println(INSERT_PROYECTO_SQL);
         Connection connection = null;
         try{
             connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_PROYECTO_SQL);
-            // Parameters start with 1 
             preparedStatement.setInt(1, proyecto.getProyectoid());
             preparedStatement.setString(2, proyecto.getNombre());            
             preparedStatement.setInt(3, proyecto.getEmpresaid());
@@ -57,7 +63,6 @@ public class ProyectoDAO {
             Log.insertLog("Se ha creado el proyecto correctamente\n");
         }
         catch (SQLException e) {
-            //grabar en el log
             System.out.println("No se ha guardado bien el proyecto: " + e);
             Log.insertLog(e + "No se ha guardado bien el proyecto\n");
         } finally {
@@ -72,6 +77,13 @@ public class ProyectoDAO {
         }
     }
 
+    
+    /**
+    * Obtiene un proyecto de la base de datos por su ID.
+    *
+    * @param idProyecto El ID del proyecto a buscar.
+    * @return El objeto Proyecto correspondiente al ID especificado, o un objeto Proyecto vacío si no se encuentra.
+    */
     public Proyecto obtenerProyectoPorId(int idProyecto) {
         Connection connection = null;
         Proyecto proyecto = new Proyecto();
@@ -86,7 +98,6 @@ public class ProyectoDAO {
                 proyecto.setEmpresaid(rs.getInt("id_empresa"));       
             }
         } catch (SQLException e) {
-            //Meter en el log el error
             System.out.println("Ha fallado la obtención del proyecto: " + e);
             Log.insertLog(e + "Ha fallado la obtención del poryecto\n");
         } finally {
@@ -103,6 +114,11 @@ public class ProyectoDAO {
         return proyecto;
     }
     
+    /**
+    * Obtiene todos los proyectos de la base de datos.
+    *
+    * @return Una lista de objetos Proyecto que representa todos los proyectos en la base de datos.
+    */
     public List<Proyecto> obtenerTodosLosProyectos() {
         Connection connection = null;
         List<Proyecto> proyectos = new ArrayList<>();
@@ -119,7 +135,6 @@ public class ProyectoDAO {
                 proyectos.add(proyecto);
                 }
             } catch (SQLException e) {
-                //Log.logdb.error("SQL Exception: " + e + "\n");  
                 System.out.println("Error en la obtención de todos los proyectos: " + e);
                 Log.insertLog(e + "Error en la obtención de todos los proyectos\n");
             } finally {
@@ -136,13 +151,18 @@ public class ProyectoDAO {
         return proyectos;
     }
 
+    /**
+    * Actualiza un proyecto en la base de datos.
+    *
+    * @param proyecto El objeto Proyecto que se va a actualizar.
+    * @return true si el proyecto se actualizó correctamente, false en caso contrario.
+    */
     public boolean actualizarProyecto(Proyecto proyecto) {
         Connection connection = null;
         boolean proyectoActualizado = false;
         try {
             connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_PROYECTO_BY_ID_SQL);
-            // Parameters start with 1 
             preparedStatement.setString(1, proyecto.getNombre());            
             preparedStatement.setInt(2, proyecto.getEmpresaid());
             preparedStatement.setInt(3, proyecto.getProyectoid());
@@ -164,6 +184,13 @@ public class ProyectoDAO {
         return proyectoActualizado;
     }
 
+    
+    /**
+    * Elimina un proyecto de la base de datos por su ID.
+    *
+    * @param id El ID del proyecto a eliminar.
+    * @return true si el proyecto se eliminó correctamente, false en caso contrario.
+    */
     public boolean eliminarProyecto(int id) {
         Connection connection = null;
         boolean proyectoEliminado = false;
@@ -194,6 +221,12 @@ public class ProyectoDAO {
         
     }
     
+    /**
+    * Obtiene todos los proyectos de la base de datos asociados a un ID de usuario.
+    *
+    * @param idUser El ID del usuario asociado a los proyectos.
+    * @return Una lista de objetos Proyecto que representa todos los proyectos asociados al ID de usuario especificado.
+    */
     public List<Proyecto> obtenerTodosLosProyectosPorIdUsuario(int idUser) {
         Connection connection = null;
         List<Proyecto> proyectos = new ArrayList<>();
@@ -211,7 +244,6 @@ public class ProyectoDAO {
                 proyectos.add(proyecto);
                 }
             } catch (SQLException e) {
-                //Log.logdb.error("SQL Exception: " + e + "\n");  
                 System.out.println("Error en la obtención de todos los proyectos por id de usuario: " + e);
                 Log.insertLog(e + "Error en la obtención de todos los proyectos por id de usuario\n");
             } finally {

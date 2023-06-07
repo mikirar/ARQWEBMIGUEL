@@ -21,6 +21,12 @@ import java.util.List;
  *
  * @author miki
  */
+
+/**
+ * Clase que representa un objeto de acceso a datos (DAO) para la tabla usuarios_proyecto en la base de datos.
+ * Se encarga de realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) sobre la tabla usuarios_proyecto.
+ * La clase utiliza una conexión a la base de datos a través de la clase ConexionBD.
+ */
 public class UsuarioProyectoDAO {
     
     private String jdbcURL = "jdbc:mysql://localhost:3306/rrhh?useSSL=false";
@@ -39,18 +45,19 @@ public class UsuarioProyectoDAO {
     private static final String SELECT_EMPRESAS_FROM_USUARIO_PROYECTO_BY_ID_USER_SQL = "SELECT e.* FROM empresa e JOIN proyectos p ON e.id_empresa = p.id_empresa JOIN usuarios_proyectos up ON p.id_proyecto = up.id_proyecto WHERE up.id_user = ?;";
     
     public UsuarioProyectoDAO() throws SQLException {
-        //log de que cogemos conexión
-        //connection = ConexionBD.getConnection();
-        //log de que tenemos conexión
 
     }
     
+    /**
+    * Crea un nuevo registro de UsuarioProyecto en la base de datos.
+    * @param usuarioProyecto El objeto UsuarioProyecto a crear.
+    */
     public void crearUsuarioProyecto(UsuarioProyecto usuarioProyecto) {
         Connection connection = null;
         try{
             connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USUARIO_PROYECTO_SQL);
-// Parameters start with 1 
+            // Parámetros comienzan con 1
             preparedStatement.setInt(1, usuarioProyecto.getId());
             preparedStatement.setInt(2, usuarioProyecto.getUserid());
             preparedStatement.setInt(3, usuarioProyecto.getProyectoid());
@@ -61,7 +68,6 @@ public class UsuarioProyectoDAO {
             Log.insertLog("Se ha creado el usuario_proyecto correctamente\n");
         }
         catch (SQLException e) {
-            //grabar en el log
             System.out.println("No se ha guardado bien el usuario_proyecto: " + e);
             Log.insertLog(e + "No se ha guardado correctamente el usuario_proyecto\n");
         } finally {
@@ -76,6 +82,11 @@ public class UsuarioProyectoDAO {
         }
     }
     
+    /**
+    * Obtiene un UsuarioProyecto de la base de datos por su ID.
+    * @param idUsuarioProyecto El ID del UsuarioProyecto a obtener.
+    * @return El UsuarioProyecto encontrado o un UsuarioProyecto vacío si no se encuentra.
+    */
     public UsuarioProyecto obtenerUsuarioProyectoPorId(int idUsuarioProyecto) {
         Connection connection = null;
         UsuarioProyecto usuarioProyecto = new UsuarioProyecto();
@@ -94,7 +105,6 @@ public class UsuarioProyectoDAO {
             }
             
         } catch (SQLException e) {
-            //Meter en el log el error
             System.out.println("Ha fallado la obtención del usuario_proyecto: " + e);
             Log.insertLog(e + "no se ha obtenido correctamente el usuario_proyecto\n");
         } finally {
@@ -111,6 +121,10 @@ public class UsuarioProyectoDAO {
         return usuarioProyecto;
     }
     
+    /**
+    * Obtiene todos los registros de UsuarioProyecto de la base de datos.
+    * @return Una lista de todos los UsuarioProyecto encontrados.
+    */
     public List<UsuarioProyecto> obtenerTodosLosUsuarioProyecto() {
         Connection connection = null;
         List<UsuarioProyecto> usuariosProyectos = new ArrayList<>();
@@ -129,7 +143,6 @@ public class UsuarioProyectoDAO {
                 usuariosProyectos.add(usuarioProyecto);
                 }
             } catch (SQLException e) {
-                //Log.logdb.error("SQL Exception: " + e + "\n");  
                 System.out.println("Error en la obtención de todos los usuarios_proyectos: " + e);
                 Log.insertLog(e + "No se han obtenido correctamente todos los usuarios_proyectos\n");
             } finally {
@@ -146,6 +159,10 @@ public class UsuarioProyectoDAO {
         return usuariosProyectos;
     }
     
+    /**
+    * Obtiene todos los Proyecto asociados a los registros de UsuarioProyecto en la base de datos.
+    * @return Una lista de todos los Proyecto asociados a los UsuarioProyecto encontrados.
+    */
     public List<Proyecto> obtenerTodosLosProyectosUsuarioProyecto() {
         Connection connection = null;
         List<Proyecto> proyectos = new ArrayList<>();
@@ -163,7 +180,6 @@ public class UsuarioProyectoDAO {
                 }
             Log.insertLog("Se han obtenido correctamente todos los proyectos de los usuario_rpoyecto\n");
             } catch (SQLException e) {
-                //Log.logdb.error("SQL Exception: " + e + "\n");  
                 System.out.println("Error en la obtención de todos los proyectos de usuario_proyecto: " + e);
                 Log.insertLog(e + "No se han obtenido correctamente todos los proyectos de usuario_rpoyecto\n");
             } finally {
@@ -179,6 +195,10 @@ public class UsuarioProyectoDAO {
             return proyectos;
     }
     
+    /**
+    * Obtiene todas las empresas asociadas a los registros de UsuarioProyecto en la base de datos.
+    * @return Una lista de todas las empresas asociadas a los UsuarioProyecto encontrados.
+    */
     public List<Empresa> obtenerTodasLasEmpresasUsuarioProyecto() {
         Connection connection = null;
         List<Empresa> empresas = new ArrayList<>();
@@ -194,7 +214,6 @@ public class UsuarioProyectoDAO {
                 empresas.add(empresa);
                 }
             } catch (SQLException e) {
-                //Log.logdb.error("SQL Exception: " + e + "\n");  
                 System.out.println("Error en la obtención de todas las empresas de usuario_proyecto: " + e);
                 Log.insertLog(e + "No se han obtenido correctamente todas las empresas de usuario_proyecto\n");
             } finally {
@@ -211,19 +230,23 @@ public class UsuarioProyectoDAO {
         return empresas;
     }
     
+    /**
+    * Actualiza un registro de UsuarioProyecto en la base de datos.
+    * @param usuarioProyecto El objeto UsuarioProyecto actualizado.
+    * @return true si la actualización fue exitosa, false en caso contrario.
+    */
     public boolean actualizarUsuarioProyecto(UsuarioProyecto usuarioProyecto) {
         Connection connection = null;
         boolean usuarioProyectoActualizado = false;
         try {
             connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USUARIO_PROYECTO_BY_ID_SQL);
-            // Parameters start with 1 
+            // Parámetros comienzan en 1
             preparedStatement.setInt(1, usuarioProyecto.getUserid());
             preparedStatement.setInt(2, usuarioProyecto.getProyectoid());
             preparedStatement.setTimestamp(3, usuarioProyecto.getFecha_alta());
             preparedStatement.setTimestamp(4, usuarioProyecto.getFecha_baja());
             preparedStatement.setInt(5, usuarioProyecto.getId());
-            //preparedStatement.executeUpdate();
             usuarioProyectoActualizado = preparedStatement.executeUpdate() > 0;
             
         } catch (SQLException e) {
@@ -250,13 +273,12 @@ public class UsuarioProyectoDAO {
         try {
             connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USUARIO_PROYECTO_BY_ID_SQL);
-            // Parameters start with 1 
+            // Parámetros comienzan en 1
             preparedStatement.setInt(1, id);
             //preparedStatement.executeUpdate();
             usuarioProyectoEliminado = preparedStatement.executeUpdate() > 0; 
         }
         catch (SQLException e) {
-            //grabar en el log
             System.out.println("No se ha eliminado bien el usuario_proyecto: " + e);
             Log.insertLog(e + "No se ha eliminado correctamente el usuario_proyecto\n");
         } finally {
@@ -272,9 +294,5 @@ public class UsuarioProyectoDAO {
         Log.insertLog("Se ha eliminado correctamente el usuario_proyecto\n");
         return usuarioProyectoEliminado;
     }
-    
-    
-    
-    
     
 }

@@ -13,6 +13,10 @@ import javax.swing.JOptionPane;
  *
  * @author miki
  */
+
+/**
+ * Clase de utilidad para establecer y cerrar la conexión con la base de datos.
+ */
 public class ConexionBD {
     
     private static String DRIVER="com.mysql.cj.jdbc.Driver";
@@ -28,16 +32,18 @@ public class ConexionBD {
         }
     }
     
+    /**
+     * Obtiene una conexión a la base de datos.
+     * @return objeto Connection que representa la conexión establecida.
+     * @throws SQLException si ocurre un error al establecer la conexión.
+     */
     public static Connection getConnection() throws SQLException{
         
         Connection connection = null;
         try {
             Class.forName(DRIVER);
             connection=DriverManager.getConnection(URL, USUARIO, PASSWORD);
-            //System.out.println("Conexión exitosa");
             Log.insertLog("Conexión exitosa\n");
-            //Aquí hacemos uso de la conexión
-            //Guardar en log que hemos realizado correctamente la conexión
 
         } catch (SQLException e){
             System.out.println("Error SQL: " + e);
@@ -51,15 +57,18 @@ public class ConexionBD {
         return connection;
     }
     
+    /**
+     * Cierra una conexión con la base de datos.
+     * @param con objeto Connection que representa la conexión a cerrar.
+     * @throws SQLException si ocurre un error al cerrar la conexión.
+     */
     public static void closeConnection(Connection con) throws SQLException {
         
         try {
             con.close();
         }
         catch (Exception e){
-            //Guardar en el log que se cierra la conexión correctamente
             Log.insertLog(e + "Conexión cerrada correctamente\n");
-            //JOptionPane.showMessageDialog(null, "CONEXIÓN FINALIZADA");
         }
     }
 }

@@ -8,9 +8,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
+/**
+ * Clase de utilidad para la gestión de registros (logs).
+ */
 public class Log {
     private static final String PROJECT_PATH = System.getProperty("user.dir");
     
+    /**
+     * Inserta un mensaje de registro en el archivo de log.
+     * @param message mensaje de registro a insertar.
+     */
     public static void insertLog(String message) {
         String formattedDateTime = getFormattedDateTime();
         String logMessage = String.format("[%s] %s", formattedDateTime, message);
@@ -20,11 +27,8 @@ public class Log {
         
         if (!folderFile.exists()) {
             try {
-                //File folderFile = new File(PROJECT_PATH,"Logs"); 
-                folderFile.mkdirs(); // create a folder in your current work space
-                //File logFile = new File(folderFile, "log.txt"); // put the file inside the folder
+                folderFile.mkdirs(); // crea una carpeta en nuestro espacio de trabajo (tomcat)
                 logFile.createNewFile();
-                //logFile.createNewFile();
             } catch (IOException e) {
                 System.err.println("Error al crear el archivo de registro.");
                 e.printStackTrace();

@@ -21,6 +21,12 @@ import java.util.List;
  *
  * @author miki
  */
+
+/**
+ * Clase que representa un objeto de acceso a datos (DAO) para la tabla usuarios en la base de datos.
+ * Se encarga de realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) sobre la tabla usuarios.
+ * La clase utiliza una conexión a la base de datos a través de la clase ConexionBD.
+ */
 public class UsuarioDAO {
     
     private String jdbcURL = "jdbc:mysql://localhost:3306/rrhh?useSSL=false";
@@ -38,20 +44,20 @@ public class UsuarioDAO {
     private static final String SELECT_USER_BY_USERNAME_PASSWORD_SQL = "SELECT * from usuarios where username = ? and password = ?;";
     
     public UsuarioDAO() {
-        //log de que cogemos conexión
-        //connection = ConexionBD.getConnection();
-        //log de que tenemos conexión
 
     }
 
-    
+    /**
+    * Crea un nuevo usuario en la base de datos.
+    * @param usuario Objeto Usuario que contiene la información del usuario a crear.
+    */
     public void crearUsuario(Usuario usuario) {
         System.out.println(INSERT_USERS_SQL);
         Connection connection = null;
         try{
             connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USERS_SQL);
-            // Parameters start with 1 
+            // Parámetros comienzan con 1 
             preparedStatement.setInt(1, usuario.getUserid());
             preparedStatement.setString(2, usuario.getUsername());
             preparedStatement.setString(3, usuario.getPassword());
@@ -66,7 +72,6 @@ public class UsuarioDAO {
             Log.insertLog("Se ha creado correctamente el usuario\n");
         }
         catch (SQLException e) {
-            //grabar en el log
             System.out.println("No se ha guardado bien el usuario: " + e);
             Log.insertLog(e + "No se ha guardado bien el usuario\n");
         } finally {
@@ -81,6 +86,12 @@ public class UsuarioDAO {
         }
     }
     
+    /**
+    * Obtiene un usuario de la base de datos utilizando el nombre de usuario y la contraseña proporcionados.
+    * @param username Nombre de usuario.
+    * @param password Contraseña del usuario.
+    * @return Objeto Usuario que corresponde al nombre de usuario y contraseña proporcionados, o null si no se encuentra.
+    */
     public Usuario obtenerUsuarioPorUsernameYPassword(String username, String password) {
         System.out.println(SELECT_USER_BY_USERNAME_PASSWORD_SQL);
         Connection connection = null;
@@ -101,7 +112,6 @@ public class UsuarioDAO {
                 usuario.setApellidos(rs.getString("apellidos"));
                 usuario.setFecha_alta(rs.getTimestamp("fecha_alta"));
                 usuario.setFecha_baja(rs.getTimestamp("fecha_baja"));
-                //usuario.setTipo_usuario(usuario.tipo_usuario.valueOf(rs.getString("tipo_usuario")));
                 usuario.setTipo_usuario(TipoUsuario.valueOf(rs.getString("tipo_usuario")));
             }
         }
@@ -118,12 +128,16 @@ public class UsuarioDAO {
                 Log.insertLog(e + "Error al cerrar la conexión\n");
             }
         }
-        //System.out.println(usuario.toString());
-        //System.out.println(usuario.getTipo_usuario());
+    
         Log.insertLog("Se ha encontrado correctamente el usuario\n");
         return usuario;
     }
     
+    /**
+    * Obtiene un usuario de la base de datos utilizando su ID.
+    * @param idUsuario ID del usuario a buscar.
+    * @return Objeto Usuario que corresponde al ID proporcionado, o null si no se encuentra.
+    */
     public Usuario obtenerUsuarioPorId(int idUsuario) {
         Connection connection = null;
         Usuario usuario = new Usuario();
@@ -142,12 +156,10 @@ public class UsuarioDAO {
                 usuario.setApellidos(rs.getString("apellidos"));
                 usuario.setFecha_alta(rs.getTimestamp("fecha_alta"));
                 usuario.setFecha_baja(rs.getTimestamp("fecha_baja"));
-                //usuario.setTipo_usuario(usuario.tipo_usuario.valueOf(rs.getString("tipo_usuario")));
                 usuario.setTipo_usuario(TipoUsuario.valueOf(rs.getString("tipo_usuario")));
             }
             
         } catch (SQLException e) {
-            //Meter en el log el error
             System.out.println("Ha fallado la obtención del usuario: " + e);
             Log.insertLog(e + "Ha fallado la obtención del usuario\n");
         } finally {
@@ -164,6 +176,10 @@ public class UsuarioDAO {
         return usuario;
     }
     
+    /**
+    * Obtiene todos los usuarios de la base de datos.
+    * @return Lista de objetos Usuario que representa a todos los usuarios encontrados.
+    */
     public List<Usuario> obtenerTodosLosUsuarios() {
         Connection connection = null;
         List<Usuario> usuarios = new ArrayList<>();
@@ -186,7 +202,6 @@ public class UsuarioDAO {
                 usuarios.add(usuario);
                 }
             } catch (SQLException e) {
-                //Log.logdb.error("SQL Exception: " + e + "\n");  
                 System.out.println("Error en la obtención de todos los usuarios: " + e);
                 Log.insertLog(e + "Ha fallado la obtención de todos los usuarios\n");
             } finally {
@@ -204,14 +219,18 @@ public class UsuarioDAO {
     }
        
     
+    /**
+    * Actualiza los datos de un usuario en la base de datos.
+    * @param usuario Objeto Usuario con los nuevos datos a actualizar.
+    * @return true si se actualizó correctamente, false en caso contrario.
+    */
     public boolean actualizarUsuario(Usuario usuario) {
         Connection connection = null;
         boolean usuarioActualizado = false;
         try {
             connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER_BY_ID_SQL);
-            // Parameters start with 1 
-            //preparedStatement.setInt(1, usuario.getUserid());
+            // Parámetros empiezan con 1
             preparedStatement.setString(1, usuario.getUsername());
             preparedStatement.setString(2, usuario.getPassword());
             preparedStatement.setString(3, usuario.getDni());
@@ -242,6 +261,11 @@ public class UsuarioDAO {
 
     }
     
+    /**
+    * Elimina un usuario de la base de datos por su ID.
+    * @param id ID del usuario a eliminar.
+    * @return true si se eliminó correctamente, false en caso contrario.
+    */
     public boolean eliminarUsuario(int id) {
         Connection connection = null;
         boolean usuarioEliminado = false;
