@@ -66,6 +66,24 @@
             }
 
         </style>
+        
+        <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var tipoUsuarioInput = document.getElementsByName('tipo_usuario')[0];
+        
+        tipoUsuarioInput.addEventListener('input', function() {
+            var inputValue = tipoUsuarioInput.value;
+            var validValue = inputValue.replace(/[^AaUu]/g, '').toUpperCase();
+            
+            if (validValue.length > 1) {
+                validValue = validValue.charAt(0);
+            }
+            
+            tipoUsuarioInput.value = validValue;
+        });
+    });
+</script>
+
     </head>
     
     <header>

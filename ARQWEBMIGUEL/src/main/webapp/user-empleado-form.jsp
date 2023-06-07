@@ -14,7 +14,82 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-gg0yROixCbMQv3Xipma34MD+dH/1f0784/j6cY/iJTQUOhcWr7x9JvORXT2MZWIT"
         crossorigin="anonymous">
+        <style>
+            header {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                text-align: center;
+                background-color: #33D1FF;
+                color: black;
+                padding: 10px;
+                font-family: "Abril fatface";
+                margin-bottom: 70px;
+            }
+            
+            footer {
+                position: fixed;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                text-align: center;
+                background-color: #33D1FF;
+                color: black;
+                padding: 10px;
+                font-family: "Abril fatface";
+            }
+            
+            body {
+                font-family: "Abril Fatface";
+                margin-top: 70px; 
+                margin-bottom: 70px; 
+            }
+            
+            .container {
+                margin-top: 30px; 
+            }
+            
+            .save-button {
+                font-size: 16px;
+                padding: 8px 16px;
+                border-radius: 4px;
+                background-color: #28a745;
+                color: white;
+                border: none;
+                margin-top: 20px;
+                
+            }
+
+            .save-button:hover {
+                background-color: #218838;
+            }
+
+        </style>
+        
+        <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var tipoUsuarioInput = document.getElementsByName('tipo_usuario')[0];
+        
+        tipoUsuarioInput.addEventListener('input', function() {
+            var inputValue = tipoUsuarioInput.value;
+            var validValue = inputValue.replace(/[^AaUu]/g, '').toUpperCase();
+            
+            if (validValue.length > 1) {
+                validValue = validValue.charAt(0);
+            }
+            
+            tipoUsuarioInput.value = validValue;
+        });
+    });
+</script>
+
     </head>
+    
+    <header>
+        <h2 style="text-align: center; background-color: #33D1FF; color: black; padding: 10px; font-family: 'Abril Fatface';">Ingenieros al peso S.A</h2>
+    </header>
+    
     <body>
         <br>
             <div class="container col-md-5">
@@ -30,10 +105,10 @@
                     <caption>
                          <h2> 
                             <c:if test="${user != null}">
-                               Edit User 
+                               Editar User 
                             </c:if>
                             <c:if test="${user == null}">
-                               Add New User 
+                               Añadir Nuevo Usuario 
                             </c:if> 
                          </h2>   
                     </caption>
@@ -88,6 +163,9 @@
                     </div>
                 </div>
             </div>
-                        
+                 
+            <footer>
+                <p>Miguel Calvo Soria - Arquitectura Web y Sistemas C/S</p>
+            </footer>
     </body>
 </html>

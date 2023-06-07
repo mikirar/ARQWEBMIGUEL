@@ -66,6 +66,24 @@
             }
 
         </style>
+        
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var tipoMarcajeInput = document.getElementsByName('tipo_marcaje')[0];
+
+            tipoMarcajeInput.addEventListener('input', function() {
+                var inputValue = tipoMarcajeInput.value;
+                var validValue = inputValue.replace(/[^EeSs]/g, '').toUpperCase();
+
+                if (validValue.length > 1) {
+                    validValue = validValue.charAt(0);
+                }
+
+                tipoMarcajeInput.value = validValue;
+            });
+        });
+</script>
+
     </head>
     
     <header>
@@ -105,7 +123,7 @@
                         name="fecha" required>
                     </fieldset>
                     <fieldset class="form-group"> 
-                        <label>Tipo marcaje</label> <input type="text"
+                        <label>Tipo marcaje (E/S)</label> <input type="text"
                         value="<c:out value='${marcaje.tipo_marcaje}' />" class="form-control" 
                         name="tipo_marcaje" required>
                     </fieldset>
