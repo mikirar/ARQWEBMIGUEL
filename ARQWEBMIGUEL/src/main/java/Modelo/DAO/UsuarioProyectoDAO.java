@@ -53,6 +53,8 @@ public class UsuarioProyectoDAO {
     * @param usuarioProyecto El objeto UsuarioProyecto a crear.
     */
     public void crearUsuarioProyecto(UsuarioProyecto usuarioProyecto) {
+        System.out.println(INSERT_USUARIO_PROYECTO_SQL);
+        Log.insertLog(INSERT_USUARIO_PROYECTO_SQL);
         Connection connection = null;
         try{
             connection = ConexionBD.getConnection();
@@ -88,6 +90,8 @@ public class UsuarioProyectoDAO {
     * @return El UsuarioProyecto encontrado o un UsuarioProyecto vacío si no se encuentra.
     */
     public UsuarioProyecto obtenerUsuarioProyectoPorId(int idUsuarioProyecto) {
+        System.out.println(SELECT_USUARIO_PROYECTO_BY_ID_SQL);
+        Log.insertLog(SELECT_USUARIO_PROYECTO_BY_ID_SQL);
         Connection connection = null;
         UsuarioProyecto usuarioProyecto = new UsuarioProyecto();
         
@@ -126,6 +130,8 @@ public class UsuarioProyectoDAO {
     * @return Una lista de todos los UsuarioProyecto encontrados.
     */
     public List<UsuarioProyecto> obtenerTodosLosUsuarioProyecto() {
+        System.out.println(SELECT_ALL_USUARIO_PROYECTO_SQL);
+        Log.insertLog(SELECT_ALL_USUARIO_PROYECTO_SQL);
         Connection connection = null;
         List<UsuarioProyecto> usuariosProyectos = new ArrayList<>();
         
@@ -164,6 +170,8 @@ public class UsuarioProyectoDAO {
     * @return Una lista de todos los Proyecto asociados a los UsuarioProyecto encontrados.
     */
     public List<Proyecto> obtenerTodosLosProyectosUsuarioProyecto() {
+        System.out.println(SELECT_PROYECTOS_FROM_USUARIO_PROYECTO_BY_ID_USER_SQL);
+        Log.insertLog(SELECT_PROYECTOS_FROM_USUARIO_PROYECTO_BY_ID_USER_SQL);
         Connection connection = null;
         List<Proyecto> proyectos = new ArrayList<>();
         
@@ -200,6 +208,8 @@ public class UsuarioProyectoDAO {
     * @return Una lista de todas las empresas asociadas a los UsuarioProyecto encontrados.
     */
     public List<Empresa> obtenerTodasLasEmpresasUsuarioProyecto() {
+        System.out.println(SELECT_EMPRESAS_FROM_USUARIO_PROYECTO_BY_ID_USER_SQL);
+        Log.insertLog(SELECT_EMPRESAS_FROM_USUARIO_PROYECTO_BY_ID_USER_SQL);
         Connection connection = null;
         List<Empresa> empresas = new ArrayList<>();
         
@@ -236,6 +246,8 @@ public class UsuarioProyectoDAO {
     * @return true si la actualización fue exitosa, false en caso contrario.
     */
     public boolean actualizarUsuarioProyecto(UsuarioProyecto usuarioProyecto) {
+        System.out.println(UPDATE_USUARIO_PROYECTO_BY_ID_SQL);
+        Log.insertLog(UPDATE_USUARIO_PROYECTO_BY_ID_SQL);
         Connection connection = null;
         boolean usuarioProyectoActualizado = false;
         try {
@@ -268,6 +280,8 @@ public class UsuarioProyectoDAO {
     }
     
     public boolean eliminarUsuarioProyecto(int id) {
+        System.out.println(DELETE_USUARIO_PROYECTO_BY_ID_SQL);
+        Log.insertLog(DELETE_USUARIO_PROYECTO_BY_ID_SQL);
         Connection connection = null;
         boolean usuarioProyectoEliminado = false;
         try {

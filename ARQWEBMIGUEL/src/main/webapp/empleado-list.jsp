@@ -15,16 +15,115 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-gg0yROixCbMQv3Xipma34MD+dH/1f0784/j6cY/iJTQUOhcWr7x9JvORXT2MZWIT"
         crossorigin="anonymous">
+        <style>
+            header {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                text-align: center;
+                background-color: #33D1FF;
+                color: black;
+                padding: 10px;
+                font-family: "Abril fatface";
+                margin-bottom: 70px;
+            }
+            
+            footer {
+                position: fixed;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                text-align: center;
+                background-color: #33D1FF;
+                color: black;
+                padding: 10px;
+                font-family: "Abril fatface";
+            }
+            
+            body {
+                font-family: "Abril Fatface";
+                margin-top: 70px; 
+                margin-bottom: 100px; 
+            }
+            
+            .container {
+                margin-top: 30px; 
+            }
+            
+            .logout-button {
+            margin-bottom: 10px;
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            color: #fff;
+            background-color: #FF3333;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+            }
+
+            .logout-button:hover {
+                background-color: #ff1b1b;
+            }
+
+            .edit-button {
+                    font-size: 15px;
+                    text-decoration: none;
+                    padding: 5px 10px;
+                    background-color: #17a2b8;
+                    color: #fff;
+                    border-radius: 4px;
+                }
+            
+            .edit-button:hover {
+                background-color: #138496;
+            }
+            
+            .delete-button {
+                font-size: 15px;
+                text-decoration: none;
+                padding: 5px 10px;
+                background-color: #dc3545;
+                color: #fff;
+                border-radius: 4px;
+            }
+            
+            .delete-button:hover {
+                background-color: #c82333;
+            }
+            
+            .marcaje {
+                    font-size: 15px;
+                    text-decoration: none;
+                    padding: 5px 10px;
+                    background-color: #17a2b8;
+                    color: #fff;
+                    border-radius: 4px;
+                }
+            
+            .marcaje:hover {
+                background-color: #138496;
+            }
+        </style>
+
     </head>
+    
+    <header>
+        <h2 style="text-align: center; background-color: #33D1FF; color: black; padding: 10px; font-family: 'Abril Fatface';">Ingenieros al peso S.A</h2>
+    </header>
+
     <body>
+        <br><br><br>
         <h1>Bienvenido ${user.nombre} ${user.apellidos}!</h1>
         <form action="LogoutControlador" method="POST">
-                        <button type="submit" class="btn btn-success" style="font-size: 15px; text-decoration: none"">Logout</button>
+                        <button type="submit" class="logout-button" style="font-size: 15px; text-decoration: none"">Logout</button>
                         <br>
         </form>
         
         <div class="row">
-            <!--<div class="alert alert-success" *ngIf='message '>{{message}}s/div» "-->
             <div class="container">
                 <h3 class="text-center">Tus Marcajes</h3>
                 <hr>
@@ -47,15 +146,15 @@
                                 <td><c:out value="${marcaje.tipo_marcaje}" /></td>
                                 <td><c:out value="${marcaje.usuarioid}" /></td>
                                 <%--<td><a href="UsuarioControlador?action=edit?userid=<c:out value="${user.userid}" />">Edit</a></td>--%>
-                                <td><a href="MarcadorEmpleadoControlador?action=edit&id=${marcaje.id}"" style="text-decoration: none; font-size: 15px">Edit</a></td>
-                                <td><a href="MarcadorEmpleadoControlador?action=delete&id=${marcaje.id}"" style="text-decoration: none; font-size: 15px">Delete</a></td>
+                                <td><a href="MarcadorEmpleadoControlador?action=edit&id=${marcaje.id}"" style="text-decoration: none; font-size: 15px" class="edit-button">Editar</a></td>
+                                <td><a href="MarcadorEmpleadoControlador?action=delete&id=${marcaje.id}"" style="text-decoration: none; font-size: 15px" class="delete-button">Eliminar</a></td>
 
                             </tr>
                         </c:forEach>
                     </tbody>
                     
                 </table>
-            <p><a href="MarcadorEmpleadoControlador?action=insert"" style="text-decoration: none; font-size: 20px">Add Marcaje</a></p>
+            <p><a href="MarcadorEmpleadoControlador?action=insert"" style="text-decoration: none; font-size: 20px" class="marcaje"">Añadir Marcaje</a></p>
             
             <div class="container col-md-5">
                 <div class="card">
@@ -119,7 +218,7 @@
                         name="tipo_usuario" required readonly>
                     </fieldset>
                         <br>
-                        <button><a href="EmpleadoControlador?action=edit&userid=${user.userid}" style="font-size: 15px; text-decoration: none"">Edit</a></button>
+                        <button  class="edit-button"><a href="EmpleadoControlador?action=edit&userid=${user.userid}"" style="font-size: 15px; text-decoration: none" class="edit-button">Editar</a></button>
                     <%--</form>--%>
                     </div>
                 </div>
@@ -176,7 +275,11 @@
                 </table>
                         
             </div>
-            
+            <br>
+            <footer>
+                <p>Miguel Calvo Soria - Arquitectura Web y Sistemas C/S</p>
+            </footer>
+
             
             
     </body>

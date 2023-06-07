@@ -53,6 +53,7 @@ public class UsuarioDAO {
     */
     public void crearUsuario(Usuario usuario) {
         System.out.println(INSERT_USERS_SQL);
+        Log.insertLog(INSERT_USERS_SQL);
         Connection connection = null;
         try{
             connection = ConexionBD.getConnection();
@@ -94,6 +95,7 @@ public class UsuarioDAO {
     */
     public Usuario obtenerUsuarioPorUsernameYPassword(String username, String password) {
         System.out.println(SELECT_USER_BY_USERNAME_PASSWORD_SQL);
+        Log.insertLog(SELECT_USER_BY_USERNAME_PASSWORD_SQL);
         Connection connection = null;
         Usuario usuario = new Usuario();
         
@@ -139,6 +141,8 @@ public class UsuarioDAO {
     * @return Objeto Usuario que corresponde al ID proporcionado, o null si no se encuentra.
     */
     public Usuario obtenerUsuarioPorId(int idUsuario) {
+        System.out.println(SELECT_USER_BY_ID_SQL);
+        Log.insertLog(SELECT_USER_BY_ID_SQL);
         Connection connection = null;
         Usuario usuario = new Usuario();
         
@@ -181,6 +185,8 @@ public class UsuarioDAO {
     * @return Lista de objetos Usuario que representa a todos los usuarios encontrados.
     */
     public List<Usuario> obtenerTodosLosUsuarios() {
+        System.out.println(SELECT_ALL_USERS_SQL);
+        Log.insertLog(SELECT_ALL_USERS_SQL);
         Connection connection = null;
         List<Usuario> usuarios = new ArrayList<>();
         
@@ -225,6 +231,8 @@ public class UsuarioDAO {
     * @return true si se actualizó correctamente, false en caso contrario.
     */
     public boolean actualizarUsuario(Usuario usuario) {
+        System.out.println(UPDATE_USER_BY_ID_SQL);
+        Log.insertLog(UPDATE_USER_BY_ID_SQL);
         Connection connection = null;
         boolean usuarioActualizado = false;
         try {
@@ -267,6 +275,8 @@ public class UsuarioDAO {
     * @return true si se eliminó correctamente, false en caso contrario.
     */
     public boolean eliminarUsuario(int id) {
+        System.out.println(DELETE_USER_BY_ID_SQL);
+        Log.insertLog(DELETE_USER_BY_ID_SQL);
         Connection connection = null;
         boolean usuarioEliminado = false;
         

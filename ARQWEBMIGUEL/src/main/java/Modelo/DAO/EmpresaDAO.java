@@ -55,6 +55,7 @@ public class EmpresaDAO {
      */
     public void crearEmpresa(Empresa empresa) {
         System.out.println(INSERT_EMPRESA_SQL);
+        Log.insertLog(INSERT_EMPRESA_SQL);
         Connection connection = null;
         try{
             connection = ConexionBD.getConnection();
@@ -88,6 +89,7 @@ public class EmpresaDAO {
      * @return La empresa encontrada o una instancia vacía si no se encuentra ninguna empresa con el ID especificado.
      */
     public Empresa obtenerEmpresaPorId(int idEmpresa) {
+        Log.insertLog(SELECT_EMPRESA_BY_ID_SQL);
         Empresa empresa = new Empresa();
         Connection connection = null;
         try {
@@ -122,6 +124,7 @@ public class EmpresaDAO {
     * @return Una lista de todas las empresas encontradas.
     */
     public List<Empresa> obtenerTodasLasEmpresa() {
+        Log.insertLog(SELECT_ALL_EMPRESA_SQL);
         List<Empresa> empresas = new ArrayList<>();
         Connection connection = null;
         try {
@@ -157,6 +160,7 @@ public class EmpresaDAO {
     * @return true si la actualización fue exitosa, false en caso contrario.
     */
     public boolean actualizarEmpresa(Empresa empresa) {
+        Log.insertLog(UPDATE_EMPRESA_BY_ID_SQL);
         boolean empresaActualizada = false;
         Connection connection = null;
         try {
@@ -192,6 +196,7 @@ public class EmpresaDAO {
     * @return true si la empresa se eliminó correctamente, false de lo contrario
     */
     public boolean eliminarEmpresa(int id) {
+        Log.insertLog(DELETE_EMPRESA_BY_ID_SQL);
         boolean empresaEliminada = false;
         Connection connection = null;
         
@@ -227,6 +232,7 @@ public class EmpresaDAO {
     * @return una lista de objetos Empresa que pertenecen al usuario dado
     */
     public List<Empresa> obtenerEmpresasPorIdUsuario(int idUsuario) {
+        Log.insertLog(SELECT_ALL_EMPRESA_BY_USER_ID_SQL);
         List<Empresa> empresas = new ArrayList<>();
         Connection connection = null;
         

@@ -85,6 +85,7 @@ public class MarcajeDAO {
     */
     public void crearMarcaje(Marcaje marcaje) {
         System.out.println(INSERT_MARCAJE_SQL);
+        Log.insertLog(INSERT_MARCAJE_SQL);
         Connection connection = null;
         
         try{
@@ -120,6 +121,7 @@ public class MarcajeDAO {
     * @return El objeto Marcaje correspondiente al ID especificado, o null si no se encuentra.
     */
     public Marcaje obtenerMarcajePorId(int idMarcaje) {
+        Log.insertLog(SELECT_MARCAJE_BY_ID_SQL);
         Marcaje marcaje = new Marcaje();
         Connection connection = null;
         
@@ -156,6 +158,7 @@ public class MarcajeDAO {
     * @return Una lista de objetos Marcaje que contiene todos los marcajes obtenidos.
     */
     public List<Marcaje> obtenerTodasLosMarcajes() {
+        Log.insertLog(SELECT_ALL_MARCAJE_SQL);
         List<Marcaje> marcajes = new ArrayList<>();
         Connection connection = null;
         
@@ -196,6 +199,7 @@ public class MarcajeDAO {
     
     public List<Marcaje> obtenerTodasLosMarcajesPorIdUsuario(int idUsuario) {
         System.out.println(SELECT_ALL_MARCAJE__USUARIO_SQL);
+        Log.insertLog(SELECT_ALL_MARCAJE__USUARIO_SQL);
         Connection connection = null;
         List<Marcaje> marcajes = new ArrayList<>();
         
@@ -878,6 +882,7 @@ public class MarcajeDAO {
     * @param id El ID del marcaje que se desea eliminar.
     */
     public void eliminarMarcaje(int id) {
+        Log.insertLog(DELETE_MARCAJE_BY_ID_SQL);
         Connection connection = null;
         boolean marcajeEliminado = false;
         try {

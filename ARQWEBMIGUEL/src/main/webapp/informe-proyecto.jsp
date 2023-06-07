@@ -15,7 +15,48 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-gg0yROixCbMQv3Xipma34MD+dH/1f0784/j6cY/iJTQUOhcWr7x9JvORXT2MZWIT"
         crossorigin="anonymous">
+        <style>
+            header {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                text-align: center;
+                background-color: #33D1FF;
+                color: black;
+                padding: 10px;
+                font-family: "Abril fatface";
+                margin-bottom: 70px;
+            }
+            
+            footer {
+                position: fixed;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                text-align: center;
+                background-color: #33D1FF;
+                color: black;
+                padding: 10px;
+                font-family: "Abril fatface";
+            }
+            
+            body {
+                font-family: "Abril Fatface";
+                margin-top: 70px; 
+                margin-bottom: 70px; 
+            }
+            
+            .container {
+                margin-top: 30px; 
+            }
+        </style>
     </head>
+    
+    <header>
+        <h2 style="text-align: center; background-color: #33D1FF; color: black; padding: 10px; font-family: 'Abril Fatface';">Ingenieros al peso S.A</h2>
+    </header>
+    
     <body>
         <br>
         
@@ -49,5 +90,10 @@
                 </table>
             <p><a href="ProyectoControlador?action=listProyecto"" style="text-decoration: none; font-size: 20px">Volver</a></p>
             <p><a href="/menu-principal-rrhh.jsp" style="text-decoration: none; font-size: 20px">Menú</a></p>
+            
+            <br>
+            <footer>
+                <p>Miguel Calvo Soria - Arquitectura Web y Sistemas C/S</p>
+            </footer>
     </body>
 </html>

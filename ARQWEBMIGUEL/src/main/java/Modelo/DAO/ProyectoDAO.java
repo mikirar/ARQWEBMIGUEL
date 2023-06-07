@@ -51,6 +51,7 @@ public class ProyectoDAO {
     */
     public void crearProyecto(Proyecto proyecto) {
         System.out.println(INSERT_PROYECTO_SQL);
+        Log.insertLog(INSERT_PROYECTO_SQL);
         Connection connection = null;
         try{
             connection = ConexionBD.getConnection();
@@ -85,6 +86,7 @@ public class ProyectoDAO {
     * @return El objeto Proyecto correspondiente al ID especificado, o un objeto Proyecto vacío si no se encuentra.
     */
     public Proyecto obtenerProyectoPorId(int idProyecto) {
+        Log.insertLog(SELECT_PROYECTO_BY_ID_SQL);
         Connection connection = null;
         Proyecto proyecto = new Proyecto();
         try {
@@ -120,6 +122,7 @@ public class ProyectoDAO {
     * @return Una lista de objetos Proyecto que representa todos los proyectos en la base de datos.
     */
     public List<Proyecto> obtenerTodosLosProyectos() {
+        Log.insertLog(SELECT_ALL_PROYECTO_SQL);
         Connection connection = null;
         List<Proyecto> proyectos = new ArrayList<>();
         
@@ -158,6 +161,7 @@ public class ProyectoDAO {
     * @return true si el proyecto se actualizó correctamente, false en caso contrario.
     */
     public boolean actualizarProyecto(Proyecto proyecto) {
+        Log.insertLog(UPDATE_PROYECTO_BY_ID_SQL);
         Connection connection = null;
         boolean proyectoActualizado = false;
         try {
@@ -192,18 +196,18 @@ public class ProyectoDAO {
     * @return true si el proyecto se eliminó correctamente, false en caso contrario.
     */
     public boolean eliminarProyecto(int id) {
+        Log.insertLog(DELETE_PROYECTO_BY_ID_SQL);
         Connection connection = null;
         boolean proyectoEliminado = false;
         
         try {
             connection = ConexionBD.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_PROYECTO_BY_ID_SQL);
-            // Parameters start with 1 
+            // Parámetros empiezan en 1 
             preparedStatement.setInt(1, id);
             proyectoEliminado = preparedStatement.executeUpdate() > 0; 
         }
         catch (SQLException e) {
-            //grabar en el log
             System.out.println("No se ha eliminado bien el proyecto: " + e);
             Log.insertLog(e + "No se ha eliminado correctamente el proyecto\n");
         } finally {
@@ -228,6 +232,7 @@ public class ProyectoDAO {
     * @return Una lista de objetos Proyecto que representa todos los proyectos asociados al ID de usuario especificado.
     */
     public List<Proyecto> obtenerTodosLosProyectosPorIdUsuario(int idUser) {
+        Log.insertLog(SELECT_ALL_PROYECTO_BY_USER_ID_SQL);
         Connection connection = null;
         List<Proyecto> proyectos = new ArrayList<>();
         
