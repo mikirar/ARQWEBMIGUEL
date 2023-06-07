@@ -20,36 +20,43 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-/*import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;*/
 
 /**
  *
  * @author miki
  */
 
-
+/**
+ * Controlador para la gestión de proyectos.
+ * Maneja las solicitudes relacionadas con la creación, edición, eliminación y listado de proyectos.
+ * Extiende la clase HttpServlet.
+ * 
+ */
 public class ProyectoControlador extends HttpServlet{
     private static final long serialVersionUID = 1L;
     private static String INSERT_OR_EDIT = "/proyecto-form.jsp";
     private static String LIST_PROYECTO = "/proyecto-list.jsp";
     private ProyectoDAO proyectoDao;
     
+    /**
+     * Constructor de la clase.
+     * Inicializa el ProyectoDAO.
+     *
+     * @throws SQLException Si ocurre un error en la conexión con la base de datos.
+     */
     public ProyectoControlador() throws SQLException {
         super();
         proyectoDao = new ProyectoDAO();
     }
     
     /**
+     * Método para manejar las solicitudes GET.
+     * Se encarga de procesar las solicitudes relacionadas con los proyectos enviadas mediante GET.
      *
-     * @param request
-     * @param response
-     * @throws ServletException
-     * @throws IOException
+     * @param request  La solicitud HTTP.
+     * @param response La respuesta HTTP.
+     * @throws ServletException Si ocurre un error en el servlet.
+     * @throws IOException      Si ocurre un error de entrada/salida.
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -82,9 +89,17 @@ public class ProyectoControlador extends HttpServlet{
         RequestDispatcher view = request.getRequestDispatcher(forward);
         view.forward(request, response);
         
-        //return;
     }
     
+    /**
+     * Método para manejar las solicitudes POST.
+     * Se encarga de procesar las solicitudes relacionadas con los proyectos enviadas mediante POST.
+     *
+     * @param request  La solicitud HTTP.
+     * @param response La respuesta HTTP.
+     * @throws ServletException Si ocurre un error en el servlet.
+     * @throws IOException      Si ocurre un error de entrada/salida.
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -99,13 +114,6 @@ public class ProyectoControlador extends HttpServlet{
         if (proyectoid == null || proyectoid.isEmpty() || proyectoid.equalsIgnoreCase("")) {
             Log.insertLog("Vamos a añadir el proyecto\n");
             proyectoDao.crearProyecto(proyecto);
-
-            /*try {
-                //Log.insertLog("Vamos a añadir el usuario\n");
-                usuarioRepository.crearUsuario(usuario);
-            } catch (SQLException ex) {
-                Logger.getLogger(UsuarioControlador.class.getName()).log(Level.SEVERE, null, ex);
-            }*/
             
         } else {
             proyecto.setProyectoid(Integer.parseInt(proyectoid));
@@ -115,6 +123,5 @@ public class ProyectoControlador extends HttpServlet{
         request.setAttribute("proyectos", proyectoDao.obtenerTodosLosProyectos());
         RequestDispatcher view = request.getRequestDispatcher(LIST_PROYECTO);            
         view.forward(request, response);
-        //return;
     }
 }

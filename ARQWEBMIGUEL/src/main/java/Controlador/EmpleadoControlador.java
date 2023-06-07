@@ -24,36 +24,36 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-/*import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;*/
 
 /**
  *
  * @author miki
  */
 
-
+/**
+ * Controlador para la gestión de empleados.
+ */
 public class EmpleadoControlador extends HttpServlet{
     private static final long serialVersionUID = 1L;
     private static String INSERT_OR_EDIT = "/user-empleado-form.jsp";
     private static String LIST_EMPLEADO = "/empleado-list.jsp";
     private UsuarioDAO usuarioRepository;
     
+    /**
+     * Constructor de la clase EmpleadoControlador.
+     * @throws SQLException Si ocurre algún error de SQL.
+     */
     public EmpleadoControlador() throws SQLException {
         super();
         usuarioRepository = new UsuarioDAO();
     }
     
     /**
-     *
-     * @param request
-     * @param response
-     * @throws ServletException
-     * @throws IOException
+     * Método GET que maneja las solicitudes GET al controlador.
+     * @param request La solicitud HTTP.
+     * @param response La respuesta HTTP.
+     * @throws ServletException Si ocurre un error en el servlet.
+     * @throws IOException Si ocurre un error de E/S.
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -63,6 +63,8 @@ public class EmpleadoControlador extends HttpServlet{
         Log.insertLog("Entramos en el doGet\n");
         String action = request.getParameter("action");
         Log.insertLog("Recogemos el parametro action con valor " + action+ "\n");
+        
+        // Comprobamos la acción solicitada
         if (action.equalsIgnoreCase("delete")) {
             Log.insertLog("Parametro valor DELETE");
             int userId = Integer.parseInt(request.getParameter("userid"));
@@ -92,12 +94,19 @@ public class EmpleadoControlador extends HttpServlet{
         //return;
     }
     
+    /**
+     * Método POST que maneja las solicitudes POST al controlador.
+     * @param request La solicitud HTTP
+     * @param response La respuesta HTTP.
+     * @throws ServletException Si ocurre un error en el servlet.
+     * @throws IOException Si ocurre un error de E/S.
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         Log.insertLog("Entramos por el doPost\n");
-        //processRequest(request, response);
+        
 
         Usuario usuario = new Usuario();
         usuario.setUsername(request.getParameter("username"));
@@ -107,17 +116,18 @@ public class EmpleadoControlador extends HttpServlet{
         usuario.setApellidos(request.getParameter("apellidos"));
         String fechaAltaString = request.getParameter("fecha_alta");
         Timestamp fechaAlta = parseStringToTimestamp(fechaAltaString);
-        //Date fechaAlta = Common.parseStringToDate(fechaAltaString);
-        //Timestamp fechaAlta = Common.parseStringToTimestamp(fechaAltaString);
+        
         usuario.setFecha_alta(fechaAlta);
         String fechaBajaString = request.getParameter("fecha_baja");
-        //Date fechaBaja = Common.parseStringToDate(fechaBajaString);
         Timestamp fechaBaja = Common.parseStringToTimestamp(fechaBajaString);
+        
         usuario.setFecha_baja(fechaBaja);
         usuario.setTipo_usuario(TipoUsuario.valueOf(request.getParameter("tipo_usuario")));
-        //usuario.setTipo_usuario();
+ 
         usuario.setUserid(Integer.parseInt(request.getParameter("userid")));
         String userid = request.getParameter("userid");
+        
+        // Comprobamos si es una inserción o una actualización
         if (userid == null || userid.isEmpty() || userid.equalsIgnoreCase("")) {
             Log.insertLog("Vamos a añadir el empleado\n");
             usuarioRepository.crearUsuario(usuario);
@@ -133,6 +143,6 @@ public class EmpleadoControlador extends HttpServlet{
         request.setAttribute("user", usuario);
         RequestDispatcher view = request.getRequestDispatcher(LIST_EMPLEADO);            
         view.forward(request, response);
-        //return;
+        
     }
 }

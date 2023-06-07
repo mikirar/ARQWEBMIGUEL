@@ -20,12 +20,6 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-/*import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;*/
 
 /**
  *
@@ -33,23 +27,30 @@ import javax.servlet.http.HttpServletResponse;*/
  */
 
 
+/**
+ * Controlador para la gestión de empresas.
+ */
 public class EmpresaControlador extends HttpServlet{
     private static final long serialVersionUID = 1L;
     private static String INSERT_OR_EDIT = "/empresa-form.jsp";
     private static String LIST_EMPRESA = "/empresa-list.jsp";
     private EmpresaDAO empresaDao;
     
+    /**
+     * Constructor de la clase EmpresaControlador.
+     * @throws SQLException Si ocurre algún error de SQL.
+     */
     public EmpresaControlador() throws SQLException {
         super();
         empresaDao = new EmpresaDAO();
     }
     
     /**
-     *
-     * @param request
-     * @param response
-     * @throws ServletException
-     * @throws IOException
+     * Método GET que maneja las solicitudes GET al controlador.
+     * @param request La solicitud HTTP.
+     * @param response La respuesta HTTP.
+     * @throws ServletException Si ocurre un error en el servlet.
+     * @throws IOException Si ocurre un error de E/S.
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -59,6 +60,8 @@ public class EmpresaControlador extends HttpServlet{
         Log.insertLog("Entramos en el doGet\n");
         String action = request.getParameter("action");
         Log.insertLog("Recogemos el parametro action con valor " + action+ "\n");
+        
+        // Comprobamos la acción solicitada
         if (action.equalsIgnoreCase("delete")) {
             Log.insertLog("Parametro valor DELETE");
             int empresaId = Integer.parseInt(request.getParameter("empresaid"));
@@ -82,29 +85,30 @@ public class EmpresaControlador extends HttpServlet{
         RequestDispatcher view = request.getRequestDispatcher(forward);
         view.forward(request, response);
         
-        //return;
+        
     }
     
+    /**
+     * Método POST que maneja las solicitudes POST al controlador.
+     * @param request La solicitud HTTP.
+     * @param response La respuesta HTTP.
+     * @throws ServletException Si ocurre un error en el servlet.
+     * @throws IOException Si ocurre un error de E/S.
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         Log.insertLog("Entramos por el doPost\n");
-        //processRequest(request, response);
+        
         Empresa empresa = new Empresa();
         empresa.setNombre_empresa(request.getParameter("nombre_empresa"));
 
         String empresaid = request.getParameter("empresaid");
+        // Comprobamos si es una inserción o una actualización
         if (empresaid == null || empresaid.isEmpty() || empresaid.equalsIgnoreCase("")) {
             Log.insertLog("Vamos a añadir el usuario\n");
             empresaDao.crearEmpresa(empresa);
-
-            /*try {
-                //Log.insertLog("Vamos a añadir el usuario\n");
-                usuarioRepository.crearUsuario(usuario);
-            } catch (SQLException ex) {
-                Logger.getLogger(UsuarioControlador.class.getName()).log(Level.SEVERE, null, ex);
-            }*/
             
         } else {
             empresa.setEmpresaid(Integer.parseInt(empresaid));
@@ -114,6 +118,6 @@ public class EmpresaControlador extends HttpServlet{
         request.setAttribute("empresas", empresaDao.obtenerTodasLasEmpresa());
         RequestDispatcher view = request.getRequestDispatcher(LIST_EMPRESA);            
         view.forward(request, response);
-        //return;
+        
     }
 }

@@ -47,6 +47,12 @@
                         <c:if test="${nombre_usuario != null}">
                             <input type="hidden" name="nombre_usuario" value="<c:out value='${nombre_usuario}' />" />
                         </c:if>
+                        <c:if test="${proyectoid != null}">
+                            <input type="hidden" name="proyectoid" value="<c:out value='${proyectoid}' />" />
+                        </c:if>
+                        <c:if test="${nombre_proyecto != null}">
+                            <input type="hidden" name="nombre_proyecto" value="<c:out value='${nombre_proyecto}' />" />
+                        </c:if>
                             
                         <legend>Seleccionar tipo de informe:</legend>
 

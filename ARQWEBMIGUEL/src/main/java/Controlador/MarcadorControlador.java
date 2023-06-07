@@ -23,36 +23,55 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-/*import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;*/
 
 /**
  *
  * @author miki
  */
 
-
+/**
+ * Controlador para el manejo de operaciones relacionadas con los marcajes.
+ * Permite agregar, editar, eliminar y listar marcajes.
+ * 
+ * El controlador se encarga de recibir las solicitudes HTTP relacionadas con los marcajes
+ * y realizar las operaciones correspondientes en la capa de datos.
+ * 
+ * Las operaciones disponibles son:
+ * - Agregar marcaje
+ * - Editar marcaje
+ * - Eliminar marcaje
+ * - Listar marcajes
+ * 
+ * Estas operaciones son realizadas mediante solicitudes GET y POST.
+ * 
+ * La clase extiende HttpServlet para manejar las solicitudes HTTP.
+ * 
+ */
 public class MarcadorControlador extends HttpServlet{
     private static final long serialVersionUID = 1L;
     private static String INSERT_OR_EDIT = "/marcaje-form.jsp";
     private static String LIST_MARCAJE = "/marcaje-list.jsp";
     private MarcajeDAO marcajeDao;
     
+    /**
+     * Constructor de la clase.
+     * Se encarga de inicializar el objeto MarcajeDAO para interactuar con la capa de datos.
+     * 
+     * @throws SQLException Si ocurre un error al establecer la conexión con la base de datos.
+     */
     public MarcadorControlador() throws SQLException {
         super();
         marcajeDao = new MarcajeDAO();
     }
     
     /**
-     *
-     * @param request
-     * @param response
-     * @throws ServletException
-     * @throws IOException
+     * Método para manejar las solicitudes GET.
+     * Se encarga de procesar las solicitudes relacionadas con los marcajes y redirigir a las vistas correspondientes.
+     * 
+     * @param request La solicitud HTTP.
+     * @param response La respuesta HTTP.
+     * @throws ServletException Si ocurre un error en el servlet.
+     * @throws IOException Si ocurre un error de entrada/salida.
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -85,15 +104,22 @@ public class MarcadorControlador extends HttpServlet{
         RequestDispatcher view = request.getRequestDispatcher(forward);
         view.forward(request, response);
         
-        //return;
     }
     
+    /**
+     * Método para manejar las solicitudes POST.
+     * Se encarga de procesar las solicitudes relacionadas con los marcajes y redirigir a la vista de lista de marcajes.
+     * 
+     * @param request La solicitud HTTP.
+     * @param response La respuesta HTTP.
+     * @throws ServletException Si ocurre un error en el servlet.
+     * @throws IOException Si ocurre un error de entrada/salida.
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         Log.insertLog("Entramos por el doPost\n");
-        //processRequest(request, response);
         Marcaje marcaje = new Marcaje();
         String fechaString = request.getParameter("fecha");
         Timestamp fecha = Common.parseStringToTimestamp(fechaString);
@@ -107,13 +133,6 @@ public class MarcadorControlador extends HttpServlet{
         if (marcajeid == null || marcajeid.isEmpty() || marcajeid.equalsIgnoreCase("")) {
             Log.insertLog("Vamos a añadir el marcaje\n");
             marcajeDao.crearMarcaje(marcaje);
-
-            /*try {
-                //Log.insertLog("Vamos a añadir el usuario\n");
-                usuarioRepository.crearUsuario(usuario);
-            } catch (SQLException ex) {
-                Logger.getLogger(UsuarioControlador.class.getName()).log(Level.SEVERE, null, ex);
-            }*/
             
         } else {
             marcaje.setId(Integer.parseInt(marcajeid));
@@ -123,6 +142,6 @@ public class MarcadorControlador extends HttpServlet{
         request.setAttribute("marcajes", marcajeDao.obtenerTodasLosMarcajes());
         RequestDispatcher view = request.getRequestDispatcher(LIST_MARCAJE);            
         view.forward(request, response);
-        //return;
+        
     }
 }

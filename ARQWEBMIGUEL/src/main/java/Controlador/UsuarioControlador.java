@@ -21,36 +21,42 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-/*import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;*/
 
 /**
  *
  * @author miki
  */
 
-
+/**
+ * Controlador que maneja las solicitudes relacionadas con los usuarios.
+ * Maneja las solicitudes relacionadas con la creación, edición, eliminación y listado de usuarios.
+ * Extiende la clase HttpServlet para recibir las solicitudes HTTP.
+ */
 public class UsuarioControlador extends HttpServlet{
     private static final long serialVersionUID = 1L;
     private static String INSERT_OR_EDIT = "/user-form.jsp";
     private static String LIST_USER = "/user-list.jsp";
     private UsuarioDAO usuarioRepository;
     
+    /**
+     * Constructor de la clase UsuarioControlador.
+     * Se encarga de inicializar el UsuarioDAO.
+     *
+     * @throws SQLException Si ocurre un error de SQL.
+     */
     public UsuarioControlador() throws SQLException {
         super();
         usuarioRepository = new UsuarioDAO();
     }
     
     /**
+     * Método para manejar las solicitudes GET.
+     * Se encarga de procesar las solicitudes relacionadas con los usuarios enviadas mediante GET.
      *
-     * @param request
-     * @param response
-     * @throws ServletException
-     * @throws IOException
+     * @param request  La solicitud HTTP.
+     * @param response La respuesta HTTP.
+     * @throws ServletException Si ocurre un error en el servlet.
+     * @throws IOException      Si ocurre un error de entrada/salida.
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -83,42 +89,42 @@ public class UsuarioControlador extends HttpServlet{
         RequestDispatcher view = request.getRequestDispatcher(forward);
         view.forward(request, response);
         
-        //return;
     }
     
+    /**
+     * Método para manejar las solicitudes POST.
+     * Se encarga de procesar las solicitudes relacionadas con los usuarios enviadas mediante POST.
+     *
+     * @param request  La solicitud HTTP.
+     * @param response La respuesta HTTP.
+     * @throws ServletException Si ocurre un error en el servlet.
+     * @throws IOException      Si ocurre un error de entrada/salida.
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         Log.insertLog("Entramos por el doPost\n");
-        //processRequest(request, response);
         Usuario usuario = new Usuario();
         usuario.setUsername(request.getParameter("username"));
         usuario.setPassword(request.getParameter("password"));                
         usuario.setDni(request.getParameter("dni"));
         usuario.setNombre(request.getParameter("nombre"));
         usuario.setApellidos(request.getParameter("apellidos"));
+        
         String fechaAltaString = request.getParameter("fecha_alta");
-        //Date fechaAlta = Common.parseStringToDate(fechaAltaString);
         Timestamp fechaAlta = Common.parseStringToTimestamp(fechaAltaString);
         usuario.setFecha_alta(fechaAlta);
         String fechaBajaString = request.getParameter("fecha_baja");
-        //Date fechaBaja = Common.parseStringToDate(fechaBajaString);
         Timestamp fechaBaja = Common.parseStringToTimestamp(fechaBajaString);
         usuario.setFecha_baja(fechaBaja);
+        
         usuario.setTipo_usuario(TipoUsuario.valueOf(request.getParameter("tipo_usuario")));
         
         String userid = request.getParameter("userid");
         if (userid == null || userid.isEmpty() || userid.equalsIgnoreCase("")) {
             Log.insertLog("Vamos a añadir el usuario\n");
             usuarioRepository.crearUsuario(usuario);
-
-            /*try {
-                //Log.insertLog("Vamos a añadir el usuario\n");
-                usuarioRepository.crearUsuario(usuario);
-            } catch (SQLException ex) {
-                Logger.getLogger(UsuarioControlador.class.getName()).log(Level.SEVERE, null, ex);
-            }*/
             
         } else {
             usuario.setUserid(Integer.parseInt(userid));
@@ -128,6 +134,5 @@ public class UsuarioControlador extends HttpServlet{
         request.setAttribute("users", usuarioRepository.obtenerTodosLosUsuarios());
         RequestDispatcher view = request.getRequestDispatcher(LIST_USER);            
         view.forward(request, response);
-        //return;
     }
 }

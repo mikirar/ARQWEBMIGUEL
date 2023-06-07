@@ -28,31 +28,54 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-/*import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;*/
 
 /**
  *
  * @author miki
  */
 
-
+/**
+ * Controlador para el manejo del logout.
+ * 
+ * Este controlador gestiona las solicitudes relacionadas con la finalización de sesión.
+ * Contiene métodos para el manejo de solicitudes GET y POST.
+ */
 public class LogoutControlador extends HttpServlet{
     
-    //Log log = new Log();
+    /**
+     * Maneja las solicitudes GET del logout.
+     * 
+     * Este método se llama cuando se realiza una solicitud GET al controlador de logout.
+     * No realiza ninguna acción.
+     *
+     * @param request  la solicitud HTTP
+     * @param response la respuesta HTTP
+     * @throws ServletException si ocurre un error en el servlet
+     * @throws IOException      si ocurre un error de entrada/salida
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
 
+    /**
+     * Maneja las solicitudes POST del logout.
+     * 
+     * Este método se llama cuando se realiza una solicitud POST al controlador de logout.
+     * Realiza las acciones necesarias para cerrar la sesión del usuario y redirige a la página de inicio.
+     *
+     * @param request  la solicitud HTTP
+     * @param response la respuesta HTTP
+     * @throws ServletException si ocurre un error en el servlet
+     * @throws IOException      si ocurre un error de entrada/salida
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Log.insertLog("Hacemos logout\n");
+        
         response.setContentType("text/html");
+        
+        // Eliminar la cookie de inicio de sesión
         Cookie loginCookie = null;
         Cookie[] cookies = request.getCookies();
         if(cookies != null){
@@ -72,6 +95,8 @@ public class LogoutControlador extends HttpServlet{
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Expires", "0");
+        
+        // Invalidar la sesión actual y redirigir a la página de inicio
         HttpSession session = request.getSession();
         if (session.getAttribute("user") != null) {
             session.removeAttribute("user");

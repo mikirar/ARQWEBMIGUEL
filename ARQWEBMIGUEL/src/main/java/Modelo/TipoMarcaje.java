@@ -8,10 +8,19 @@ package Modelo;
  *
  * @author miki
  */
+
+/**
+ * Enumeración que representa los tipos de marcaje.
+ */
 public enum TipoMarcaje {
-    E,
-    S;
+    E, // Tipo de marcaje de entrada
+    S; // Tipo de marcaje de salida
     
+    /**
+     * Obtiene el valor del tipo de marcaje a partir de su nombre.
+     * @param nombre el nombre del tipo de marcaje.
+     * @return el valor del tipo de marcaje correspondiente, o null si no se encuentra.
+     */
     public static TipoMarcaje obtenerValor(String nombre) {
         for (TipoMarcaje tipo : TipoMarcaje.values()) {
             if (tipo.name().equals(nombre)) {

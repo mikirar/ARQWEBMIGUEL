@@ -32,12 +32,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-/*import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;*/
 
 /**
  *
@@ -45,6 +39,12 @@ import javax.servlet.http.HttpServletResponse;*/
  */
 
 
+/**
+ * Controlador para el manejo del login.
+ * 
+ * Este controlador gestiona las solicitudes relacionadas con el inicio de sesión.
+ * Contiene métodos para el manejo de solicitudes GET y POST.
+ */
 public class LoginControlador extends HttpServlet{
     String forward;
     private String userID;
@@ -55,6 +55,17 @@ public class LoginControlador extends HttpServlet{
     ProyectoDAO proyectoDao = new ProyectoDAO();
     
     
+    /**
+     * Maneja las solicitudes GET del inicio de sesión.
+     * 
+     * Este método se llama cuando se realiza una solicitud GET al controlador de inicio de sesión.
+     * Redirige al usuario a la página de inicio.
+     *
+     * @param request  la solicitud HTTP
+     * @param response la respuesta HTTP
+     * @throws ServletException si ocurre un error en el servlet
+     * @throws IOException      si ocurre un error de entrada/salida
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Log.insertLog("Entramos por el doGet");
@@ -64,10 +75,22 @@ public class LoginControlador extends HttpServlet{
 
     }
 
+    
+    /**
+     * Maneja las solicitudes POST del inicio de sesión.
+     * 
+     * Este método se llama cuando se realiza una solicitud POST al controlador de inicio de sesión.
+     * Realiza la autenticación del usuario y redirige según el tipo de usuario y la validez de las credenciales.
+     *
+     * @param request  la solicitud HTTP
+     * @param response la respuesta HTTP
+     * @throws ServletException si ocurre un error en el servlet
+     * @throws IOException      si ocurre un error de entrada/salida
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Log.insertLog("Entramos por el doPost\n");
-        // get request parameters for userID and password
+        // Obtener parámetros de la solicitud para el nombre de usuario y la contraseña
         String user = request.getParameter("usuario");
         String pwd = request.getParameter("password");
         Usuario usuarioBd = usuarioDao.obtenerUsuarioPorUsernameYPassword(user, pwd);
@@ -108,8 +131,7 @@ public class LoginControlador extends HttpServlet{
                 request.setAttribute("marcajes", marcajes);
                 request.setAttribute("empresas", empresas);
                 request.setAttribute("proyectos", proyectos);
-                //RequestDispatcher dispatcher = request.getRequestDispatcher("EmpleadoControlador?action=listEmpleado");
-                //dispatcher.forward(request, response);
+             
                 Log.insertLog("Logeamos como usuario\n");
                 response.sendRedirect("EmpleadoControlador?action=listEmpleado");
 

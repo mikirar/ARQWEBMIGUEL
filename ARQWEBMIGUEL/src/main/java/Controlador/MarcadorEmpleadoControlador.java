@@ -26,36 +26,44 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-/*import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;*/
 
 /**
  *
  * @author miki
  */
 
-
+/**
+ * Controlador para manejar las operaciones relacionadas con los marcajes de los empleados.
+ * 
+ * Este servlet se encarga de recibir las solicitudes relacionadas con los marcajes de los empleados,
+ * procesar los datos y redirigir a la vista correspondiente.
+ * 
+ * La clase MarcadorEmpleadoControlador extiende HttpServlet y maneja las solicitudes GET y POST.
+ */
 public class MarcadorEmpleadoControlador extends HttpServlet{
     private static final long serialVersionUID = 1L;
     private static String INSERT_OR_EDIT = "/marcaje-empleado-form.jsp";
     private static String LIST_EMPLEADO = "/empleado-list.jsp";
     private MarcajeDAO marcajeDao;
     
+    /**
+     * Constructor de la clase MarcadorEmpleadoControlador.
+     * 
+     * @throws SQLException Si ocurre un error al crear el objeto MarcajeDAO.
+     */
     public MarcadorEmpleadoControlador() throws SQLException {
         super();
         marcajeDao = new MarcajeDAO();
     }
     
     /**
-     *
-     * @param request
-     * @param response
-     * @throws ServletException
-     * @throws IOException
+     * Método para manejar las solicitudes GET.
+     * Se encarga de procesar las solicitudes relacionadas con los marcajes de los empleados y redirigir a la vista correspondiente.
+     * 
+     * @param request La solicitud HTTP.
+     * @param response La respuesta HTTP.
+     * @throws ServletException Si ocurre un error en el servlet.
+     * @throws IOException Si ocurre un error de entrada/salida.
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -82,7 +90,6 @@ public class MarcadorEmpleadoControlador extends HttpServlet{
         } else if (action.equalsIgnoreCase("listEmpleado")) {
             Log.insertLog("Parametro valor LIST\n");
             forward = LIST_EMPLEADO;
-            //request.setAttribute("marcajes", marcajeDao.obtenerTodasLosMarcajesPorIdUsuario(Integer.parseInt(request.getParameter("usuarioid"))));
             HttpSession session = request.getSession();
             Usuario user = (Usuario) session.getAttribute("user");
             request.setAttribute("marcajes", marcajeDao.obtenerTodasLosMarcajesPorIdUsuario(user.getUserid()));
@@ -97,15 +104,22 @@ public class MarcadorEmpleadoControlador extends HttpServlet{
         RequestDispatcher view = request.getRequestDispatcher(forward);
         view.forward(request, response);
         
-        //return;
     }
     
+    /**
+     * Método para manejar las solicitudes POST.
+     * Se encarga de procesar las solicitudes relacionadas con los marcajes de los empleados enviadas mediante POST.
+     * 
+     * @param request La solicitud HTTP.
+     * @param response La respuesta HTTP.
+     * @throws ServletException Si ocurre un error en el servlet.
+     * @throws IOException Si ocurre un error de entrada/salida.
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         Log.insertLog("Entramos por el doPost\n");
-        //processRequest(request, response);
         Marcaje marcaje = new Marcaje();
         String fechaString = request.getParameter("fecha");
         Timestamp fecha = Common.parseStringToTimestamp(fechaString);
@@ -120,14 +134,6 @@ public class MarcadorEmpleadoControlador extends HttpServlet{
             Log.insertLog("Vamos a añadir el marcaje del empleado\n");
             marcajeDao.crearMarcaje(marcaje);
             
-
-            /*try {
-                //Log.insertLog("Vamos a añadir el usuario\n");
-                usuarioRepository.crearUsuario(usuario);
-            } catch (SQLException ex) {
-                Logger.getLogger(UsuarioControlador.class.getName()).log(Level.SEVERE, null, ex);
-            }*/
-            
         } else {
             marcaje.setId(Integer.parseInt(marcajeid));
             Log.insertLog("Vamos a actualizar el marcaje del empleado\n");
@@ -139,6 +145,6 @@ public class MarcadorEmpleadoControlador extends HttpServlet{
         request.setAttribute("marcajes", marcajes);
         RequestDispatcher view = request.getRequestDispatcher(LIST_EMPLEADO);            
         view.forward(request, response);
-        //return;
+   
     }
 }

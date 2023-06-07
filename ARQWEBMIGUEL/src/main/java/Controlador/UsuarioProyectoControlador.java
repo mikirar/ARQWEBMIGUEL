@@ -22,18 +22,17 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-/*import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;*/
 
 /**
  *
  * @author miki
  */
 
+/**
+ * Controlador para la gestión de usuarios y proyectos.
+ * Maneja las solicitudes relacionadas con la creación, edición, eliminación y listado de usuario_proyecto.
+ * Extiende la clase HttpServlet para recibir las solicitudes HTTP.
+ */
 
 public class UsuarioProyectoControlador extends HttpServlet{
     private static final long serialVersionUID = 1L;
@@ -41,17 +40,21 @@ public class UsuarioProyectoControlador extends HttpServlet{
     private static String LIST_USER_PROJECT = "/user-project-list.jsp";
     private UsuarioProyectoDAO usuarioProyectoDao;
     
+    /**
+     * Constructor de la clase. Inicializa el objeto UsuarioProyectoDAO.
+     * @throws SQLException si ocurre un error en la conexión con la base de datos.
+     */
     public UsuarioProyectoControlador() throws SQLException {
         super();
         usuarioProyectoDao = new UsuarioProyectoDAO();
     }
     
     /**
-     *
-     * @param request
-     * @param response
-     * @throws ServletException
-     * @throws IOException
+     * Maneja las peticiones GET al servlet.
+     * @param request la solicitud HTTP.
+     * @param response la respuesta HTTP.
+     * @throws ServletException si ocurre un error en el servlet.
+     * @throws IOException si ocurre un error de entrada/salida.
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -64,7 +67,6 @@ public class UsuarioProyectoControlador extends HttpServlet{
         if (action.equalsIgnoreCase("delete")) {
             Log.insertLog("Parametro valor DELETE");
             int id = Integer.parseInt(request.getParameter("id"));
-            //usuarioRepository.eliminarUsuario(userId);
             usuarioProyectoDao.eliminarUsuarioProyecto(id);
             forward = LIST_USER_PROJECT;
             request.setAttribute("usuariosproyectos", usuarioProyectoDao.obtenerTodosLosUsuarioProyecto());
@@ -85,16 +87,20 @@ public class UsuarioProyectoControlador extends HttpServlet{
         RequestDispatcher view = request.getRequestDispatcher(forward);
         view.forward(request, response);
         
-        //return;
     }
     
+    /**
+     * Maneja las peticiones POST al servlet.
+     * @param request la solicitud HTTP.
+     * @param response la respuesta HTTP.
+     * @throws ServletException si ocurre un error en el servlet.
+     * @throws IOException si ocurre un error de entrada/salida.
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         Log.insertLog("Entramos por el doPost\n");
-        //processRequest(request, response);
-        //Usuario usuario = new Usuario();
         UsuarioProyecto usuarioProyecto = new UsuarioProyecto();
         usuarioProyecto.setUserid(Integer.parseInt(request.getParameter("userid")));
         usuarioProyecto.setProyectoid(Integer.parseInt(request.getParameter("proyectoid")));
@@ -109,13 +115,6 @@ public class UsuarioProyectoControlador extends HttpServlet{
         if (id == null || id.isEmpty() || id.equalsIgnoreCase("")) {
             Log.insertLog("Vamos a añadir el usuario proyecto\n");
             usuarioProyectoDao.crearUsuarioProyecto(usuarioProyecto);
-
-            /*try {
-                //Log.insertLog("Vamos a añadir el usuario\n");
-                usuarioRepository.crearUsuario(usuario);
-            } catch (SQLException ex) {
-                Logger.getLogger(UsuarioControlador.class.getName()).log(Level.SEVERE, null, ex);
-            }*/
             
         } else {
             usuarioProyecto.setId(Integer.parseInt(id));
@@ -125,6 +124,5 @@ public class UsuarioProyectoControlador extends HttpServlet{
         request.setAttribute("usuariosproyectos", usuarioProyectoDao.obtenerTodosLosUsuarioProyecto());
         RequestDispatcher view = request.getRequestDispatcher(LIST_USER_PROJECT);            
         view.forward(request, response);
-        //return;
     }
 }

@@ -35,7 +35,9 @@ import javax.servlet.http.HttpServletResponse;*/
  * @author miki
  */
 
-
+/**
+ * Controlador para la generación de informes
+ */
 public class InformesControlador extends HttpServlet{
     private static final long serialVersionUID = 1L;
     private static String MENU = "/menu-informe-marcaje.jsp";
@@ -47,6 +49,10 @@ public class InformesControlador extends HttpServlet{
     private ProyectoDAO proyectoDao;
     private MarcajeDAO marcajeDao;
     
+    /**
+     * Constructor de la clase InformesControlador.
+     * @throws SQLException Si ocurre algún error de SQL.
+     */
     public InformesControlador() throws SQLException {
         super();
         empresaDao = new EmpresaDAO();
@@ -56,18 +62,20 @@ public class InformesControlador extends HttpServlet{
     }
     
     /**
+     * Método GET para manejar las solicitudes de informes
      *
-     * @param request
-     * @param response
-     * @throws ServletException
-     * @throws IOException
+     * @param request  El objeto HttpServletRequest
+     * @param response El objeto HttpServletResponse
+     * @throws ServletException Si ocurre un error de Servlet
+     * @throws IOException      Si ocurre un error de E/S
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
         Log.insertLog("Entramos en el doGet\n");
-
+        
+        // Recuperar parámetros de la solicitud
         String empresaIdString = request.getParameter("empresaid");
         String nombre_empresa = request.getParameter("nombre_empresa");
         String userIdString = request.getParameter("userid");
@@ -75,91 +83,39 @@ public class InformesControlador extends HttpServlet{
         String proyectoIdString = request.getParameter("proyectoid");
         String nombre_proyecto = request.getParameter("nombre_proyecto");
         
+        // Establecer atributos en el objeto request
         request.setAttribute("empresaid", empresaIdString);
         request.setAttribute("nombre_empresa", nombre_empresa);
         request.setAttribute("userid", userIdString);
         request.setAttribute("nombre_usuario", nombre_usuario);
         request.setAttribute("proyectoid", proyectoIdString);
         request.setAttribute("nombre_proyecto", nombre_proyecto);
-        System.out.println("Entro al get");
-        System.out.println("Empresaid " + empresaIdString);
-        System.out.println("Userid " + userIdString);
-        System.out.println("Proyectoid " + proyectoIdString);
-        /*
-        if (empresaIdString != null && !empresaIdString.equalsIgnoreCase("")) {
-            int empresaId = Integer.parseInt(empresaIdString);
-            request.setAttribute("empresaid", empresaId);
-        }
-        else if (userIdString != null && !userIdString.equalsIgnoreCase("")) {
-            int userId = Integer.parseInt(userIdString);
-            request.setAttribute("userid", userId);
-        }
-        else if (proyectoIdString != null && !proyectoIdString.equalsIgnoreCase("")) {
-            int proyectoId = Integer.parseInt(proyectoIdString);
-            request.setAttribute("proyectoid", proyectoId);
-        }*/
         
+        //Redirigimos directamente al menú con los parámetros 
         String forward = MENU;
         String action = request.getParameter("action");
         Log.insertLog("Recogemos el parametro action con valor " + action+ "\n");
         
-        /*
-        if (action.equalsIgnoreCase("informeEmpresa")) {
-            //int empresaId = Integer.parseInt(request.getParameter("empresaid"));
-            //request.setAttribute("empresaid", empresaId);
-            Log.insertLog("Parametro valor informeEmpresa\n");
-            forward = INFORME_EMPRESA;
-            request.setAttribute("marcajesEmpresa", marcajeDao.obtenerTodasLosMarcajesPorIdEmpresa(empresaId));
-        } else if (action.equalsIgnoreCase("informeUsuario")) {
-            Log.insertLog("Parametro valor informeUsuario\n");
-            forward = INFORME_USUARIO;
-            request.setAttribute("marcajesUsuario", marcajeDao.obtenerTodasLosMarcajesPorIdUsuario(userId));
-        } else if (action.equalsIgnoreCase("informeProyecto")) {
-            Log.insertLog("Parametro valor informeProyecto\n");
-            forward = INFORME_PROYECTO;
-            request.setAttribute("marcajesProyecto", marcajeDao.obtenerTodasLosMarcajesPorIdProyecto(proyectoId));
-        } */
+        Log.insertLog("Redirigimos al menu de informes\n");
         
-        /*
-        if (action.equalsIgnoreCase("generarInforme")) {
-            Log.insertLog("Parametro valor generarInforme\n");
-            if (empresaIdString != null && !empresaIdString.equalsIgnoreCase("")) {
-                Log.insertLog("Parametro valor empresa\n");
-                int empresaId = Integer.parseInt(empresaIdString);
-                request.setAttribute("empresaid", empresaId);
-                forward = INFORME_EMPRESA;
-                request.setAttribute("marcajesEmpresa", marcajeDao.obtenerTodasLosMarcajesPorIdEmpresa(empresaId));
-                
-            } else if (userIdString != null && !userIdString.equalsIgnoreCase("")) {
-                Log.insertLog("Parametro valor usuario\n");
-                int userId = Integer.parseInt(userIdString);
-                request.setAttribute("userid", userId);
-                forward = INFORME_USUARIO;
-                request.setAttribute("marcajesUsuario", marcajeDao.obtenerTodasLosMarcajesPorIdUsuario(userId));
-                        
-            } else if (proyectoIdString != null && !proyectoIdString.equalsIgnoreCase("")) {
-                Log.insertLog("Parametro valor proyecto\n");
-                int proyectoId = Integer.parseInt(proyectoIdString);
-                request.setAttribute("proyectoid", proyectoId);
-                forward = INFORME_PROYECTO;
-                request.setAttribute("marcajesProyecto", marcajeDao.obtenerTodasLosMarcajesPorIdProyecto(proyectoId));
-            }
-        }*/
-        
-        //else {
-        Log.insertLog("Parametro valor vacio vamos al menu\n");
-        forward = MENU;
-        //}
         RequestDispatcher view = request.getRequestDispatcher(forward);
         view.forward(request, response);
-        
-        //return;
+       
     }
     
+    
+    /**
+     * Método POST que maneja las solicitudes POST al controlador.
+     * @param request La solicitud HTTP.
+     * @param response La respuesta HTTP.
+     * @throws ServletException Si ocurre un error en el servlet.
+     * @throws IOException Si ocurre un error de E/S.
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
+        // Inicializamos variables
         Log.insertLog("Entramos por el doPost\n");
         String forward = MENU;
         String empresaIdString = request.getParameter("empresaid");
@@ -169,12 +125,14 @@ public class InformesControlador extends HttpServlet{
         String proyectoIdString = request.getParameter("proyectoid");
         String nombre_proyecto = request.getParameter("nombre_proyecto");
         
+        //Recuperamos parámetros de la request para generar el informe
         String tipoInforme = request.getParameter("tipoInforme");
         String fechaInicioString = request.getParameter("fecha_inicio");
         Timestamp fechaInicio = Common.parseStringToTimestamp(fechaInicioString);
         String fechaFinString = request.getParameter("fecha_fin");
         Timestamp fechaFin = Common.parseStringToTimestamp(fechaFinString);
         
+        //Establecer atributos en el objeto request
         request.setAttribute("empresaid", empresaIdString);
         request.setAttribute("nombre_empresa", nombre_empresa);
         request.setAttribute("userid", userIdString);
@@ -182,6 +140,8 @@ public class InformesControlador extends HttpServlet{
         request.setAttribute("proyectoid", proyectoIdString);
         request.setAttribute("nombre_proyecto", nombre_proyecto);
         
+        
+        //Generamos informe según parámetros
         if (empresaIdString != null && !empresaIdString.equalsIgnoreCase("")) {
             Log.insertLog("Parametro valor empresa\n");
             if (tipoInforme.equalsIgnoreCase("semanal")){
@@ -243,6 +203,39 @@ public class InformesControlador extends HttpServlet{
                 request.setAttribute("userid", usuarioId);
                 forward = INFORME_USUARIO;
                 request.setAttribute("marcajesUsuario", marcajeDao.obtenerTodasLosMarcajesPorIdUsuarioPeriodo(usuarioId, fechaInicio, fechaFin));
+                
+            }
+        }
+        
+        else if (proyectoIdString != null && !proyectoIdString.equalsIgnoreCase("")){
+            Log.insertLog("Parametro valor proyecto\n");
+            if (tipoInforme.equalsIgnoreCase("semanal")){
+                Log.insertLog("Parametro valor semanal\n");
+                int proyectoId = Integer.parseInt(proyectoIdString);
+                request.setAttribute("proyectoid", proyectoId);
+                forward = INFORME_PROYECTO;
+                request.setAttribute("marcajeProyecto", marcajeDao.obtenerTodasLosMarcajesPorIdProyectoSemanal(proyectoId, fechaInicio));
+                
+            } else if (tipoInforme.equalsIgnoreCase("mensual")) {
+                Log.insertLog("Parametro valor mensual\n");
+                int proyectoId = Integer.parseInt(proyectoIdString);
+                request.setAttribute("proyectoid", proyectoId);
+                forward = INFORME_PROYECTO;
+                request.setAttribute("marcajeProyecto", marcajeDao.obtenerTodasLosMarcajesPorIdProyectoMensual(proyectoId, fechaInicio));
+                
+            } else if (tipoInforme.equalsIgnoreCase("anual")) {
+                Log.insertLog("Parametro valor anual\n");
+                int proyectoId = Integer.parseInt(proyectoIdString);
+                request.setAttribute("proyectoid", proyectoId);
+                forward = INFORME_PROYECTO;
+                request.setAttribute("marcajeProyecto", marcajeDao.obtenerTodasLosMarcajesPorIdProyectoAnual(proyectoId, fechaInicio));
+                
+            } else if (tipoInforme.equalsIgnoreCase("periodo")) {
+                Log.insertLog("Parametro valor mensual\n");
+                int proyectoId = Integer.parseInt(proyectoIdString);
+                request.setAttribute("proyectoid", proyectoId);
+                forward = INFORME_PROYECTO;
+                request.setAttribute("marcajeProyecto", marcajeDao.obtenerTodasLosMarcajesPorIdProyectoPeriodo(proyectoId, fechaInicio, fechaFin));
                 
             }
         }
